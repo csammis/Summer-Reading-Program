@@ -100,7 +100,7 @@ if (is_user_logged_in())
     <div>For security, please log out and close your browser when you are done.</div>
     <div>&nbsp;</div>
     <div><?php SRP_PrintLinkToTemplatedPage('editprofile', 'Update profile');?></div>
-    <div><a href="<?php echo SRP_GetLogoutUrl();?>">Log out</a></div>
+    <div><a href="<?php echo wp_logout_url(site_url('/'));?>">Log out</a></div>
     <div>&nbsp;</div>
 <?php
     if (!SRP_IsUserAdministrator())
