@@ -1650,6 +1650,18 @@ li.SRPReviewSlug{
     font-size:larger;
 }
 
+.SRPAdminComment {
+    margin-left:1.5em;
+    margin-right:1.0em;
+    margin-top:0.5em;
+    margin-bottom:0.5em;
+}
+
+.SRPAdminNewComment {
+    margin-left:1.5em;
+    margin-right:1.0em;
+}
+
 .srp_counter {
     font-weight:bold;
 }

@@ -89,6 +89,35 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
                     (grade <?php echo $post['author_grade']; ?>)
                     on <?php echo get_date_from_gmt(date('Y-m-d H:i:s', strtotime($post['date'])), 'F jS, Y');?>
                 </div>
+                <div id="SRPCommentContainer-<?php echo $post['id']; ?>" style="margin:0.2em;border-top:0.1em dashed gray;">
+                <?php
+                    if ($post['comment_count'] > 0)
+                    {
+                        $comments = SRP_GetCommentsOnPost($post['id']);
+                        for ($j = 0; $j < count($comments); $j++)
+                        {
+                            $comment = $comments[$j];
+                ?>
+                    <div class="SRPAdminComment"><?php echo $comment['content'];?> <em>posted <?php
+                        echo get_date_from_gmt(date('Y-m-d H:i:s', strtotime($comment['date'])), 'F jS, Y'); ?></em></div>
+                <?php
+                        }
+                    }
+                ?>
+
+                <!-- List comments on this post -->
+                <div class="SRPAdminComment">Fake Comment One <em>posted Some Date and Time</em></div>
+                <div class="SRPAdminComment">Fake Comment Two <em>posted A Different Time</em></div>
+                
+                </div>
+                <?php if (SRP_IsUserAdministrator()) : ?>
+                <div class="SRPAdminNewComment" id="form-new-comment-<?php echo $post['id']; ?>">
+                    <form>
+                    <div><textarea style="width:90%"></textarea></div>
+                    <div><input type="submit" value="Add comment" /></div>
+                    </form>
+                </div>
+                <?php endif; ?>
             </div>
 <?php
 		}

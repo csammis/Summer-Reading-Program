@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 //  SRP_PostSearch
 //  SRP_GetPostsByUser
+//  SRP_GetCommentsOnPost
 
 function SRP_PostSearch($author, $title, $rating, $genre, $grade, $startAt = 0, $limit = 10)
 {
@@ -50,7 +51,8 @@ function SRP_PostSearch($author, $title, $rating, $genre, $grade, $startAt = 0, 
 
     $select  = "SELECT post.id AS ID, post.post_date AS date, post.post_content AS content, post.post_author AS author, ";
     $select .= "  meta_author.meta_value AS book_author, meta_title.meta_value AS title, ";
-    $select .= "  meta_rating.meta_value AS rating, meta_genre.meta_value AS genre, meta_grade.meta_value AS grade ";
+    $select .= "  meta_rating.meta_value AS rating, meta_genre.meta_value AS genre, meta_grade.meta_value AS grade, ";
+    $select .= "  post.comment_count AS comments ";
     $select .= "FROM $wpdb->posts post ";
 
     /////// AUTHOR ///////
@@ -164,6 +166,7 @@ function SRP_PostSearch($author, $title, $rating, $genre, $grade, $startAt = 0, 
     $ratings  = $wpdb->get_col($query, 6);
     $genres   = $wpdb->get_col($query, 7);
     $grades   = $wpdb->get_col($query, 8);
+    $comments = $wpdb->get_col($query, 9);
 
     $bHasMore = false;
     if (count($IDs) > $limit)
@@ -183,6 +186,7 @@ function SRP_PostSearch($author, $title, $rating, $genre, $grade, $startAt = 0, 
                         'book_rating' => $ratings[$i],
                         'book_genre' => $genres[$i],
                         'author_grade' => $grades[$i],
+                        'comment_count' => $comments[$i],
                         'has_more' => $bHasMore);
         $retval[] = $review;
     }
@@ -227,6 +231,32 @@ function SRP_GetPostsByUser($userid, $status)
                         'book_author' => $bauthors[$i],
                         'book_title' => $btitles[$i]);
         $retval[] = $review;
+    }
+    return $retval;
+}
+
+/*
+ * SRP_GetCommentsOnPost
+ * Returns an associative array of all the comments on the specified post ID.
+ */
+function SRP_GetCommentsOnPost($postid)
+{
+    global $wpdb;
+
+    $select  = "SELECT c.comment_ID, c.comment_date_gmt, c.comment_content ";
+    $select .= "FROM $wpdb->comments c WHERE c.comment_post_id = %s ORDER BY c.comment_date_gmt";
+
+    $query = $wpdb->prepare($select, $postid);
+
+    $IDs      = $wpdb->get_col($query, 0);
+    $dates    = $wpdb->get_col($query, 1);
+    $contents = $wpdb->get_col($query, 2);
+
+    $retval = array();
+    for ($i = 0; $i < count($IDs); $i++)
+    {
+        $comment = array('id' => $IDs[$i], 'date' => $dates[$i], 'content' => $contents[$i]);
+        $retval[] = $comment;
     }
     return $retval;
 }

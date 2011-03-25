@@ -67,7 +67,7 @@ function SRP_CreatePages()
     SRP_CreateSinglePage('Register', 'user_reg.php', '0');
     SRP_CreateSinglePage('Reset user time', 'hoursreset.php', '3');
     SRP_CreateSinglePage('Retrive Password', 'retrievepassword.php', '3');
-    SRP_CreateSinglePage('Reviews', 'reviewpage.php', '0,1');
+    SRP_CreateSinglePage('Reviews', 'reviewpage.php', '0,1,2');
     SRP_CreateSinglePage('Statistics', 'statistics.php', '2');
     SRP_CreateSinglePage('Submit Time', 'submitbooks.php', '1');
     SRP_CreateSinglePage('Submit Review', 'submitreview.php', '1');
