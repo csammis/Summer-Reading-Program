@@ -29,7 +29,6 @@ THE SOFTWARE.
 *
 */
 
-//  SRP_GetLogoutUrl
 //  SRP_DaysBetweenDates
 //  SRP_SendEmail
 //  SRP_SelectUrlOfTemplatedPage
@@ -38,15 +37,6 @@ THE SOFTWARE.
 //  SRP_GetLocalDate
 
 require_once('srp-inc-users.php');
-
-/*
- * SRP_GetLogoutUrl
- * Returns a URL to the logout processor.
- */
-function SRP_GetLogoutUrl()
-{
-    return get_bloginfo('template_directory') . '/logout.php';
-}
 
 /*
  * SRP_DaysBetweenDates

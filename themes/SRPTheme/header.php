@@ -35,7 +35,7 @@ require_once('includes/srp-inc-template.php');
 
                     if (is_user_logged_in())
                     {
-                        $list .= '<li><a class="fadeThis" href="' . SRP_GetLogoutUrl() . '"><span>Log out</span></a></li>' . "\n";
+                        $list .= '<li><a class="fadeThis" href="' . wp_logout_url(site_url('/')) . '"><span>Log out</span></a></li>' . "\n";
                     }
                     echo $list;
                 ?>
