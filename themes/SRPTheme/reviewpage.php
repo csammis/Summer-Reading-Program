@@ -104,18 +104,62 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
                         }
                     }
                 ?>
-
-                <!-- List comments on this post -->
-                <div class="SRPAdminComment">Fake Comment One <em>posted Some Date and Time</em></div>
-                <div class="SRPAdminComment">Fake Comment Two <em>posted A Different Time</em></div>
                 
                 </div>
                 <?php if (SRP_IsUserAdministrator()) : ?>
+                <!-- Javascript method to add a new comment inline -->
+                <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+                <script language="javascript">
+                function addNewComment(postId, jqueryUrl, commentText, commentTimestamp)
+                {
+                    if (commentText === undefined)
+                    {
+                        var commentTextField = document.getElementById("comment-field-" + postId);
+                        commentText = commentTextField.value;
+                        commentTextField.value = '';
+
+                        if (commentText == '')
+                        {
+                            return false;
+                        }
+
+                        // Do jquery post to insert new comment to this page
+                        $.post(jqueryUrl,
+                            { "postid" : postId, "commenttext" : commentText, "username" : 'admin' },
+                            function (data) { alert(data); });
+                    }
+
+                    if (commentTimestamp === undefined)
+                    {
+                        var mnames = [ "January", "February", "March", "April", "May", "June",
+                                       "July", "August", "September", "October", "November", "December" ];
+                        var d = new Date();
+                        commentTimestamp = mnames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+                    }
+
+                    commentText += " <em>posted " + commentTimestamp + "</em>";
+
+                    var parent = document.getElementById("SRPCommentContainer-" + postId);
+
+                    var commentGroup = document.createElement('div');
+                    commentGroup.setAttribute('class', 'SRPAdminComment');
+                    var commentTextSpan = document.createElement('span');
+                    commentTextSpan.innerHTML = commentText;
+                    commentGroup.appendChild(commentTextSpan);
+                    parent.appendChild(commentGroup);
+
+                    return false;
+                }
+                </script>
+
                 <div class="SRPAdminNewComment" id="form-new-comment-<?php echo $post['id']; ?>">
-                    <form>
-                    <div><textarea style="width:90%"></textarea></div>
-                    <div><input type="submit" value="Add comment" /></div>
-                    </form>
+                    <!-- <form onSubmit="javascript:addNewComment( < ?php echo $post['id']; ?>)"> -->
+                    <div>
+                    <textarea style="width:90%" id="comment-field-<?php echo $post['id']; ?>"></textarea>
+                    </div>
+                    <div><input type="submit" value="Add comment"
+                        onClick="javascript:addNewComment(<?php echo $post['id']; ?>, '<?php echo site_url('/') . "/comment-poster/";?>');" /></div>
+                    <!-- </form> -->
                 </div>
                 <?php endif; ?>
             </div>

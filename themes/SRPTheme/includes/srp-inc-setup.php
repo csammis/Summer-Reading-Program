@@ -59,6 +59,7 @@ function SRP_OneClickSetup()
  */
 function SRP_CreatePages()
 {
+    SRP_CreateSinglePage('Comment Poster', 'postcomment.php', '3');
     SRP_CreateSinglePage('Contact', 'contact.php', '0,1');
     SRP_CreateSinglePage('Home', 'frontpage.php', '0,1,2');
     SRP_CreateSinglePage('How It Works', 'howitworks.php', '0,1');

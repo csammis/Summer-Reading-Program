@@ -202,7 +202,7 @@ function SRP_GetPostsByUser($userid, $status)
     global $wpdb;
     
     $select  = "SELECT post.id AS ID, post.post_date AS date, ";
-    $select .= "       meta_author.meta_value AS book_author, meta_title.meta_value AS title ";
+    $select .= "       meta_author.meta_value AS book_author, meta_title.meta_value AS title, post.comment_count AS comments ";
     $select .= "FROM $wpdb->posts post ";
     
     $select .= "INNER JOIN $wpdb->postmeta meta_author ON (meta_author.post_id = post.id AND meta_author.meta_key = %s) ";
@@ -222,6 +222,7 @@ function SRP_GetPostsByUser($userid, $status)
     $dates    = $wpdb->get_col($query, 1);
     $bauthors = $wpdb->get_col($query, 2);
     $btitles  = $wpdb->get_col($query, 3);
+    $comments = $wpdb->get_col($query, 4);
     
     $retval = array();
     for ($i = 0; $i < count($IDs); $i++)
@@ -229,7 +230,8 @@ function SRP_GetPostsByUser($userid, $status)
         $review = array('id' => $IDs[$i],
                         'date' => $dates[$i],
                         'book_author' => $bauthors[$i],
-                        'book_title' => $btitles[$i]);
+                        'book_title' => $btitles[$i],
+                        'comment_count' => $comments[$i]);
         $retval[] = $review;
     }
     return $retval;
