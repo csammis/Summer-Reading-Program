@@ -35,7 +35,7 @@ SRP_AuthRedirect($SRP_UNAUTHENTICATED);
 require_once('includes/srp-inc-search.php');
 require_once('includes/srp-inc-template.php');
 require_once('includes/srp-inc-lists.php');
-
+require_once('includes/srp-inc-utility.php');
 
 $s_author = esc_attr(stripslashes($_REQUEST['s_author']));
 $s_title  = esc_attr(stripslashes($_REQUEST['s_title']));
@@ -87,7 +87,7 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
                 <div class="SRPAuthorListing">
                     Reviewed by <?php echo get_usermeta($authorID, 'first_name'); ?>
                     (grade <?php echo $post['author_grade']; ?>)
-                    on <?php echo get_date_from_gmt(date('Y-m-d H:i:s', strtotime($post['date'])), 'F jS, Y');?>
+                    on <?php echo get_date_from_gmt(date('Y-m-d H:i:s', strtotime($post['date'])), 'F jS, Y'); ?>
                 </div>
                 <div id="SRPCommentContainer-<?php echo $post['id']; ?>" style="margin:0.2em;border-top:0.1em dashed gray;">
                 <?php
@@ -110,43 +110,34 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
                 <!-- Javascript method to add a new comment inline -->
                 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
                 <script language="javascript">
-                function addNewComment(postId, jqueryUrl, commentText, commentTimestamp)
+                function addNewComment(postId, jqueryUrl)
                 {
-                    if (commentText === undefined)
+                    var commentDisplay = '';
+
+                    var commentTextField = document.getElementById("comment-field-" + postId);
+                    commentText = commentTextField.value;
+                    commentTextField.value = '';
+                    commentText = $.trim(commentText);
+                    if (commentText == '')
                     {
-                        var commentTextField = document.getElementById("comment-field-" + postId);
-                        commentText = commentTextField.value;
-                        commentTextField.value = '';
-
-                        if (commentText == '')
-                        {
-                            return false;
-                        }
-
-                        // Do jquery post to insert new comment to this page
-                        $.post(jqueryUrl,
-                            { "postid" : postId, "commenttext" : commentText, "username" : 'admin' },
-                            function (data) { alert(data); });
+                        return false;
                     }
+                    
+                    // Do jquery post to insert new comment to this page
+                    $.post(jqueryUrl,
+                        { "postid" : postId, "commenttext" : commentText, "username" : 'admin' },
+                        function (data) {
+                            commentDisplay = data;
+                    
+                            var parent = document.getElementById("SRPCommentContainer-" + postId);
 
-                    if (commentTimestamp === undefined)
-                    {
-                        var mnames = [ "January", "February", "March", "April", "May", "June",
-                                       "July", "August", "September", "October", "November", "December" ];
-                        var d = new Date();
-                        commentTimestamp = mnames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-                    }
-
-                    commentText += " <em>posted " + commentTimestamp + "</em>";
-
-                    var parent = document.getElementById("SRPCommentContainer-" + postId);
-
-                    var commentGroup = document.createElement('div');
-                    commentGroup.setAttribute('class', 'SRPAdminComment');
-                    var commentTextSpan = document.createElement('span');
-                    commentTextSpan.innerHTML = commentText;
-                    commentGroup.appendChild(commentTextSpan);
-                    parent.appendChild(commentGroup);
+                            var commentGroup = document.createElement('div');
+                            commentGroup.setAttribute('class', 'SRPAdminComment');
+                            var commentTextSpan = document.createElement('span');
+                            commentTextSpan.innerHTML = commentDisplay;
+                            commentGroup.appendChild(commentTextSpan);
+                            parent.appendChild(commentGroup);
+                        });
 
                     return false;
                 }

@@ -6,7 +6,7 @@
 This WordPress plugin was developed for the Olathe Public Library, Olathe, KS
 http://www.olathelibrary.org
 
-Copyright (c) 2010, Chris Sammis
+Copyright (c) 2011, Chris Sammis
 http://csammisrun.net/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -46,8 +46,14 @@ $comment_data = array(
     'comment_approved' => 1
 );
 
-//print_r($comment_data);
-
-echo wp_insert_comment($comment_data);
+if (wp_insert_comment($comment_data) > 0)
+{
+    echo "$commenttext, <em>posted " . get_date_from_gmt(date('Y-m-d H:i:s', 
+        strtotime($comment_data['comment_date_gmt'])), 'F jS, Y') . '</em>';
+}
+else
+{
+    echo 'Failed to insert new comment, try again later.';
+}
 
 ?>
