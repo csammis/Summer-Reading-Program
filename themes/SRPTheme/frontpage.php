@@ -231,12 +231,17 @@ if (is_user_logged_in())
 		    $title = $posts[$i]['book_title'];
 		    $author = $posts[$i]['book_author'];
 		    $date = get_date_from_gmt(date('Y-m-d H:i:s', strtotime($posts[$i]['date'])), 'F jS, Y');
-		    echo "<li><em>$title</em>, by $author, reviewed on $date.";
+		    $url = SRP_SelectUrlOfTemplatedPage('reviewpage') . "/?s_rid=" . $posts[$i]['id'];
+            echo "<li>";
+            echo '<a href="' . $url . '">';
+            echo "<em>$title</em>";
+            echo '</a>';
+            echo ", by $author, reviewed on $date.";
             if ($posts[$i]['comment_count'] > 0)
             {
                 echo " (Commented Review!)";
             }
-            echo "</li>\n";
+            echo "</a></li>\n";
 		}
 		echo "</ul>\n";
 	    }

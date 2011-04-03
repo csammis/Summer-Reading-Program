@@ -42,6 +42,7 @@ $s_title  = esc_attr(stripslashes($_REQUEST['s_title']));
 $s_rating = esc_attr(stripslashes($_REQUEST['s_rating']));
 $s_genre  = esc_attr(stripslashes($_REQUEST['s_genre']));
 $s_grade  = esc_attr(stripslashes($_REQUEST['s_grade']));
+$s_rid    = esc_attr(stripslashes($_REQUEST['s_rid']));
 
 $startPost = $_REQUEST['lastPost'];
 if (!is_numeric($startPost) || $startPost < 0)
@@ -51,7 +52,7 @@ if (!is_numeric($startPost) || $startPost < 0)
 
 $limit = 10;
 
-$posts = SRP_PostSearch($s_author, $s_title, $s_rating, $s_genre, $s_grade, $startPost, $limit);
+$posts = SRP_PostSearch($s_rid, $s_author, $s_title, $s_rating, $s_genre, $s_grade, $startPost, $limit);
 
 SRP_PrintPageStart(75);
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */

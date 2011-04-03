@@ -33,7 +33,7 @@ THE SOFTWARE.
 //  SRP_GetPostsByUser
 //  SRP_GetCommentsOnPost
 
-function SRP_PostSearch($author, $title, $rating, $genre, $grade, $startAt = 0, $limit = 10)
+function SRP_PostSearch($rid, $author, $title, $rating, $genre, $grade, $startAt = 0, $limit = 10)
 {
     global $wpdb;
 
@@ -42,6 +42,18 @@ function SRP_PostSearch($author, $title, $rating, $genre, $grade, $startAt = 0, 
     $bUseRating = strlen($rating) > 0 && is_numeric($rating);
     $bUseGenre  = strlen($genre)  > 0 && is_numeric($genre);
     $bUseGrade  = strlen($grade)  > 0 && is_numeric($grade);
+
+    // Review retrieval by ID trumps the other search fields
+    $bUseRID = false;
+    if (strlen($rid) > 0 && is_numeric($rid))
+    {
+        $bUseRID = true;
+        $bUseAuthor = false;
+        $bUseTitle = false;
+        $bUseRating = false;
+        $bUseGenre = false;
+        $bUseGrade = false;
+    }
 
     $limitPlus = $limit + 1;
 
@@ -150,9 +162,18 @@ function SRP_PostSearch($author, $title, $rating, $genre, $grade, $startAt = 0, 
     }
     $select .= ') ';
 
-    $select .= "WHERE (post.post_type = %s AND post.post_status = %s) $where ORDER BY post.post_date DESC LIMIT $startAt, $limitPlus ";
-    $params[] = 'post';
-    $params[] = 'publish';
+    if ($bUseRID === FALSE)
+    {
+        $select .= "WHERE (post.post_type = %s AND post.post_status = %s) $where";
+        $params[] = 'post';
+        $params[] = 'publish';
+    }
+    else
+    {
+        $select .= "WHERE post.ID = %s";
+        $params[] = $rid;
+    }
+    $select .= " ORDER BY post.post_date DESC LIMIT $startAt, $limitPlus ";
 
     $wpdb->show_errors();
     $query = $wpdb->prepare($select, $params);
