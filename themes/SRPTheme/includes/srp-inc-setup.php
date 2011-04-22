@@ -106,4 +106,21 @@ function SRP_CreateSinglePage($title, $template, $page_access)
     }
 }
 
+function _SRP_DenormalizePostAuthorInformation()
+{
+    global $wpdb;
+
+
+    // Denormalize post author information from usermeta to postmeta
+    $query  = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
+    $query .= " SELECT p.ID, 'author_info_2010', CONCAT(umn.meta_value, ' (grade ', umg.meta_value, ')') ";
+    $query .= " FROM $wpdb->posts p ";
+    $query .= " INNER JOIN $wpdb->usermeta umn ON p.post_author = umn.user_id AND umn.meta_key = %s ";
+    $query .= " INNER JOIN $wpdb->usermeta umg ON p.post_author = umg.user_id AND umg.meta_key = %s ";
+
+    $retval = $wpdb->query($wpdb->prepare($query, 'first_name', 'school_grade'));
+
+
+}
+
 ?>

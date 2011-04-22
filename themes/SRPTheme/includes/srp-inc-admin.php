@@ -104,7 +104,7 @@ function SRP_DeletePosts($ids)
  * SRP_ResetDatabase
  * Deletes published posts, non-admin users, and usermeta and postmeta for both.
  */
-function SRP_ResetDatabase()
+function SRP_ResetDatabase($removeReviews = true)
 {
     global $wpdb;
 
@@ -122,28 +122,30 @@ function SRP_ResetDatabase()
         $admin_userids .= $query[$i]->user_id;
     }
 
-    $delete_postmeta  = "DELETE FROM $wpdb->postmeta ";
-    $delete_postmeta .= "WHERE POST_ID IN (SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status = %s)";
+    if ($removeReviews === true)
+    {
+        $delete_postmeta  = "DELETE FROM $wpdb->postmeta ";
+        $delete_postmeta .= "WHERE POST_ID IN (SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status = %s)";
     
-    $retval = $wpdb->query($wpdb->prepare($delete_postmeta, 'post', 'publish'));
-    if ($retval === FALSE)
-    {
-        echo 'Error executing DELETE FROM postmeta';
-        $wpdb->print_error();
-        echo "\n";
-        return;
-    }
+        $retval = $wpdb->query($wpdb->prepare($delete_postmeta, 'post', 'publish'));
+        if ($retval === FALSE)
+        {
+            echo 'Error executing DELETE FROM postmeta';
+            $wpdb->print_error();
+            echo "\n";
+            return;
+        }
 
-    $delete_posts = "DELETE FROM $wpdb->posts WHERE post_type = %s AND post_status = %s";
-    $retval = $wpdb->query($wpdb->prepare($delete_posts, 'post', 'publish'));
-    if ($retval === FALSE)
-    {
-        echo 'Error executing DELETE FROM posts';
-        $wpdb->print_error();
-        echo "\n";
-        return;
+        $delete_posts = "DELETE FROM $wpdb->posts WHERE post_type = %s AND post_status = %s";
+        $retval = $wpdb->query($wpdb->prepare($delete_posts, 'post', 'publish'));
+        if ($retval === FALSE)
+        {
+            echo 'Error executing DELETE FROM posts';
+            $wpdb->print_error();
+            echo "\n";
+            return;
+        }
     }
-
 
     $delete_usermeta = "DELETE FROM $wpdb->usermeta WHERE user_id NOT IN ($admin_userids)";
     $retval = $wpdb->query($wpdb->prepare($delete_usermeta));
