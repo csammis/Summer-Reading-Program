@@ -286,4 +286,66 @@ function SRP_GetGrandPrizeName($userid)
     return get_srptheme_option("srp_gprize$prizeid");
 }
 
+function SRP_GetGrandPrizesForGrade($grade)
+{
+    if ($grade < 6 || $grade > 12)
+    {
+        return array();
+    }
+
+    $options = get_option('SRPTheme');
+    ksort($options);
+
+    $optionkeys = array_keys($options);
+    $gprizes = array();
+    $badids = array();
+    for ($i = 0; $i < count($optionkeys); $i++)
+    {
+        $key = $optionkeys[$i];
+        $pos = strpos($key, 'srp_gprize');
+        if ($pos === false || $pos != 0)
+        {
+            continue;
+        }
+
+        // There are a few keys that start with srp_gprize that we don't care about here;
+        // they have underscores in their name.  Skip past those keys.
+        if (strpos($key, '_', strlen('srp_gprize')) !== false)
+        {
+            continue;
+        }
+
+        $grandPrizeId = substr($key, strlen('srp_gprize'));
+        if (!is_numeric($grandPrizeId))
+        {
+            $grandPrizeId = substr($grandPrizeId, 0, strpos($grandPrizeId, 'grade'));
+            
+            if ($options[$key] != '')
+            {
+                $bIsOK = false;
+                foreach (explode(',', $options[$key]) as $val)
+                {
+                    if (($grade - 6) == $val)
+                    {
+                        // This prize is OK for the desired grade
+                        $bIsOK = true;
+                    }
+                }
+
+                if ($bIsOK === false)
+                {
+                    $badids[$grandPrizeId] = '1';
+                }
+            }
+        }
+        else
+        {
+            $gprizes[$grandPrizeId]['name'] = $options[$key];
+        }
+    }
+
+    // Now that all the grand prizes have been collected, remove those that are not applicable to this grade
+    return array_diff_key($gprizes, $badids);
+}
+
 ?>

@@ -335,7 +335,7 @@ function SRP_PrintSchoolSelector($type, $selected)
             continue;
         }
         
-        echo "<option value=\"-$gid\">$groupname</option>\n";
+        echo "<option value=\"-$gid\" disabled=\"disabled\">$groupname</option>\n";
         foreach ($gid2sids[$gid] as $sid)
         {
             $schoolname = $sid2name[$sid];
@@ -383,7 +383,7 @@ function SRP_PrintGenreSelector($inputname, $selected = '', $bIncludeBlank = fal
     echo "<select name=\"$inputname\" id=\"$inputname\" class=\"$class\">\n";
     if ($bIncludeBlank)
     {
-        echo '<option value=""'; if ($selected == '') echo ' selected="selected"'; echo '>' . "</option>\n";
+        echo '<option value=""'; if ($selected == '') echo ' selected="selected"'; echo ' disabled="disabled">' . "</option>\n";
     }
     foreach ( $gid2name as $gid => $genrename)
     {
@@ -396,14 +396,21 @@ function SRP_PrintGenreSelector($inputname, $selected = '', $bIncludeBlank = fal
  * SRP_PrintGradeSelector
  * Prints a selector for the grades allowed for the reading program.
  */
-function SRP_PrintGradeSelector($inputname, $selected = '', $bIncludeBlank = false, $class = 'SRPInput')
+function SRP_PrintGradeSelector($inputname, $selected = '', $class = 'SRPInput', $enabled = true)
 {
-    echo "<select name=\"$inputname\" id=\"$inputname\" class=\"$class\">\n";
+    $change = "javascript:processGradeChange('" . site_url('/') . "/jquery-processor/');";
+    echo "<select name=\"$inputname\" id=\"$inputname\" class=\"$class\" onChange=\"$change\"";
+    if ($enabled === false)
+    {
+        echo ' disabled="disabled"';
+    }
+    echo ">\n";
 ?>
-    <option value="6" <?php  if ($selected == 6 || $selected == '') echo 'selected="selected"';?>>Grade 6</option>
-    <option value="7" <?php  if ($selected == 7)  echo 'selected="selected"';?>>Grade 7</option>
-    <option value="8" <?php  if ($selected == 8)  echo 'selected="selected"';?>>Grade 8</option>
-    <option value="9" <?php  if ($selected == 9)  echo 'selected="selected"';?>>Freshman (grade 9)</option>
+    <option value="-1" <?php if ($selected == '') echo 'selected="selected"';?> disabled="disabled">-- Select a grade --</option>
+    <option value="6" <?php  if ($selected ==  6) echo 'selected="selected"';?>>Grade 6</option>
+    <option value="7" <?php  if ($selected ==  7) echo 'selected="selected"';?>>Grade 7</option>
+    <option value="8" <?php  if ($selected ==  8) echo 'selected="selected"';?>>Grade 8</option>
+    <option value="9" <?php  if ($selected ==  9) echo 'selected="selected"';?>>Freshman (grade 9)</option>
     <option value="10" <?php if ($selected == 10) echo 'selected="selected"';?>>Sophomore (grade 10)</option>
     <option value="11" <?php if ($selected == 11) echo 'selected="selected"';?>>Junior (grade 11)</option>
     <option value="12" <?php if ($selected == 12) echo 'selected="selected"';?>>Senior (grade 12)</option>

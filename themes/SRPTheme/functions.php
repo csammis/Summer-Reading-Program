@@ -228,7 +228,17 @@ function SRP_StoreSimpleDynamicOptions($options, $postarray, $prefkey, $nextidke
         $genrepos = strpos($postkeys[$i], $prefkey);
         if ($genrepos !== false && $genrepos == 0)
         {
-            $options[$postkeys[$i]] = esc_attr(stripslashes($postarray[$postkeys[$i]]));
+            $val = '';
+            if (is_array($postarray[$postkeys[$i]]))
+            {
+                $val = implode(',', $postarray[$postkeys[$i]]);
+            }
+            else
+            {
+                $val = esc_attr(stripslashes($postarray[$postkeys[$i]]));
+            }
+
+            $options[$postkeys[$i]] = $val; // esc_attr(stripslashes($postarray[$postkeys[$i]]));
         }
     }
     
@@ -260,7 +270,7 @@ function srptheme_update_options()
     {
         if (isset($_POST['srp_gprize_every'])) $options['srp_gprize_every'] = $_POST['srp_gprize_every'];
         if (isset($_POST['srp_gprize_numentries'])) $options['srp_gprize_numentries'] = $_POST['srp_gprize_numentries'];
-        
+
         $options = SRP_StoreSimpleDynamicOptions($options, $_POST, 'srp_hprize', 'nexthprizeid');
         $options = SRP_StoreSimpleDynamicOptions($options, $_POST, 'srp_gprize', 'nextgprizeid');
     }

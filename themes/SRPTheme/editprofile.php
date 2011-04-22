@@ -106,7 +106,6 @@ switch ($action_type)
             // Whoo!  Add meta information, send notification, and log this fine person into the system
             if ($is_administrator == false)
             {
-                update_usermeta($user_id, 'school_grade', $srp_grade);
                 update_usermeta($user_id, 'school_name_fall', $srp_school_fall);
                 update_usermeta($user_id, 'school_name_spring', $srp_school_spring);
                 if (strlen($srp_phone) > 0)
@@ -204,7 +203,7 @@ value="<?php echo esc_attr(stripslashes($srp_email)); ?>" size="20" />
 </div>
 <div>
     <label <?php if (strpos($reqfields, 'srp_grade:') !== FALSE) echo 'class="errormsg"';?>>The grade you will enter this fall:<br />
-    <?php SRP_PrintGradeSelector('srp_grade', $srp_grade); ?>
+    <?php SRP_PrintGradeSelector('srp_grade', $srp_grade, 'SRPInput', false); ?>
     </label>
 </div>
 <div>

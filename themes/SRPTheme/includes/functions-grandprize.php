@@ -38,6 +38,8 @@ function SRP_PrintGrandPrizeOptions()
 ?>
 <div>Grand prizes are awarded by raffle at the end of the summer, and participants can earn entries into this raffle by accumulating reading time. You can specify maximum number of entries per participant. You can enter more than one grand prize for the program; participants will choose which grand prize they'd like to enter for when they register.</div>
 <div>&nbsp;</div>
+<div>If you do not check any grades for a grand prize, it will be available to all grades.</div>
+<div>&nbsp;</div>
 <!-- Set up the form variable for nondecreasing grand prize IDs -->
 <input type="hidden" id="nextgprizeid" name="nextgprizeid" value="<?php echo $gid; ?>" />
 <div>Give users an entry for their grand prize selection every&nbsp;
@@ -48,7 +50,7 @@ function SRP_PrintGrandPrizeOptions()
 <div>&nbsp;</div>
 <!-- Javascript for grand prize table manipulation -->
 <script language="javascript">
-function addGrandPrizeRow(grandPrizeId, grandPrizeName)
+function addGrandPrizeRow(grandPrizeId, grandPrizeName, grandPrizeGrades)
 {
     if (grandPrizeName === undefined)
     {
@@ -63,6 +65,11 @@ function addGrandPrizeRow(grandPrizeId, grandPrizeName)
         nextGprizeIdField.setAttribute('value', grandPrizeId + 1);
     }
 
+    if (grandPrizeGrades === undefined)
+    {
+        grandPrizeGrades = "0000000";
+    }
+
     var parent = document.getElementById("srp_allgprizes");
 
     var gprizegroup = document.createElement("div");
@@ -72,19 +79,41 @@ function addGrandPrizeRow(grandPrizeId, grandPrizeName)
          'border-left:solid 0.2em black; padding-left:0.5em; margin-bottom:0.75em');
 
     var namegroup = document.createElement("div");
+
     var namelabel = document.createElement("span");
     namelabel.innerHTML = "Grand prize:&nbsp;";
+    
     var namename = document.createElement("input");
     namename.setAttribute('class', 'text');
     namename.setAttribute('type', 'text');
     namename.setAttribute('size', 40);
     namename.setAttribute('name', 'srp_gprize' + grandPrizeId);
     namename.setAttribute('value', grandPrizeName);
+
+    var gradegroup = document.createElement("span");
+    gradegroup.innerHTML = " for these grades: ";
+    for (i = 0; i < 7; i++)
+    {
+        var check = document.createElement("input");
+        check.setAttribute('type', 'checkbox');
+        check.setAttribute('name', 'srp_gprize' + grandPrizeId + 'grade[]');
+        check.setAttribute('value', i);
+        check.setAttribute('style',
+                'padding-left:0.2em');
+        check.checked = (grandPrizeGrades.charAt(i) == '1');
+        gradegroup.appendChild(check);
+        var checkdesc = document.createElement("span");
+        checkdesc.innerHTML = '&nbsp;' + (i + 6) + '&nbsp;';
+        gradegroup.appendChild(checkdesc);
+    }
+
     var nameremove = document.createElement('span');
     nameremove.setAttribute('style', 'margin-left:2em; font-size:smaller; vertical-align:middle');
     nameremove.innerHTML = "<a href=\"javascript:deleteGrandPrizeRow(" + grandPrizeId + ");\">Remove this prize</a>";
+    
     namegroup.appendChild(namelabel);
     namegroup.appendChild(namename);
+    namegroup.appendChild(gradegroup);
     namegroup.appendChild(nameremove);
 
     gprizegroup.appendChild(namegroup);
@@ -114,6 +143,7 @@ function loadExistingGrandPrizes()
     ksort($options);
 
     $optionkeys = array_keys($options);
+    $gprizes = array();
     for ($i = 0; $i < count($optionkeys); $i++)
     {
         $key = $optionkeys[$i];
@@ -123,9 +153,33 @@ function loadExistingGrandPrizes()
             continue;
         }
 
+        // There are a few keys that start with srp_gprize that we don't care about here;
+        // they have underscores in their name.  Skip past those keys.
+        if (strpos($key, '_', strlen('srp_gprize')) !== false)
+        {
+            continue;
+        }
+
         $grandPrizeId = substr($key, strlen('srp_gprize'));
-        $grandPrizeName = $options[$key];
-        echo "addGrandPrizeRow($grandPrizeId, '$grandPrizeName');\n";
+        if (!is_numeric($grandPrizeId))
+        {
+            $grandPrizeId = substr($grandPrizeId, 0, strpos($grandPrizeId, 'grade'));
+            $grades = '0000000';
+            foreach (explode(',', $options[$key]) as $val)
+            {
+                $grades[$val] = '1'; // lol php
+            }
+            $gprizes[$grandPrizeId]['grades'] = $grades;
+        }
+        else
+        {
+            $gprizes[$grandPrizeId]['name'] = $options[$key];
+        }
+    }
+
+    foreach ($gprizes as $id => $prize)
+    {
+        echo "addGrandPrizeRow($id, '$prize[name]', '$prize[grades]');\n";
     }
 ?>
 }

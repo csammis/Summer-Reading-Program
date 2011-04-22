@@ -74,6 +74,7 @@ switch ($action_type)
         $srp_school_spring = esc_attr(stripslashes($_POST['srp_school_spring']));
         if (strlen($srp_school_spring) == 0 || $srp_school_spring < 0) $reqfields .= 'srp_school_spring:';
         $srp_grade = esc_attr(stripslashes($_POST['srp_grade']));
+        if (strlen($srp_grade) == 0 || $srp_grade < 6) $reqfields .= 'srp_grade:';
         
         $srp_grandprize = esc_attr(stripslashes($_POST['srp_grandprize']));
         if (strlen($srp_grandprize) == 0) $reqfields .= 'srp_grandprize:';
@@ -291,6 +292,49 @@ switch ($action_type)
             <?php SRP_PrintSpringSchoolSelector($srp_school_spring); ?>
         </label>
         </p>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script language="javascript">
+        function processGradeChange(jqueryUrl)
+        {
+            var dropdown = document.getElementById('srp_grade');
+            var selIndex = dropdown.selectedIndex;
+            var grade = dropdown.options[selIndex].value;
+
+            $.post(jqueryUrl,
+                { "action" : "g2p", "grade" : grade },
+                function (data) {
+                    var arrayData = data.split('\n');
+                    var gprizeDropdown = document.getElementById('srp_grandprize');
+                    gprizeDropdown.options.length = 0;
+                    var blankOption = document.createElement('option');
+                    blankOption.value = -1;
+                    blankOption.text = '';
+                    gprizeDropdown.options.add(blankOption);
+
+                    for (i = 0; i < arrayData.length - 1; i += 2)
+                    {
+                        var id = arrayData[i];
+                        var name = arrayData[i + 1];
+                        var option = document.createElement('option');
+                        option.value = id;
+                        option.text = name;
+                        gprizeDropdown.options.add(option);
+                    }
+                });
+            return true;
+        }
+
+        if (document.addEventListener)
+        {
+            document.addEventListener('DOMContentLoaded', function() { processGradeChange('<?php echo site_url('/') . '/jquery-processor/'; ?>'); }, false);
+        }
+        else
+        {
+            window.onLoad = processGradeChange('<?php echo site_url('/') . '/jquery-processor/'; ?>');
+        }
+        </script>
+
         <p>
         <label <?php if (strpos($reqfields, 'srp_grade:') !== FALSE) echo 'class="errormsg"';?>>The grade you will enter this fall:<br />
         <?php SRP_PrintGradeSelector('srp_grade', $srp_grade); ?>
