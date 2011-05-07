@@ -106,11 +106,11 @@ switch ($action_type)
             // Whoo!  Add meta information, send notification, and log this fine person into the system
             if ($is_administrator == false)
             {
-                update_usermeta($user_id, 'school_name_fall', $srp_school_fall);
-                update_usermeta($user_id, 'school_name_spring', $srp_school_spring);
+                update_user_meta($user_id, 'school_name_fall', $srp_school_fall);
+                update_user_meta($user_id, 'school_name_spring', $srp_school_spring);
                 if (strlen($srp_phone) > 0)
                 {
-                    update_usermeta($user_id, 'phone', $srp_phone);
+                    update_user_meta($user_id, 'phone', $srp_phone);
                 }
             }
       

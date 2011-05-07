@@ -94,13 +94,13 @@ switch ($action_type)
                 SRP_SetGrandPrizeEntriesWithinBoundary($current_user->ID, $userminutes, ($userminutes + $srp_minutes));
                 
                 $userminutes = $userminutes + $srp_minutes;
-                update_usermeta($current_user->ID, 'srp_minutes', $userminutes);
+                update_user_meta($current_user->ID, 'srp_minutes', $userminutes);
                 
                 $url = site_url('/');
                 if ($srp_submitreview == 1)
                 {
                     $submitreview_info = urlencode($srp_title) . '=' . urlencode($srp_author) . '=' . urlencode($srp_genre);
-                    update_usermeta($current_user->ID, 'submitreview_info', $submitreview_info);
+                    update_user_meta($current_user->ID, 'submitreview_info', $submitreview_info);
                     
                     $url = SRP_SelectUrlOfTemplatedPage('submitreview');
                 }

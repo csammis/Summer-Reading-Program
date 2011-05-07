@@ -36,9 +36,9 @@ if(!defined("PHP_EOL")) define("PHP_EOL", strtoupper(substr(PHP_OS,0,3) == "WIN"
 
 function setup_options()
 {
-    remove_options();
+    //remove_options();
 
-    update_option( 'SRPTheme' , apply_filters('theme_default_settings', array(
+    /*update_option( 'SRPTheme' , apply_filters('theme_default_settings', array(
                     'theme_version' => THEME_VERSION,
                     'gmail_reply_to' => $srp_gmail_reply_to,
                     'gmail_account' => $srp_gmail_account,
@@ -46,7 +46,7 @@ function setup_options()
                     'grand_prizes' => $srp_grand_prizes,
                     'program_active' => $srp_program_active
                 ))
-    );
+    );*/
 }
 
 function remove_options()
@@ -143,6 +143,7 @@ function get_srptheme_message($message)
         $retval = get_srptheme_option($message);
         if ($message == 'srp_footertext')
         {
+            $retval = preg_replace('/&quot;/', '"', $retval);
             $retval = preg_replace('/&gt;/', '>', $retval);
             $retval = preg_replace('/&lt;/', '<', $retval);
             $retval = preg_replace('/<iframe[*.?]>/', '', $retval);

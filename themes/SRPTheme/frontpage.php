@@ -201,7 +201,7 @@ if (is_user_logged_in())
         <div class="userreviewbox">
         <?php
         $nPending = SRP_GetReviewCountByUser($current_user->ID, 'pending');
-	$nReviews = SRP_GetReviewCountByUser($current_user->ID, 'publish');
+        $nReviews = SRP_GetReviewCountByUser($current_user->ID, 'publish');
         if ($nReviews > 0 || $nPending > 0)
         {
             require_once('includes/srp-inc-search.php');
@@ -301,6 +301,7 @@ else
                 }
             ?>
             <form id="SRPLogin" method="post" action="<?php echo site_url('/'); ?>">
+            <div>
             <input type="hidden" name="action" value="logon" />
             <input type="hidden" name="page_id" value="<?php the_ID(); ?>" />
             <p>
@@ -315,7 +316,11 @@ else
             </label>
             </p>
             <p><input type="submit" value="Login" /></p>
-            <p><?php SRP_PrintLinkToTemplatedPage('user_reg', 'New user?');?> &nbsp; | &nbsp; <?php SRP_PrintLinkToTemplatedPage('retrievepassword', 'Forgot your password?');?></p>
+            <p>
+            <?php SRP_PrintLinkToTemplatedPage('user_reg', 'New user?');?> &nbsp; | &nbsp; 
+            <?php SRP_PrintLinkToTemplatedPage('retrievepassword', 'Forgot your password?');?>
+            </p>
+            </div>
             </form>
         </div>
 <?php

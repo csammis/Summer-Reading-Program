@@ -13,6 +13,29 @@ require_once('includes/srp-inc-template.php');
 <link rel="shortcut icon" href="<?php bloginfo('template_directory'); ?>/favicon.ico" />
 <?php if (is_singular() && get_option('thread_comments')) wp_enqueue_script( 'comment-reply' ); ?>
 <?php wp_head(); ?>
+<?php
+    global $SRP_RIGHTWIDTH;
+    global $SRP_LEFTWIDTH;
+
+    // Generate the CSS for the column widths
+    echo "<style type=\"text/css\">\n";
+    echo "#page.with-sidebar .mask-main .mask-left {\n";
+    echo "  right:$SRP_RIGHTWIDTH%;\n";
+    echo "}\n";
+    echo "#page.with-sidebar .mask-main .col1 {\n";
+    echo "  width:$SRP_LEFTWIDTH%;\n";
+    echo "  left:$SRP_RIGHTWIDTH%;\n";
+    echo "}\n";
+    echo "#page.with-sidebar .mask-main .col2 {\n";
+    if ($rightwidth == 0)
+        echo "  visibility:collapse;\n";
+    else
+    {
+        echo "  width:$SRP_RIGTHWIDTH%;\n";
+        echo "  left:$SRP_RIGHTWIDTH%;\n";
+    }
+    echo "}\n</style>\n";
+?>
 </head>
 <body <?php if (is_home()) { ?>class="home"<?php } else { ?>class="inner"<?php } ?>>
 <!-- page wrap -->

@@ -96,7 +96,7 @@ function SRP_SelectUser($username, $firstname)
 
 function SRP_UpdateUserMinutes($userid, $userminutes)
 {
-    update_usermeta($userid, 'srp_minutes', $userminutes);
+    update_user_meta($userid, 'srp_minutes', $userminutes);
     SRP_AwardHourlyPrizesWithinBoundary($userid, 0, $userminutes);
     
     global $wpdb;

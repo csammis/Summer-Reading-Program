@@ -48,32 +48,21 @@ THE SOFTWARE.
  * SRP_PrintPageStart
  * Prints the two-column page header with a default left column width of 60%
  */
+
+$SRP_LEFTWIDTH  = 60;
+$SRP_RIGHTWIDTH = 100 - $SRP_LEFTWIDTH;
+
 function SRP_PrintPageStart($leftwidth = 60)
 {
-    $rightwidth = 100 - $leftwidth;
+    // Assign to globals so header.php can grab these
+    // and inject a <style> element in the right place
+
+    $SRP_LEFTWIDTH = $leftwidth;
+    $SRP_RIGHTWIDTH = 100 - $leftwidth;
+
     get_header();
     
     $ga_id = get_srptheme_option('ga_id');
-
-    // Generate the CSS for the column widths
-    echo "<style type=\"text/css\">\n";
-    echo "#page.with-sidebar .mask-main .mask-left {\n";
-    echo "  right:$rightwidth%;\n";
-    echo "}\n";
-    echo "#page.with-sidebar .mask-main .col1 {\n";
-    echo "  width:$leftwidth%;\n";
-    echo "  left:$rightwidth%;\n";
-    echo "}\n";
-    echo "#page.with-sidebar .mask-main .col2 {\n";
-    if ($rightwidth == 0)
-        echo "  visibility:collapse;\n";
-    else
-    {
-        echo "  width:$rightwidth%;\n";
-        echo "  left:$rightwidth%;\n";
-    }
-    echo "}\n</style>\n";
-
 ?>
 <div id="main-wrap1">
 <div id="main-wrap2">
@@ -488,7 +477,7 @@ function SRP_PrintHeaderImg()
     $url = get_srptheme_appearance('header');
     if (strlen($url) > 0)
     {
-        echo "<img src=\"$url\" style=\"width:778px;height:178px;\" />\n";
+        echo "<img src=\"$url\" style=\"width:778px;height:178px;\" alt=\"\" />\n";
     }
     
     echo '';
@@ -503,7 +492,7 @@ function SRP_PrintFooterImg()
     $url = get_srptheme_appearance('footer');
     if (strlen($url) > 0 && file_exists($url))
     {
-        echo "<img src=\"$url\" />\n";
+        echo "<img src=\"$url\" alt=\"\" />\n";
     }
     
     echo '';

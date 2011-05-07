@@ -168,7 +168,7 @@ function SRP_NextPrizeFromHours($hours)
 
 function SRP_SetUserPrizeMilestone($userid, $milestone)
 {
-    update_usermeta($userid, 'srp_milestone' . $milestone, '1');
+    update_user_meta($userid, 'srp_milestone' . $milestone, '1');
 }
 
 function SRP_SendReviewerDrawingPrizeEmail($userid)
@@ -257,7 +257,7 @@ function SRP_AwardUserHourBasedPrize($userid, $prizeid)
 
     $prizes  = get_usermeta($userid, 'srp_prizeswon');
     $prizes .= "$prizeid;";
-    update_usermeta($userid, 'srp_prizeswon', $prizes);
+    update_user_meta($userid, 'srp_prizeswon', $prizes);
 }
 
 function SRP_SetGrandPrizeEntriesWithinBoundary($userid, $previousMinutes, $newMinutes)

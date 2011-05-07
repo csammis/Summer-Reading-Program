@@ -146,19 +146,19 @@ switch ($action_type)
             else
             {
                 // Whoo!  Add meta information, send notification, and log this fine person into the system
-                update_usermeta($user_id, 'first_name', $srp_fname);
-                update_usermeta($user_id, 'display_name', $srp_fname);
-                update_usermeta($user_id, 'last_name', $srp_lname);
-                update_usermeta($user_id, 'school_grade', $srp_grade);
-                update_usermeta($user_id, 'school_name_fall', $srp_school_fall);
-                update_usermeta($user_id, 'school_name_spring', $srp_school_spring);
-                update_usermeta($user_id, 'phone', $srp_phone);
-                update_usermeta($user_id, 'srp_grandprize', $srp_grandprize);
+                update_user_meta($user_id, 'first_name', $srp_fname);
+                update_user_meta($user_id, 'display_name', $srp_fname);
+                update_user_meta($user_id, 'last_name', $srp_lname);
+                update_user_meta($user_id, 'school_grade', $srp_grade);
+                update_user_meta($user_id, 'school_name_fall', $srp_school_fall);
+                update_user_meta($user_id, 'school_name_spring', $srp_school_spring);
+                update_user_meta($user_id, 'phone', $srp_phone);
+                update_user_meta($user_id, 'srp_grandprize', $srp_grandprize);
                 
                 if ($sendEmail == true)
                 {
                     $confirmation_id = uniqid();
-                    update_usermeta($user_id, 'confirmation_id', $confirmation_id);
+                    update_user_meta($user_id, 'confirmation_id', $confirmation_id);
                     SRP_SendNewEmail($user_id, $srp_pass1, $confirmation_id);
 ?>
 <h2>Thanks for registering!</h2>
@@ -168,7 +168,7 @@ switch ($action_type)
                 }
                 else
                 {
-                    update_usermeta($user_id, 'srp_noemail', '1');
+                    update_user_meta($user_id, 'srp_noemail', '1');
 
                     // Log the user in right away
                     $credentials['user_login'] = $srp_login;
