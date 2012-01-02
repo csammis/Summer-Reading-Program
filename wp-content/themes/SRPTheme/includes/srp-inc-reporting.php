@@ -65,7 +65,7 @@ function SRP_GetAllUsersCSV()
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_grade ON (um_grade.user_id = u.id AND um_grade.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_school ON (um_school.user_id = u.id AND um_school.meta_key = %s) ";
-    $select .= "ORDER BY um_fname.meta_key";
+    $select .= "ORDER BY u.id";
 
     $query = $wpdb->prepare($select, 'first_name', 'last_name', 'school_grade', 'school_name_fall');
     $id_col = $wpdb->get_col($query, 0);
@@ -77,12 +77,13 @@ function SRP_GetAllUsersCSV()
 
     $sid2name = SRP_GetAllSchoolNames();
 
-    $retval = "Name,Grade,Email,School\n";
+    $retval = "Name,ID,Grade,Email,School\n";
     for ($i = 0; $i < count($id_col); $i++)
     {
+        $id = $id_col[$i];
         $firstname = $fname_col[$i];
         $lastname = $lname_col[$i];
-        $retval .= "$firstname $lastname,";
+        $retval .= "$firstname $lastname,$id,";
         $retval .= $grade_col[$i] . ',';
         $retval .= $email_col[$i] . ',';
         $retval .= $sid2name[$school_col[$i]] . "\n";
@@ -90,7 +91,7 @@ function SRP_GetAllUsersCSV()
 
     return $retval;
 }
-
+  
 /*
  * SRP_SelectAllMinutes
  * Returns the number of minutes logged by SRP users.
@@ -130,6 +131,16 @@ function SRP_GetUserCount($bIncludeAdmins = false)
     return $wpdb->get_var($wpdb->prepare($select));
 }
 
+function SRP_GetConfirmedUserCount()
+{
+    global $wpdb;
+  $select  = "SELECT COUNT(*) FROM $wpdb->usermeta caps ";
+  $select .= "LEFT OUTER JOIN $wpdb->usermeta confirmed ON caps.user_id = confirmed.user_id AND confirmed.meta_key = %s ";
+  $select .= "WHERE caps.meta_key LIKE %s AND caps.meta_value NOT LIKE %s AND confirmed.meta_value IS NULL";
+
+  return $wpdb->get_var($wpdb->prepare($select, 'confirmation_id', '%_capabilities', '%administrator%'));
+}
+
 /*
  * SRP_GetReviewCount
  * Returns the number of published reviews.
@@ -138,8 +149,9 @@ function SRP_GetReviewCount()
 {
     global $wpdb;
     
-    $select = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = %s AND post_status = %s";
-    return $wpdb->get_var($wpdb->prepare($select, 'post', 'publish'));
+    $select  = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = %s AND post_status = %s ";
+    $select .= "AND post_author NOT IN (SELECT user_id FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value LIKE %s)";
+    return $wpdb->get_var($wpdb->prepare($select, 'post', 'publish', '%_capabilities', '%administrator%'));
 }
 
 /*
@@ -178,10 +190,12 @@ function SRP_SelectUsersWithReviews()
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_grade ON (um_grade.user_id = u.id AND um_grade.meta_key = %s) ";
-    $select .= "WHERE (p.post_type = %s AND p.post_status = %s) ";
+    $select .= "WHERE (p.post_type = %s AND p.post_status = %s) AND u.id NOT IN ";
+    $select .= "(SELECT user_id FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value LIKE %s) ";
     $select .= "ORDER BY u.id ";
 
-    $query = $wpdb->prepare($select, 'first_name', 'last_name', 'school_grade', 'post', 'publish');
+    $query = $wpdb->prepare($select, 'first_name', 'last_name', 'school_grade',
+                            'post', 'publish', '%_capabilities', '%administrator%');
     $id_col = $wpdb->get_col($query, 0);
     $fname_col = $wpdb->get_col($query, 1);
     $lname_col = $wpdb->get_col($query, 2);
@@ -260,7 +274,7 @@ function SRP_SelectUsersWithHours($hourlimit = 0)
 
     // Determine whether the user is completely out-of-bounds for hours logged
     $now = new DateTime();
-    $interval = SRP_DaysBetweenDates('2010-5-22', $now->format('Y-m-d'));
+    $interval = SRP_DaysBetweenDates('2011-5-31', $now->format('Y-m-d'));
     $hours_max = $interval * 24;
 
     for ($i = 0; $i < count($id_col); $i++)
@@ -270,15 +284,18 @@ function SRP_SelectUsersWithHours($hourlimit = 0)
         $grade = $grade_col[$i];
         if (!isset($grade))
             $grade = '&lt;not set&gt;';
+        $minutes = $minutes_col[$i];
         $hours = floor($minutes_col[$i] / 60.0);
-        if ($hours >= $hourlimit)
+        //if ($hours >= $hourlimit)
         {
-            $str = $firstname . ' ' . $lastname . ", grade $grade [$hours hours]";
-            if ($hours > $hours_max)
-            {
-                $str = '<span style="color:red">' . $str . " (email " . $email_col[$i] . " or phone " . $phone_col[$i] . ")</span>";
-            }
-            $names[$hours] = $str;
+            $email = $email_col[$i];
+            $str  = $firstname . ' ' . $lastname . ", grade $grade [$minutes minutes] ($hours hours)";
+            $str .= " email: $email";
+            //if ($hours > $hours_max)
+            //{
+            //    $str = '<span style="color:red">' . $str . " (email " . $email_col[$i] . " or phone " . $phone_col[$i] . ")</span>";
+            //}
+            $names[$minutes] = $str;
         }
     }
 
@@ -356,5 +373,5 @@ function SRP_SelectSchoolsByMostReviewers($school = 'spring')
 
     return $counts;
 }
-
+  
 ?>
