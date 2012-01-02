@@ -38,7 +38,6 @@ require_once('includes/srp-inc-template.php');
 $srp_leftcolumnwidth = 100;
 
 $user_id = $current_user->ID;
-$is_administrator = SRP_IsUserAdministrator();
 $srp_login  = $current_user->user_login;
 $srp_email  = $current_user->user_email;
 $srp_fname  = get_usermeta($user_id, 'first_name');
@@ -65,7 +64,7 @@ switch ($action_type)
     
         $srp_pass1 = esc_attr(stripslashes($_POST['srp_pass1']));
         $srp_pass2 = esc_attr(stripslashes($_POST['srp_pass2']));
-        if ($is_administrator == false)
+        if (!SRP_IsUserAdministrator())
         {
             $srp_school_fall = esc_attr(stripslashes($_POST['srp_school_fall']));
             if (strlen($srp_school_fall) == 0 || $srp_school_fall == -1) $reqfields .= 'srp_school_fall:';
@@ -104,7 +103,7 @@ switch ($action_type)
             $user_id = $current_user->ID;
       
             // Whoo!  Add meta information, send notification, and log this fine person into the system
-            if ($is_administrator == false)
+            if (!SRP_IsUserAdministrator())
             {
                 update_user_meta($user_id, 'school_name_fall', $srp_school_fall);
                 update_user_meta($user_id, 'school_name_spring', $srp_school_spring);
@@ -171,7 +170,7 @@ value="<?php echo esc_attr(stripslashes($srp_email)); ?>" size="20" />
 </label>
 </div>
 <?php
-    if ($is_administrator == false)
+    if (!SRP_IsUserAdministrator())
     {
     ?>
 <div>&nbsp;</div>
