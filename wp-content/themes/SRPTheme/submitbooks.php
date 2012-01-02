@@ -40,7 +40,7 @@ $action_type = $_POST['action'];
 if (empty($action_type))
 {
     $action_type = 'start';
-	$srp_numbertype = 0;
+  $srp_numbertype = 0;
 }
 
 switch ($action_type)
@@ -52,13 +52,13 @@ switch ($action_type)
         if (strlen($srp_title) == 0) $reqfields .= 'srp_title:';
         $srp_author = esc_attr(stripslashes($_POST['srp_author']));
         if (strlen($srp_author) == 0) $reqfields .= 'srp_author:';
-		$srp_genre = esc_attr(stripslashes($_POST['srp_genre']));
+    $srp_genre = esc_attr(stripslashes($_POST['srp_genre']));
         if (strlen($srp_genre) == 0) $reqfields .= 'srp_genre:';
-		
-		$srp_submitreview = esc_attr(stripslashes($_POST['srp_submitreview']));
-		if (strlen($srp_submitreview) == 0) $srp_submitreview = 0;
-		
-		$srp_pages = esc_attr(stripslashes($_POST['srp_pages']));
+    
+    $srp_submitreview = esc_attr(stripslashes($_POST['srp_submitreview']));
+    if (strlen($srp_submitreview) == 0) $srp_submitreview = 0;
+    
+    $srp_pages = esc_attr(stripslashes($_POST['srp_pages']));
         if (strlen($srp_pages) == 0 || !is_numeric($srp_pages) || $srp_pages <= 0)
         {
             $reqfields .= 'srp_pages:';
@@ -75,7 +75,8 @@ switch ($action_type)
         else
         {
             $program_open_date = get_srptheme_option('program_open_date');
-            $days_open = ((time() - $program_open_date) / 60 / 60 / 24) + 1;
+            // odd zero day behavior?  $days_open = ((time() - $program_open_date) / 60 / 60 / 24) + 1;
+            $days_open = ((time() - $program_open_date) / 60 / 60 / 24);
             $reading_hours_open = $days_open * 20;
             
             $userminutes = get_usermeta($current_user->ID, 'srp_minutes');
@@ -136,18 +137,18 @@ switch ($action_type)
             echo $errormsg;
         }
 
-		if (get_srptheme_option('program_active') == 0)
-		{
+    if (get_srptheme_option('program_active') == 0)
+    {
 ?>
-		<div>&nbsp;</div>
-		<div>Sorry, the Summer Reading Program is closed!</div>
+    <div>&nbsp;</div>
+    <div>Sorry, the Summer Reading Program is closed!</div>
 <?php
-		}
-		else
-		{
+    }
+    else
+    {
 ?>
-			<div>&nbsp;</div>
-			<div class="reviewbox">
+      <div>&nbsp;</div>
+      <div class="reviewbox">
             <form id="SRPSubmitBook" method="post" action="<?php echo get_permalink(get_the_ID()); ?>">
             <input type="hidden" name="action" value="postbook" />
             <input type="hidden" name="page_id" value="<?php the_ID(); ?>" />
@@ -171,10 +172,11 @@ switch ($action_type)
             <div>
             <span>
             <label for="srp_pages" <?php if (strpos($reqfields, 'srp_pages:') !== FALSE) echo 'class="errormsg"';?>>Number of pages / minutes spent reading:</label>
-            &nbsp;&nbsp;
-            <input type="text" name="srp_pages" id="srp_pages" class="SRPInputNoSizeNoMargin"
+            <br />
+            <input type="text" name="srp_pages" id="srp_pages" class="SRPInputNoSize"
                    value="<?php echo esc_attr(stripslashes($srp_pages)); ?>" size="5" onKeyPress="validateNumber(event);" />
-            </span>&nbsp;<span style="font-size:smaller;font-style:italic">1 page = 1 minute</span>
+            &nbsp;&nbsp;<span style="font-size:smaller;font-style:italic">1 page = 1 minute</span>
+            </span>
             </div>
             <div>&nbsp;</div>
             <div>
@@ -185,13 +187,13 @@ switch ($action_type)
             <input type="submit" value="Submit book" />
             </p>
             </form>
-			</div>
+      </div>
 <?php
-		} // end closed check
+    } // end closed check
 ?>
-		</div>
+    </div>
 <?php
-		
+    
         endif; /* end The Loop */
         SRP_PrintPageEnd($srp_leftcolumnwidth, 'srp_title');
        break;
