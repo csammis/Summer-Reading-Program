@@ -96,6 +96,8 @@ function SRP_SelectUser($username, $firstname)
 
 function SRP_UpdateUserMinutes($userid, $userminutes)
 {
+    require_once('srp-inc-prizes.php');
+  
     update_user_meta($userid, 'srp_minutes', $userminutes);
     SRP_AwardHourlyPrizesWithinBoundary($userid, 0, $userminutes);
     
@@ -174,11 +176,6 @@ function SRP_IsUserConfirmed($username)
     $query = $wpdb->prepare($selectgrade, 'school_grade', $username);
     $grade_col = $wpdb->get_col($query, 0);
     $grade = $grade_col[0];
-    if ($grade == 6 || $grade == 7)
-    {
-        return true;
-    }
-    
     
     $select  = "SELECT DISTINCT u.id AS ID ";
     $select .= "FROM $wpdb->users u ";
