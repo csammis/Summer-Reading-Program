@@ -179,7 +179,6 @@ function SRP_PostSearch($rid, $author, $title, $rating, $genre, $grade, $startAt
     }
     $select .= " ORDER BY post.post_date DESC LIMIT $startAt, $limitPlus ";
 
-    $wpdb->show_errors();
     $query = $wpdb->prepare($select, $params);
 
     $IDs      = $wpdb->get_col($query, 0);
