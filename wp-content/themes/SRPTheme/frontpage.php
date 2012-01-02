@@ -106,6 +106,15 @@ if (is_user_logged_in())
     if (!SRP_IsUserAdministrator())
     {
         require_once('includes/srp-inc-prizes.php');
+
+        $gprizeid = get_usermeta($current_user->ID, 'srp_grandprize');
+        if ($gprizeid == 6)
+        {
+?>
+<!-- placeholder for prize messages -->
+<?php
+        }
+
         
         $user_minutes_read = get_usermeta($current_user->ID, 'srp_minutes');
         if (strlen($user_minutes_read) == 0)
@@ -121,6 +130,7 @@ if (is_user_logged_in())
         
         $prizeswon = get_usermeta($current_user->ID, 'srp_prizeswon');
 ?>
+  
         <h4>Your Books</h4>
         <div class="profilebox">
         <div class="profilenumber"><?php echo $read_str; ?></div>
@@ -194,7 +204,7 @@ if (is_user_logged_in())
         
         </div><!-- / prizes -->
         <div>&nbsp;</div>
-        <div><?php SRP_PrintLinkToTemplatedPage('submitbooks', 'Submit books or hours read');?></div>
+        <div><?php SRP_PrintLinkToTemplatedPage('submitbooks', 'Submit pages or minutes read');?></div>
         </div>
         <div>&nbsp;</div>
         <h4>Your Reviews</h4>
@@ -207,31 +217,31 @@ if (is_user_logged_in())
             require_once('includes/srp-inc-search.php');
             for ($j = 0; $j <= 1; $j++)
             {
-		unset($status);
-		if ($j == 0 && $nReviews > 0)
-		{
-		    $msg  = "You have entered $nReviews review";
-		    $msg .= ($nReviews == 1) ? '' : 's';
-	            $msg .= " so far.";
-		    echo "<div>$msg</div>\n";
-		    $status = 'publish';
-		}
-		else if ($j == 1 && $nPending > 0)
-		{
-		    $msg  = "You have $nPending review";
-		    $msg .= ($nPending == 1) ? '' : 's';
-	            $msg .= " pending approval.";
-		    echo "<div>$msg</div>\n";
-		    $status = 'pending';
-		}
-		$posts = SRP_GetPostsByUser($current_user->ID, $status);
-		echo "<ul>\n";
-		for ($i = 0; $i < count($posts); $i++)
-		{
-		    $title = $posts[$i]['book_title'];
-		    $author = $posts[$i]['book_author'];
-		    $date = get_date_from_gmt(date('Y-m-d H:i:s', strtotime($posts[$i]['date'])), 'F jS, Y');
-		    $url = SRP_SelectUrlOfTemplatedPage('reviewpage') . "/?s_rid=" . $posts[$i]['id'];
+    unset($status);
+    if ($j == 0 && $nReviews > 0)
+    {
+        $msg  = "You have entered $nReviews review";
+        $msg .= ($nReviews == 1) ? '' : 's';
+              $msg .= " so far.";
+        echo "<div>$msg</div>\n";
+        $status = 'publish';
+    }
+    else if ($j == 1 && $nPending > 0)
+    {
+        $msg  = "You have $nPending review";
+        $msg .= ($nPending == 1) ? '' : 's';
+              $msg .= " pending approval.";
+        echo "<div>$msg</div>\n";
+        $status = 'pending';
+    }
+    $posts = SRP_GetPostsByUser($current_user->ID, $status);
+    echo "<ul>\n";
+    for ($i = 0; $i < count($posts); $i++)
+    {
+        $title = $posts[$i]['book_title'];
+        $author = $posts[$i]['book_author'];
+        $date = get_date_from_gmt(date('Y-m-d H:i:s', strtotime($posts[$i]['date'])), 'F jS, Y');
+        $url = SRP_SelectUrlOfTemplatedPage('reviewpage') . "/?s_rid=" . $posts[$i]['id'];
             echo "<li>";
             echo '<a href="' . $url . '">';
             echo "<em>$title</em>";
@@ -242,9 +252,9 @@ if (is_user_logged_in())
                 echo " (Commented Review!)";
             }
             echo "</a></li>\n";
-		}
-		echo "</ul>\n";
-	    }
+    }
+    echo "</ul>\n";
+      }
         }
         ?>
         <div>&nbsp;</div>
