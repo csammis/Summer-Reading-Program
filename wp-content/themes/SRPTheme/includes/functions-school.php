@@ -183,6 +183,13 @@ window.onload = function loadExistingGroupsAndSchools()
 <?php
     $options = get_option('SRPTheme');
     ksort($options);
+
+    // group ID -> group name
+    $groups = array();
+    // group ID -> school ID -> school name
+    $schools = array();
+    // group ID -> school ID -> show value
+    $schoolshow = array();
     
     $optionkeys = array_keys($options);
     for ($i = 0; $i < count($optionkeys); $i++)
@@ -203,27 +210,49 @@ window.onload = function loadExistingGroupsAndSchools()
             // This is a group name
             $groupid = substr($key, strlen('stp_group'));
             $groupname = $options[$key];
-            echo "addGroupRow($groupid, '$groupname');\n";
+            $gid = $groupid + 0;
+            $groups[$gid] = $groupname;
         }
         else
         {
             // This is school data
             $matches = array();
             preg_match('/srp_school([0-9]+)group([0-9]+)/', $key, $matches);
-            $gid = $matches[2];
-            $sid = $matches[1];
+            $gid = $matches[2] + 0;
+            $sid = $matches[1] + 0;
             if (strpos($key, 'show') === false)
             {
                 $schoolname = $options[$key];
-                echo "addSchoolRow($gid, $sid, '$schoolname');\n";
+                $schools[$gid][$sid] = $schoolname;
             }
             else
             {
                 $show_value = $options[$key];
-                echo "setSchoolRowShow($gid, $sid, $show_value);\n";
+                $schoolshow[$gid][$sid] = $show_value;
             }
         }
     }
+
+    ksort($groups);
+    foreach ($groups as $gid => $groupname)
+      {
+        echo "addGroupRow($gid, '$groupname');\n";
+
+        $gschools = $schools[$gid];
+        ksort($gschools);
+        foreach ($gschools as $sid => $schoolname)
+          {
+            echo "addSchoolRow($gid, $sid, '$schoolname');\n";
+          }
+            
+        $gschoolshow = $schoolshow[$gid];
+        ksort($gschoolshow);
+        foreach ($gschoolshow as $sid => $show_value)
+          {
+            echo "setSchoolRowShow($gid, $sid, $show_value);\n";
+          }
+      }
+      
 ?>
 }
 </script>
