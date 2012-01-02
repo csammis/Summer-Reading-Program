@@ -52,19 +52,41 @@ function SRP_SelectNReviewersFromLastWeek($nReviewers)
 {
     global $wpdb;
     $last_drawing = get_option("SRP_LastDrawing", "");
+  
+    $admin_userids = '';
+    $select = "SELECT user_id FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value LIKE %s";
+    $query = $wpdb->get_results($wpdb->prepare($select, '%_capabilities', '%administrator%'));
+    for ($i = 0; $i < count($query); $i++)
+    {
+        if ($i > 0)
+        {
+            $admin_userids .= ',';
+        }
+        $admin_userids .= $query[$i]->user_id;
+    }
+  
+    // Blacklisted users
+    if (strlen($admin_userids) > 0)
+    {
+       $admin_userids .= ',';
+    }
+    $admin_userids .= "869";
 
     $params[] = 'post';
     $params[] = 'publish';
+    $params[] = $admin_userids;
+  
     $select  = "SELECT DISTINCT u.id as ID ";
     $select .= "FROM $wpdb->users u ";
     $select .= "INNER JOIN $wpdb->posts p ON u.id = p.post_author ";
-    $select .= "WHERE (p.post_type = %s AND p.post_status = %s) ";
+    $select .= "WHERE (p.post_type = %s AND p.post_status = %s) AND u.id NOT IN (%s) ";
     $select .= "AND p.post_date_gmt <= UTC_TIMESTAMP() ";
     if (strlen($last_drawing) > 0)
     {
         $select .= "AND p.post_date_gmt > %s ";
         $params[] = $last_drawing;
     }
+
     $select .= "ORDER BY u.id";
 
     $query = $wpdb->prepare($select, $params);
