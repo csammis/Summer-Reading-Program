@@ -40,23 +40,23 @@ if ($_POST['action'] == 'process')
 {
     require_once('includes/srp-inc-admin.php');
     
-	$op_ids = array();
-	foreach (array_keys($_POST) as $key)
-	{
-		if (substr($key, 0, 16) == 'SRP_ApprovePost_')
-		{
-			$op_ids[] = substr($key, 16);
-		}
-	}
-	
-	if (isset($_POST['SRPApprovePosts']))
-	{
-		SRP_PublishPosts($op_ids);
-	}
-	else if (isset($_POST['SRPDeletePosts']))
-	{
-		SRP_DeletePosts($op_ids);
-	}
+  $op_ids = array();
+  foreach (array_keys($_POST) as $key)
+  {
+    if (substr($key, 0, 16) == 'SRP_ApprovePost_')
+    {
+      $op_ids[] = substr($key, 16);
+    }
+  }
+  
+  if (isset($_POST['SRPApprovePosts']))
+  {
+    SRP_PublishPosts($op_ids);
+  }
+  else if (isset($_POST['SRPDeletePosts']))
+  {
+    SRP_DeletePosts($op_ids);
+  }
 }
 
 $srp_leftcolumnwidth = 100;
@@ -70,20 +70,20 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 <div>&nbsp;</div>
 <?php
     $query = new WP_Query(array('nopaging' => 1, 'post_status' => 'pending', 'caller_get_posts' => $current_user->ID));
-	if ($query->have_posts())
-	{
-		$bPrintTableEnd = true;
+  if ($query->have_posts())
+  {
+    $bPrintTableEnd = true;
 ?>
 <script type="text/javascript">
 bAllChecked = false;
 function checkAll()
 {
-	var form = document.getElementById('SRPApprove');
-	bAllChecked = !bAllChecked;
-	for (var i = 0; i < form.elements.length; i++)
-	{
-		form.elements[i].checked = bAllChecked;
-	}
+  var form = document.getElementById('SRPApprove');
+  bAllChecked = !bAllChecked;
+  for (var i = 0; i < form.elements.length; i++)
+  {
+    form.elements[i].checked = bAllChecked;
+  }
 }
 </script>
 
@@ -91,34 +91,34 @@ function checkAll()
 <input type="hidden" name="action" value="process" />
 <table>
 <tr>
-	<th><input type="checkbox" name="checkall" onClick="javascript:checkAll();" /></th>
-	<th>Date posted</th>
-	<th>Title / Author</th>
-	<th>Content</th>
+  <th><input type="checkbox" name="checkall" onClick="javascript:checkAll();" /></th>
+  <th>Review Date and Author</th>
+  <th>Book Title / Author</th>
+  <th>Content</th>
 </tr>
 <?php
-	}
-	
+  }
+  
     while ($query->have_posts()) :
         $query->the_post();
         $post_id = get_the_ID();
 ?>
 <tr>
 <td><input type="checkbox" name="<?php echo "SRP_ApprovePost_$post_id"; ?>" /></td>
-<td><?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?></td>
+<td><?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?> by <?php echo get_the_author(); ?></td>
 <td><em><?php echo get_post_meta($post_id, 'book_title', true); ?></em>, <?php echo get_post_meta($post_id, 'book_author', true); ?></td>
 <td><?php echo strip_tags(get_the_content()); ?></td>
 </tr>
 <?php
     endwhile;
-	if ($bPrintTableEnd == true)
-	{
+  if ($bPrintTableEnd == true)
+  {
 ?>
 </table>
 <p><input type="submit" name="SRPApprovePosts" value="Approve all checked posts" />&nbsp;&nbsp;&nbsp;<input type="submit" name="SRPDeletePosts" value="Delete all checked posts" /></p>
 </form>
 <?php
-	}
+  }
     wp_reset_query();
 ?>
 </div>
