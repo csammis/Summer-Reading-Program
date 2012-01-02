@@ -289,13 +289,13 @@ function SRP_PrintSchoolSelector($type, $selected)
         if (strpos($key, 'srp_group') === 0)
         {
             preg_match('/srp_group([0-9]+)/', $key, $matches);
-            $gid = $matches[1];
+            $gid = $matches[1] + 0;
             $gid2name[$gid] = $options[$key];
         }
         else if (strpos($key, 'srp_school') === 0)
         {
             preg_match('/srp_school([0-9]+)group([0-9]+)/', $key, $matches);
-            $gid = $matches[2]; $sid = $matches[1];
+            $gid = $matches[2] + 0; $sid = $matches[1] + 0;
             if (strpos($key, 'show') !== false)
             {
                 $show_value = $options[$key];
@@ -310,12 +310,11 @@ function SRP_PrintSchoolSelector($type, $selected)
             }
         }
     }
-    
-    //asort($gid2name);
-    
+
     $fieldname = ($type == 0) ? 'srp_school_spring' : 'srp_school_fall';
     
     echo "<select name=\"$fieldname\" class=\"SRPInput\">\n";
+    ksort($gid2name);
     foreach ( $gid2name as $gid => $groupname)
     {
         if (count($gid2sids[$gid]) == 0)
@@ -325,7 +324,9 @@ function SRP_PrintSchoolSelector($type, $selected)
         }
         
         echo "<option value=\"-$gid\" disabled=\"disabled\">$groupname</option>\n";
-        foreach ($gid2sids[$gid] as $sid)
+        $sidarray = $gid2sids[$gid];
+        asort($sidarray); // Put the schools within groups in ID numerical order
+        foreach ($sidarray as $sid)
         {
             $schoolname = $sid2name[$sid];
             echo "<option value=\"$sid\"";
