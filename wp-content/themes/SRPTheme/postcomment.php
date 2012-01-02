@@ -1,7 +1,7 @@
 <?php
 /*
 * Template Name: SRP Comment Poster
-* Lists and search controls for book reviews
+* jquery processor for administrator commenting on reviews
 
 This WordPress plugin was developed for the Olathe Public Library, Olathe, KS
 http://www.olathelibrary.org
