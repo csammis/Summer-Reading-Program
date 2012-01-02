@@ -64,7 +64,7 @@ function SRP_PostSearch($rid, $author, $title, $rating, $genre, $grade, $startAt
     $select  = "SELECT post.id AS ID, post.post_date AS date, post.post_content AS content, post.post_author AS author, ";
     $select .= "  meta_author.meta_value AS book_author, meta_title.meta_value AS title, ";
     $select .= "  meta_rating.meta_value AS rating, meta_genre.meta_value AS genre, meta_grade.meta_value AS grade, ";
-    $select .= "  post.comment_count AS comments ";
+    $select .= "  meta_pauthor.meta_value AS p_author, post.comment_count AS comments ";
     $select .= "FROM $wpdb->posts post ";
 
     /////// AUTHOR ///////
@@ -162,6 +162,10 @@ function SRP_PostSearch($rid, $author, $title, $rating, $genre, $grade, $startAt
     }
     $select .= ') ';
 
+    ////// Legacy post author //////
+    $select .= "LEFT OUTER JOIN $wpdb->postmeta meta_pauthor ON (meta_pauthor.post_id = post.id AND meta_pauthor.meta_key = %s) ";
+    $params[] = 'author_info';
+
     if ($bUseRID === FALSE)
     {
         $select .= "WHERE (post.post_type = %s AND post.post_status = %s) $where";
@@ -187,7 +191,8 @@ function SRP_PostSearch($rid, $author, $title, $rating, $genre, $grade, $startAt
     $ratings  = $wpdb->get_col($query, 6);
     $genres   = $wpdb->get_col($query, 7);
     $grades   = $wpdb->get_col($query, 8);
-    $comments = $wpdb->get_col($query, 9);
+    $pauthors = $wpdb->get_col($query, 9);
+    $comments = $wpdb->get_col($query, 10);
 
     $bHasMore = false;
     if (count($IDs) > $limit)
@@ -207,6 +212,7 @@ function SRP_PostSearch($rid, $author, $title, $rating, $genre, $grade, $startAt
                         'book_rating' => $ratings[$i],
                         'book_genre' => $genres[$i],
                         'author_grade' => $grades[$i],
+                        'legacy_author_info' => $pauthors[$i],
                         'comment_count' => $comments[$i],
                         'has_more' => $bHasMore);
         $retval[] = $review;

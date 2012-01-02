@@ -50,8 +50,10 @@ function srp_upgrader_activated()
     // The 2010 version was a special case of "not-writing-for-upgradability"
     if ($from_version == '2010')
     {
-        // (1) Wipe out the srp_options in the opt table
+        // (1) Wipe out the srp_options and old theme settings in the opt table
         delete_option('SRPTheme');
+        delete_option('widget_srpreviewwidget');
+        delete_option('sidebars_widgets');
 
         // (2) Import new genres
         update_option('SRPTheme', array(

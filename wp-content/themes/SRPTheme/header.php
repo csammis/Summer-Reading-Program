@@ -2,6 +2,7 @@
 <?php
 require_once('includes/srp-inc-utility.php');
 require_once('includes/srp-inc-template.php');
+require_once('includes/srp-inc-search.php');
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://gmpg.org/xfn/11">
@@ -27,11 +28,11 @@ require_once('includes/srp-inc-template.php');
     echo "  left:$SRP_RIGHTWIDTH%;\n";
     echo "}\n";
     echo "#page.with-sidebar .mask-main .col2 {\n";
-    if ($rightwidth == 0)
+    if ($SRP_RIGHTWIDTH == 0)
         echo "  visibility:collapse;\n";
     else
     {
-        echo "  width:$SRP_RIGTHWIDTH%;\n";
+        echo "  width:$SRP_RIGHTWIDTH%;\n";
         echo "  left:$SRP_RIGHTWIDTH%;\n";
     }
     echo "}\n</style>\n";

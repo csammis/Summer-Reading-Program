@@ -44,7 +44,6 @@ if (is_user_logged_in())
 }
 
 $srp_leftcolumnwidth = 100;
-SRP_PrintPageStart($srp_leftcolumnwidth);
 
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 
@@ -160,6 +159,7 @@ switch ($action_type)
                     $confirmation_id = uniqid();
                     update_user_meta($user_id, 'confirmation_id', $confirmation_id);
                     SRP_SendNewEmail($user_id, $srp_pass1, $confirmation_id);
+                    SRP_PrintPageStart($srp_leftcolumnwidth);
 ?>
 <h2>Thanks for registering!</h2>
 <div>Please check your e-mail for a confirmation link.  Follow this link to confirm your account and log in to the site.</div>
@@ -217,12 +217,16 @@ switch ($action_type)
                     break;
             }
             $errormsg .= '</div>';
-            echo $errormsg;
         }
         
     /** Intentional fall-through if registration failed **/
     case 'start':
+        SRP_PrintPageStart($srp_leftcolumnwidth);
 
+        if (strlen($errormsg) > 0)
+        {
+            echo $errormsg;
+        }
 ?>
         <h2><?php the_title(); ?></h2>
         <div class="post-content clearfix">

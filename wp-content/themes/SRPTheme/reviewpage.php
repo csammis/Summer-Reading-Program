@@ -79,6 +79,16 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 			$post = $posts[$i];
 			$authorID = $post['authorID'];
 			$bHasMore = $post['has_more'];
+
+            $author_blurb = '';
+            if (strlen($post['legacy_author_info']) > 0)
+            {
+                $author_blurb = $post['legacy_author_info'];
+            }
+            else
+            {
+                $author_blurb = get_usermeta($authorID, 'first_name') . ' (grade ' . $post['author_grade'] . ')';
+            }
 ?>
             <div class="SRPReviewListing">
                 <div class="SRPTitleListing"><em><?php echo $post['book_title']; ?></em>, <?php echo $post['book_author']; ?></div>
@@ -86,8 +96,7 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
                 <div class="SRPRatingListing"><span class="SRPRatingText">Rating:</span> <?php SRP_PrintStars($post['book_rating']); ?></div>
                 <div class="SRPReviewListingContent"><?php echo strip_tags($post['content']); ?></div>
                 <div class="SRPAuthorListing">
-                    Reviewed by <?php echo get_usermeta($authorID, 'first_name'); ?>
-                    (grade <?php echo $post['author_grade']; ?>)
+                    Reviewed by <?php echo $author_blurb; ?>
                     on <?php echo get_date_from_gmt(date('Y-m-d H:i:s', strtotime($post['date'])), 'F jS, Y'); ?>
                 </div>
                 <div id="SRPCommentContainer-<?php echo $post['id']; ?>" style="margin:0.2em;border-top:0.1em dashed gray;">

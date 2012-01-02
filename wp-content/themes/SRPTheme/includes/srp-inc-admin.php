@@ -125,9 +125,9 @@ function SRP_ResetDatabase($removeReviews = true)
     if ($removeReviews === true)
     {
         $delete_postmeta  = "DELETE FROM $wpdb->postmeta ";
-        $delete_postmeta .= "WHERE POST_ID IN (SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status = %s)";
+        $delete_postmeta .= "WHERE POST_ID IN (SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status = %s AND post_author NOT IN ($admin_userids))";
     
-        $retval = $wpdb->query($wpdb->prepare($delete_postmeta, 'post', 'publish'));
+        $retval = $wpdb->query($wpdb->prepare($delete_postmeta, 'post', 'publish', $admin_userids));
         if ($retval === FALSE)
         {
             echo 'Error executing DELETE FROM postmeta';
@@ -136,8 +136,8 @@ function SRP_ResetDatabase($removeReviews = true)
             return;
         }
 
-        $delete_posts = "DELETE FROM $wpdb->posts WHERE post_type = %s AND post_status = %s";
-        $retval = $wpdb->query($wpdb->prepare($delete_posts, 'post', 'publish'));
+        $delete_posts = "DELETE FROM $wpdb->posts WHERE post_type = %s AND post_status = %s AND post_author NOT IN ($admin_userids)";
+        $retval = $wpdb->query($wpdb->prepare($delete_posts, 'post', 'publish', $admin_userids));
         if ($retval === FALSE)
         {
             echo 'Error executing DELETE FROM posts';

@@ -39,8 +39,9 @@ class SRPReviewWidget extends WP_Widget
         $postcount = empty($instance['count']) ? 5  : $instance['count'];
         if ($postcount == 0)
             $postcount = 1;
-            
-        $query = new WP_Query(array('showposts' => $postcount, 'nopaging' => 0, 'post_status' => 'publish', 'caller_get_posts' => 1));
+
+        $posts = SRP_PostSearch('', '', '', '', '', '', 0, $postcount);
+        
         echo $before_widget;
         $title = apply_filters('widget_title', empty($instance['title']) ? __('Recent reviews') : $instance['title']);
         if ($title)
@@ -48,32 +49,42 @@ class SRPReviewWidget extends WP_Widget
             echo '<div class="titlewrap"><h4><span>' . $title . '</span></h4></div>';
         }
         
-        if (! $query->have_posts())
+        if (count($posts) == 0)
         {
             echo 'No reviews yet...';
         }
         else
         {
             echo '<ul>';
-            while ($query->have_posts()) :
-                $query->the_post();
-                $post_id = get_the_ID();
-                $genre_name = SRP_GetGenreName(get_post_meta($post_id, 'book_genre', true));
+            for ($i = 0; $i < count($posts); $i++)
+            {
+                $post = $posts[$i];
+                $authorID = $post['authorID'];
+                $bHasMore = $post['has_more'];
+
+                $author_blurb = '';
+                if (strlen($post['legacy_author_info']) > 0)
+                {
+                    $author_blurb = $post['legacy_author_info'];
+                }
+                else
+                {
+                    $author_blurb = get_usermeta($authorID, 'first_name') . ' (grade ' . $post['author_grade'] . ')';
+                }
 ?>
 <li class="SRPReviewSlug">
-<div class="SRPTitle"><em><?php echo get_post_meta($post_id, 'book_title', true); ?></em>, <?php echo get_post_meta($post_id, 'book_author', true); ?></div>
-<div class="SRPGenre"><span class="SRPRatingText">Genre:</span> <?php echo $genre_name; ?></div>
-<div class="SRPRating"><span class="SRPRatingText">Rating:</span> <?php $this->PrintStars(get_post_meta($post_id, 'book_rating', true)); ?></div>
-<div class="SRPReview"><?php echo strip_tags(get_the_content()); ?></div>
-<div class="SRPAuthor">Reviewed by <?php the_author(); ?> (grade <?php the_author_meta('school_grade'); ?>) 
-                       on <?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?></div>
+<div class="SRPTitle"><em><?php echo $post['book_title']; ?></em>, <?php echo $post['book_author']; ?></div>
+<div class="SRPGenre"><span class="SRPRatingText">Genre:</span> <?php echo SRP_GetGenreName($post['book_genre']); ?></div>
+<div class="SRPRating"><span class="SRPRatingText">Rating:</span> <?php $this->PrintStars($post['book_rating']); ?></div>
+<div class="SRPReview"><?php echo strip_tags($post['content']); ?></div>
+<div class="SRPAuthor">Reviewed by <?php echo $author_blurb; ?>
+                       on <?php echo get_date_from_gmt(date('Y-m-d H:i:s', strtotime($post['date'])), 'F jS, Y'); ?></div>
 </li>
 <?php
-            endwhile;
+            }
             echo '</ul>';
         }
         echo $after_widget;
-        wp_reset_query(); // WP_Query cleanup
     }
     
     function update($new_instance, $old_instance) {
