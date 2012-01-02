@@ -77,10 +77,12 @@ function SRP_PrintGeneralOptions()
 <div>The following settings control the contents of the Summer Reading Program site.  Please read each instruction carefully before saving changes.</div>
 <div>&nbsp;</div>
 <div>The Summer Reading Program may be <em>open</em> (users may register accounts, log in, and submit time read and reviews) or <em>closed</em> (users may browse reviews but not create any new content).  Administrators may log in at any time.  The program is initially closed.</div>
+  <div>&nbsp;</div><div><strong>Please note:</strong> the Program calculates how many hours are allowed to be logged per user based on how long the program has been open. Closing and opening the program midsummer will reset this counter, creating serious usability issues.  It is not recommended that the program be closed except at the end of the summer.</div>
 <div>&nbsp;</div>
 <div>The Summer Reading Program is &nbsp;
-<input type="radio" name="program_active" id="program_active" value="1" <?php if ($program_active == 1) echo 'checked'; ?> /> open &nbsp;
-<input type="radio" name="program_active" id="program_active" value="0" <?php if ($program_active == 0) echo 'checked'; ?> /> closed</div>
+<input type="radio" disabled="disabled" name="program_active" id="program_active" value="1" <?php if ($program_active == 1) echo 'checked'; ?> /> open &nbsp;
+<input type="radio" name="program_active" id="program_active" value="0" <?php if ($program_active == 0) echo 'checked'; ?> /> closed
+<!-- <input type="radio" name="program_active" id="program_active" value="-1" <?php if ($program_active == -1) echo 'checked'; ?> /> paused (no user access) --></div>
 
 <div>&nbsp;</div>
 <div>The Summer Reading Program theme expects a certain set of pages with specific attributes.  Check this box in order to create that set of pages.  Doing this more than once will cause no problems.</div>
