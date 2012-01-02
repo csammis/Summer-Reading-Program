@@ -65,13 +65,6 @@ function SRP_SelectNReviewersFromLastWeek($nReviewers)
         $admin_userids .= $query[$i]->user_id;
     }
   
-    // Blacklisted users
-    if (strlen($admin_userids) > 0)
-    {
-       $admin_userids .= ',';
-    }
-    $admin_userids .= "869";
-
     $params[] = 'post';
     $params[] = 'publish';
     $params[] = $admin_userids;
