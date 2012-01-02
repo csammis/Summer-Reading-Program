@@ -155,6 +155,7 @@ function loadExistingPrizes()
         $prizes[$id][$type] = $value;
     }
     
+    ksort($prizes);
     foreach ($prizes as $id => $values)
     {
         echo "addPrizeRow($id, $values[hours], '$values[name]', '$values[code]');\n";
