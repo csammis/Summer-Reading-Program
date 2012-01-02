@@ -30,6 +30,7 @@ THE SOFTWARE.
 */
 
 require_once('includes/srp-inc-users.php');
+require_once('includes/srp-inc-utility.php');
 SRP_AuthRedirect($SRP_UNAUTHENTICATED);
 
 require_once('includes/srp-inc-template.php');
@@ -248,12 +249,13 @@ switch ($action_type)
         <input type="hidden" name="page_id" value="<?php the_ID(); ?>" />
         <h4>Your Account</h4>
         <p>
-        <label <?php if (strpos($reqfields, 'srp_login:') !== FALSE) echo 'class="errormsg"';?>>Username:<br />
+        <label <?php if (strpos($reqfields, 'srp_login:') !== FALSE) echo 'class="errormsg"';?>>Username: <em>Can contain letters, numbers, spaces, dashes (-) and underscores (_)</em><br />
         <input type="text" name="srp_login" id="srp_login" class="SRPInput" value="<?php echo esc_attr(stripslashes($srp_login)); ?>" size="20" />
         </label>
         </p>
         <p>
         <label><span <?php if (strpos($reqfields, 'srp_email:') !== FALSE) echo 'class="errormsg"';?>>E-mail</span> (please do not use your school e-mail address):<br />
+        <a href="http://www.oplteens.com/email/">Don't have your own email address?</a> <br />
         <input type="text" name="srp_email" id="srp_email" class="SRPInput" value="<?php echo esc_attr(stripslashes($srp_email)); ?>" size="20" />
         </label>
         </p>
