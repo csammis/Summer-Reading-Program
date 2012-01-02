@@ -58,20 +58,27 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 <div>&nbsp;</div>
 
 <div>
-<span class="SRPStatLabel">Number of registered users:</span>&nbsp;<span class="SRPStatValue"><?php echo SRP_GetUserCount();?></span>
+<span class="SRPStatLabel">Number of registered users:</span>&nbsp;<span class="SRPStatValue"><?php echo SRP_GetUserCount();?> (<?php echo SRP_GetConfirmedUserCount(); ?> have confirmed)</span>
 &nbsp;
 <form id="SRPCreateCSV" method="POST" action="<?php echo get_permalink(get_the_ID()); ?>">
 <input type="hidden" name="action" value="csv" />
 <input type="submit" value="Create registered user CSV" />
 </form>
 </div>
-
+  
 <div><span class="SRPStatLabel">Number of reviews posted:</span>&nbsp;<span class="SRPStatValue"><?php echo SRP_GetReviewCount();?></span></div>
 <?php
     $minutes = SRP_SelectAllMinutes();
     $hours = floor($minutes / 60);
 ?>
 <div><span class="SRPStatLabel">Total number of minutes / pages logged:</span>&nbsp;<span class="SRPStatValue"><?php echo "$minutes ($hours hours)"; ?></span></div>
+<?php
+    $program_open_date = get_srptheme_option('program_open_date');
+    $days_open = ((time() - $program_open_date) / 60 / 60 / 24);
+    $reading_hours_open = round($days_open * 20, 2);
+?>
+<div>&nbsp;</div>
+<div><span class="SRPStatLabel">The Summer Reading Program is allowing <?php echo $reading_hours_open; ?> hours per user to be logged since program open (20 hours out of each 24 hour period).</span></div>
 <div>&nbsp;</div>
 <div><span class="SRPStatLabel">Users who have submitted reviews (from most reviews to least):</span><br />
   <ol>
@@ -84,7 +91,7 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
   ?>
   </ol>
 </div>
-<div><span class="SRPStatLabel">Users who have submitted at least one hour (from most hours to least):</span><br />
+<div><span class="SRPStatLabel">Users who have submitted at least one minute (from most minutes to least):</span><br />
   <ol>
   <?php
     $names = SRP_SelectUsersWithHours(1);
@@ -136,6 +143,10 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
   ?>
   </ol>
 </div>
+    
+    <div><?php /* SRP_ChrisScratch(); */ ?>
+      </div>
+    
 <?php
 
 endif; /* end The Loop */
