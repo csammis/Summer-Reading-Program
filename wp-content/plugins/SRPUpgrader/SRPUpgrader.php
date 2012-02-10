@@ -4,15 +4,17 @@ Plugin Name: SRP Upgrader
 Description:  Activate this plugin to convert an SRP installation to the latest version.
 */
 
-register_activation_hook (__FILE__, 'srp_upgrader_activated');
+register_activation_hook (WP_PLUGIN_DIR . '/SRPUpgrader/SRPUpgrader.php', 'srp_upgrader_activated');
 
 global $SRP_VERSION;
-$SRP_VERSION = '2011';
+$SRP_VERSION = '2012';
 
 function srp_upgrader_activated()
 {
     global $SRP_VERSION;
     global $wpdb;
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
     $version_table_name = $wpdb->prefix . 'srp_version';
 
@@ -34,65 +36,132 @@ function srp_upgrader_activated()
             return;
         }
     }
-
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-    // Create the srp_version table
-    $create_table = "CREATE TABLE $version_table_name (
-                        id mediumint(9) NOT NULL AUTO_INCREMENT,
-                        prev_version tinytext DEFAULT '' NOT NULL,
-                        to_version tinytext DEFAULT '' NOT NULL,
-                        upgrade_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                        UNIQUE KEY id (id)
-                    );";
-    dbDelta($create_table);
-
-    // The 2010 version was a special case of "not-writing-for-upgradability"
-    if ($from_version == '2010')
+    else
     {
-        // (1) Wipe out the srp_options and old theme settings in the opt table
-        delete_option('SRPTheme');
-        delete_option('widget_srpreviewwidget');
-        delete_option('sidebars_widgets');
-
-        // (2) Import new genres
-        update_option('SRPTheme', array(
-            'srp_genre1'  => 'Adventure',   //adventure
-            'srp_genre2'  => 'Fantasy',     //fantasy
-            'srp_genre3'  => 'Fiction',     //fiction
-            'srp_genre4'  => 'Historical',  //historical
-            'srp_genre5'  => 'Horror',      //horror
-            'srp_genre6'  => 'Mystery',     //mystery
-            'srp_genre7'  => 'Non-fiction', //nonfiction
-            'srp_genre8'  => 'Romance',     //romance
-            'srp_genre9'  => 'Science Fiction', //scifi
-            'srp_genre10' => 'Thriller',    //thriller
-            'nextgenreid' => 11));
-
-
-        // (3) Map genres from 2010 -> new versions on the postmeta table
-        $genreUpdate = "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = %s AND meta_value = %s";
-        $wpdb->query($wpdb->prepare($genreUpdate, '1', 'book_genre', 'adventure'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '2', 'book_genre', 'fantasy'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '3', 'book_genre', 'fiction'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '4', 'book_genre', 'historical'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '5', 'book_genre', 'horror'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '6', 'book_genre', 'mystery'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '7', 'book_genre', 'nonfiction'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '8', 'book_genre', 'romance'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '9', 'book_genre', 'scifi'));
-        $wpdb->query($wpdb->prepare($genreUpdate, '10', 'book_genre', 'thriller'));
-
-        // (4) Denormalize post author information
-        $query  = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
-        $query .= " SELECT p.ID, 'author_info', CONCAT(umn.meta_value, ' (grade ', umg.meta_value, ')') ";
-        $query .= " FROM $wpdb->posts p ";
-        $query .= " INNER JOIN $wpdb->usermeta umn ON p.post_author = umn.user_id AND umn.meta_key = %s ";
-        $query .= " INNER JOIN $wpdb->usermeta umg ON p.post_author = umg.user_id AND umg.meta_key = %s ";
-        $wpdb->query($wpdb->prepare($query, 'first_name', 'school_grade'));
+        // Create the srp_version table
+        $create_table = "CREATE TABLE $version_table_name (
+                            id mediumint(9) NOT NULL AUTO_INCREMENT,
+                            prev_version tinytext DEFAULT '' NOT NULL,
+                            to_version tinytext DEFAULT '' NOT NULL,
+                            upgrade_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                            UNIQUE KEY id (id)
+                        );";
+        dbDelta($create_table);
     }
 
+
+    $upgrade_year = intval($from_version);
+    switch ($upgrade_year)
+    {
+    case 2010:
+        {
+            die('how did i get here?');
+
+            // The 2010 version was a special case of "not-writing-for-upgradability"
+            // (1) Wipe out the srp_options and old theme settings in the opt table
+            delete_option('SRPTheme');
+            delete_option('widget_srpreviewwidget');
+            delete_option('sidebars_widgets');
+
+            // (2) Import new genres
+            update_option('SRPTheme', array(
+                'srp_genre1'  => 'Adventure',   //adventure
+                'srp_genre2'  => 'Fantasy',     //fantasy
+                'srp_genre3'  => 'Fiction',     //fiction
+                'srp_genre4'  => 'Historical',  //historical
+                'srp_genre5'  => 'Horror',      //horror
+                'srp_genre6'  => 'Mystery',     //mystery
+                'srp_genre7'  => 'Non-fiction', //nonfiction
+                'srp_genre8'  => 'Romance',     //romance
+                'srp_genre9'  => 'Science Fiction', //scifi
+                'srp_genre10' => 'Thriller',    //thriller
+                'nextgenreid' => 11));
+
+
+            // (3) Map genres from 2010 -> new versions on the postmeta table
+            $genreUpdate = "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = %s AND meta_value = %s";
+            $wpdb->query($wpdb->prepare($genreUpdate, '1', 'book_genre', 'adventure'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '2', 'book_genre', 'fantasy'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '3', 'book_genre', 'fiction'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '4', 'book_genre', 'historical'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '5', 'book_genre', 'horror'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '6', 'book_genre', 'mystery'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '7', 'book_genre', 'nonfiction'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '8', 'book_genre', 'romance'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '9', 'book_genre', 'scifi'));
+            $wpdb->query($wpdb->prepare($genreUpdate, '10', 'book_genre', 'thriller'));
+
+            // (4) Denormalize post author information
+            $query  = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
+            $query .= " SELECT p.ID, 'author_info', CONCAT(umn.meta_value, ' (grade ', umg.meta_value, ')') ";
+            $query .= " FROM $wpdb->posts p ";
+            $query .= " INNER JOIN $wpdb->usermeta umn ON p.post_author = umn.user_id AND umn.meta_key = %s ";
+            $query .= " INNER JOIN $wpdb->usermeta umg ON p.post_author = umg.user_id AND umg.meta_key = %s ";
+            $wpdb->query($wpdb->prepare($query, 'first_name', 'school_grade'));
+        }
+        // Intentional fallthrough
+    case 2011:
+        {
+            // 2011 was the last year SRP stored data in the wp_options table
+
+            $srp_theme_opts = get_option('SRPTheme');
+            ksort($srp_theme_opts);
+
+            //// Messages - fixed displays whose contents are configurable
+            $messages_tablename = $wpdb->prefix . 'srp_messages';
+            $table_exists = strlen($wpdb->get_var("SHOW TABLES LIKE '$messages_tablename'")) > 0;
+            if ($table_exists === false)
+            {
+                $create_messages = "CREATE TABLE $messages_tablename (
+                                            id mediumint(9) not null auto_increment,
+                                            message_name tinytext default '' not null,
+                                            message_value text default '' not null,
+                                            unique key id (id));";
+                dbDelta($create_messages);
+                $insert_message = "INSERT INTO $messages_tablename (message_name, message_value) VALUES (%s, %s)";
+                $messages2011 = array('srp_footertext', 'srp_hourlyemail', 'srp_hourlynotice', 'srp_weeklyemail', 'srp_regagreement');
+                foreach ($messages2011 as $msgkey)
+                {
+                    $wpdb->query($wpdb->prepare($insert_message, $msgkey, $srp_theme_opts[$msgkey]));
+                }
+            }
+
+            //// Genres - The configurable list of genres available to choose for books
+            $genres_tablename = $wpdb->prefix . 'srp_genres';
+            $table_exists = strlen($wpdb->get_var("SHOW TABLES LIKE '$genres_tablename'")) > 0;
+            if ($table_exists === false)
+            {
+                $create_genres = "CREATE TABLE $genres_tablename (
+                                            id mediumint(9) not null auto_increment,
+                                            genre_name tinytext default '' not null,
+                                            unique key id (id));";
+                dbDelta($create_genres);
+                $insert_genre = "INSERT INTO $genres_tablename (genre_name) VALUES (%s)";
+                foreach ($srp_theme_opts as $key => $val)
+                {
+                    $pos = strpos($key, 'srp_genre');
+                    if ($pos === false || $pos != 0)
+                    {
+                        continue;
+                    }
+
+                    $wpdb->query($wpdb->prepare($insert_genre, $val));
+                }
+            }
+
+            //TODO: User options, theme options, post information, prizes, schools 
+
+        }
+        // Intentional fallthrough
+    default:
+        {
+            // nothing here
+        }
+    }
+    
     delete_option('SRP_LastDrawing');
+
+    /********** Upgrade functionality common to all versions **********/
 
     // Create an upgrade user
     $upgrade_userid = username_exists('SRP_Upgrade_User');
