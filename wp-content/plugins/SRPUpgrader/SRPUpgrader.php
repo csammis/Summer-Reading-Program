@@ -149,7 +149,112 @@ function srp_upgrader_activated()
                 }
             }
 
-            //TODO: User options, theme options, post information, prizes, schools 
+            //// Schools and school groups - The configurable list of OPL feeder schools and their groupings
+            $schools_tablename = $wpdb->prefix . 'srp_school';
+            $table_exists = strlen($wpdb->get_var("SHOW TABLES LIKE '$schools_tablename'")) > 0;
+            if ($table_exists === false)
+            {
+                $groups_tablename = $wpdb->prefix . 'srp_schoolgroup';
+                $create_groups = "CREATE TABLE $groups_tablename (
+                                            id mediumint(9) not null auto_increment,
+                                            group_name tinytext default '' not null,
+                                            group_order mediumint(9) default 1 not null,
+                                            primary key (id));";
+                dbDelta($create_groups);
+                
+                $create_schools = "CREATE TABLE $schools_tablename (
+                                            id mediumint(9) not null auto_increment,
+                                            school_name tinytext default '' not null,
+                                            semester mediumint(9) default 1 not null,
+                                            primary key (id));";
+                dbDelta($create_schools);
+
+
+                $ssgrel_tablename = $wpdb->prefix . 'srp_schoolgroup_school_rel';
+                $create_ssgrel = "CREATE TABLE $ssgrel_tablename (
+                                            group_id mediumint(9) not null,
+                                            school_id mediumint(9) not null,
+                                            seq_num mediumint(9) not null,
+                                            primary key (group_id, school_id));";
+                dbDelta($create_ssgrel);
+
+                // This is pretty awful and is basically the reason I decided to upgrade to tables...
+
+                // Create an associative array of groups (id -> name) and school data (groupid -> schoolid -> name + semester)
+                foreach ($srp_theme_opts as $key => $val)
+                {
+                    $pos = strpos($key, 'srp_school');
+                    if ($pos === false)
+                    {
+                        $pos = strpos($key, 'srp_group');
+                        if ($pos === false)
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (strpos($key, 'school') === false)
+                    {
+                        // This is a group name
+                        $groupid = substr($key, strlen('srp_group'));
+                        $groupname = $val;
+                        $gid = $groupid + 0;
+                        $groups[$gid] = $groupname;
+                    }
+                    else
+                    {
+                        // This is school data
+                        $matches = array();
+                        preg_match('/srp_school([0-9]+)group([0-9]+)/', $key, $matches);
+                        $gid = $matches[2] + 0;
+                        $sid = $matches[1] + 0;
+                        if (strpos($key, 'show') === false)
+                        {
+                            $schools[$gid][$sid]['name'] = $val;
+                        }
+                        else
+                        {
+                            $schools[$gid][$sid]['show'] = $val;
+                        }
+                    }
+                }
+
+                // Insert that mess into the new tables
+                $groups_insert  = "INSERT INTO $groups_tablename (id, group_name, group_order) VALUES (%s, %s, %s)";
+                $schools_insert = "INSERT INTO $schools_tablename (id, school_name, semester) VALUES (%s, %s, %s)";
+                $ssgrel_insert   = "INSERT INTO $ssgrel_tablename (group_id, schooL_id, seq_num) VALUES (%s, %s, %s)";
+
+                ksort($groups);
+                foreach ($groups as $oldgid => $gname)
+                {
+                    // Insert the group (2011 group order was determined by ID. Yeah.)
+                    $wpdb->query($wpdb->prepare($groups_insert, $oldgid, $gname, $oldgid));
+
+                    $seq_num = 1;
+                    ksort($schools[$oldgid]);
+                    foreach ($schools[$oldgid] as $oldsid => $school_data)
+                    {
+                        // Mangle up the semester a bit so that zeros aren't involved and "Both" (1) is the default
+                        $semester = $school_data['show'];
+                        switch ($semester)
+                        {
+                            case 0: $semester = 2; break; // spring
+                            case 1: $semester = 3; break; // fall
+                            case 2: $semester = 1; break; // both
+                        }
+
+                        // Insert the school
+                        $wpdb->query($wpdb->prepare($schools_insert, $oldsid, $school_data['name'], $semester));
+
+                        // Insert the rel row
+                        $wpdb->query($wpdb->prepare($ssgrel_insert, $oldgid, $oldsid, $seq_num));
+
+                        $seq_num++;
+                    }
+                }
+            } // end schools/groups
+            
+            //TODO: User options, theme options, post information, prizes
 
         }
         // Intentional fallthrough
