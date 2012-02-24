@@ -254,7 +254,93 @@ function srp_upgrader_activated()
                 }
             } // end schools/groups
             
-            //TODO: User options, theme options, post information, prizes
+            $prizes_tablename = $wpdb->prefix . 'srp_prizes';
+            $table_exists = strlen($wpdb->get_var("SHOW TABLES LIKE '$prizes_tablename'")) > 0;
+            if ($table_exists === false)
+            {
+                $prizes_create = "CREATE TABLE $prizes_tablename (
+                                            id mediumint(9) not null auto_increment,
+                                            prize_name tinytext default '' not null,
+                                            hour_threshold mediumint(9) not null default 0,
+                                            prize_code tinytext default '' not null,
+                                            primary key (id));";
+                dbDelta($prizes_create);
+
+                $gprize_tablename = $wpdb->prefix . 'srp_gprizes';
+                $gprize_create = "CREATE TABLE $gprize_tablename (
+                                            id mediumint(9) not null auto_increment,
+                                            prize_name tinytext default '' not null,
+                                            primary key (id));";
+                dbDelta($gprize_create);
+
+                $gprize_grade_tablename = $wpdb->prefix . 'srp_gprize_grade';
+                $gprize_grade_create = "CREATE TABLE $gprize_grade_tablename (
+                                                  gprize_id mediumint(9) not null default 0,
+                                                  grade mediumint(9) not null default 0,
+                                                  primary key (gprize_id, grade));";
+                dbDelta($gprize_grade_create);
+
+                foreach ($srp_theme_opts as $key => $val)
+                {
+                    $pos = strpos($key, 'srp_hprize');
+                    if ($pos === false || $pos != 0)
+                    {
+                        $pos = strpos($key, 'srp_gprize');
+                        if ($pos === false || $pos != 0)
+                        {
+                            continue;
+                        }
+
+                        if (strpos($key, '_', strlen('srp_gprize')) !== false)
+                        {
+                            continue;
+                        }
+
+                        $grandPrizeId = substr($key, strlen('srp_gprize'));
+                        if (!is_numeric($grandPrizeId))
+                        {
+                            $grandPrizeId = substr($grandPrizeId, 0, strpos($grandPrizeId, 'grade'));
+                            $gprizes[$grandPrizeId]['grades'] = $val;
+                        }
+                        else
+                        {
+                            $gprizes[$grandPrizeId]['name'] = $val;
+                        }
+                    }
+                    else
+                    {
+                        $matches = array();
+                        preg_match('/srp_hprize([a-z]+)([0-9]+)/', $key, $matches);
+                        $type = $matches[1];
+                        $id = $matches[2];
+                        $prizes[$id][$type] = $val;
+                    }
+                }
+
+                $prizes_insert = "INSERT INTO $prizes_tablename (prize_name, hour_threshold, prize_code) VALUES (%s, %s, %s)";
+                $gprize_insert = "INSERT INTO $gprize_tablename (id, prize_name) VALUES (%s, %s)";
+                $gprize_grade_insert = "INSERT INTO $gprize_grade_tablename (gprize_id, grade) VALUES (%s, %s)";
+                
+                foreach ($prizes as $id => $prize)
+                {
+                    $wpdb->query($wpdb->prepare($prizes_insert, $prize['name'], $prize['hours'], $prize['code']));
+                }
+
+                $i = 1;
+                foreach ($gprizes as $id => $gprize)
+                {
+                    $wpdb->query($wpdb->prepare($gprize_insert, $i, $gprize['name']));
+                    $grades = $gprize['grades'];
+                    foreach (explode(',', $grades) as $grade)
+                    {
+                        $grade += 6;
+                        $wpdb->query($wpdb->prepare($gprize_grade_insert, $i, $grade));
+                    }
+                    $i++;
+                }
+            }
+
+            //TODO: User options, theme options (including gprize interval), post information
 
         }
         // Intentional fallthrough
