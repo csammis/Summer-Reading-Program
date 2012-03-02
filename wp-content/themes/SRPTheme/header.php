@@ -3,6 +3,17 @@
 require_once('includes/srp-inc-utility.php');
 require_once('includes/srp-inc-template.php');
 require_once('includes/srp-inc-search.php');
+
+// Set up the theme object so that it's available
+require_once('includes/srp-obj-theme.php');
+
+global $SrpTheme;
+$SrpTheme = new SRPThemeSettings;
+if (!$SrpTheme->dbSelect())
+{
+    die('Could not instantiate SRP theme settings object.');
+}
+
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://gmpg.org/xfn/11">

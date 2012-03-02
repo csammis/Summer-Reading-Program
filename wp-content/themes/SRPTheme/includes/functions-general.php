@@ -29,14 +29,17 @@ THE SOFTWARE.
 *
 */
 
+require_once('srp-obj-theme.php');
+
 function SRP_PrintGeneralOptions()
 {
-    $program_active = get_srptheme_option('program_active');
-    $max_length = get_srptheme_option('max_length');
-    if (strlen($max_length) == 0)
+    $theme_opts = new SRPThemeSettings;
+    if (!$theme_opts->dbSelect())
     {
-        $max_length = 500;
+        die('Could not retrieve SRPThemeSettings object.');
     }
+    
+    $program_active = get_srptheme_option('program_active');
     
     $jscolor_url = get_bloginfo('template_directory') . '/jscolor/jscolor.js';
 ?>
@@ -46,31 +49,31 @@ function SRP_PrintGeneralOptions()
 <script type="text/javascript" src="<?php echo $jscolor_url; ?>"></script>
 <table class="form-table" style="width: auto">
 <tr><th scope="row">Library name:</th>
-<td><input type="text" name="library_name" id="library_name" value="<?php echo get_srptheme_option('library_name'); ?>" size="40" /></td>
+<td><input type="text" name="library_name" id="library_name" value="<?php echo $theme_opts->getLibraryName(); ?>" size="40" /></td>
 </tr>
 <tr><th scope="row">URL of header image:</th>
-<td><input type="text" name="srp_headerimg" id="srp_headerimg" value="<?php echo get_srptheme_appearance('header'); ?>" size="80" /></td>
+<td><input type="text" name="srp_headerimg" id="srp_headerimg" value="<?php echo $theme_opts->getHeaderImageUrl(); ?>" size="80" /></td>
 </tr>
 <tr><th scope="row">URL of footer image:</th>
-<td><input type="text" name="srp_footerimg" id="srp_footerimg" value="<?php echo get_srptheme_appearance('footer'); ?>" size="80" /></td>
+<td><input type="text" name="srp_footerimg" id="srp_footerimg" value="<?php echo $theme_opts->getFooterImageUrl(); ?>" size="80" /></td>
 </tr>
 <tr><th scope="row">Header / Footer color:</th>
-<td><input class="color" name="srp_backcolor1" id="srp_backcolor1" value="<?php echo get_srptheme_appearance('backcolor1'); ?>" /></td>
+<td><input class="color" name="srp_backcolor1" id="srp_backcolor1" value="<?php echo $theme_opts->getHeaderFooterColor(); ?>" /></td>
 </tr>
 <tr><th scope="row">Side color:</th>
-<td><input class="color" name="srp_backcolor2" id="srp_backcolor2" value="<?php echo get_srptheme_appearance('backcolor2'); ?>" /></td>
+<td><input class="color" name="srp_backcolor2" id="srp_backcolor2" value="<?php echo $theme_opts->getSideColor(); ?>" /></td>
 </tr>
 <tr><th scope="row">Body color:</th>
-<td><input class="color" name="srp_backcolor3" id="srp_backcolor3" value="<?php echo get_srptheme_appearance('backcolor3'); ?>" /></td>
+<td><input class="color" name="srp_backcolor3" id="srp_backcolor3" value="<?php echo $theme_opts->getBodyColor(); ?>" /></td>
 </tr>
 <tr><th scope="row">Limit review length to this many characters:</th>
-<td><input type="textx" name="max_length" id="max_length" value="<?php echo $max_length; ?>" /></td>
+<td><input type="textx" name="max_length" id="max_length" value="<?php echo $theme_opts->getMaxReviewLength(); ?>" /></td>
 </tr>
 
 </table>
 <div>&nbsp;</div>
 <div>If you want to track visitors to your site, register an account with <a href="http://www.google.com/analytics/" target="new">Google Analytics</a> and enter the tracking ID here.  Visits to each SRP page will be tracked separately.</div>
-<div><input type="text" name="ga_id" id="ga_id" value="<?php echo get_srptheme_option('ga_id'); ?>" size="40" /></div>
+<div><input type="text" name="ga_id" id="ga_id" value="<?php echo $theme_opts->getGoogleAnalyticsID(); ?>" size="40" /></div>
 <div>&nbsp;</div>
 <hr />
 <div>&nbsp;</div>

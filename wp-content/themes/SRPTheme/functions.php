@@ -72,68 +72,6 @@ function print_srptheme_option($option)
     echo esc_attr(stripslashes($get_srptheme_options[$option]));
 }
 
-function get_srptheme_appearance($name)
-{
-    $retval = '';
-    if ($name == 'header')
-    {
-        if (is_srptheme_option_set('srp_headerimg'))
-        {
-            $retval = get_srptheme_option('srp_headerimg');
-        }
-        else
-        {
-            $retval = get_bloginfo('template_directory') . '/images/headerimg.png';
-        }
-    } 
-    else if ($name == 'footer')
-    {
-        if (is_srptheme_option_set('srp_footerimg'))
-        {
-            $retval = get_srptheme_option('srp_footerimg');
-        }
-        else
-        {
-            $retval = get_bloginfo('template_directory') . '/images/footerimg.png';
-        }
-    }
-    else if ($name == 'backcolor1')
-    {
-        if (is_srptheme_option_set('srp_backcolor1'))
-        {
-            $retval = get_srptheme_option('srp_backcolor1');
-        }
-        else
-        {
-            $retval = '1E6088';
-        }
-    }
-    else if ($name == 'backcolor2')
-    {
-        if (is_srptheme_option_set('srp_backcolor2'))
-        {
-            $retval = get_srptheme_option('srp_backcolor2');
-        }
-        else
-        {
-            $retval = '3D2D1E';
-        }
-    }
-    else if ($name == 'backcolor3')
-    {
-        if (is_srptheme_option_set('srp_backcolor3'))
-        {
-            $retval = get_srptheme_option('srp_backcolor3');
-        }
-        else
-        {
-            $retval = 'B5D1E6';
-        }
-    }
-    
-    return $retval;
-}
-
 function get_srptheme_message($message)
 {
     $retval = '';
@@ -248,6 +186,8 @@ function SRP_StoreSimpleDynamicOptions($options, $postarray, $prefkey, $nextidke
 
 function srptheme_update_options()
 {
+    die('Not a good idea right now.');
+
 	check_admin_referer('theme-settings');
 	if (!current_user_can('edit_themes')) wp_die('You are not authorised to perform this operation.');
 	$options = get_option('SRPTheme');
@@ -436,15 +376,16 @@ function srptheme_addmenu()
 
 function setup_css()
 {
+    global $SrpTheme;
 ?>
 <style type="text/css">
 @import     "<?php echo get_bloginfo('stylesheet_url'); ?>";
 @import     "<?php echo get_bloginfo('template_url') . '/options/side-default.css'; ?>";
-#page       { background:#<?php echo get_srptheme_appearance('backcolor1'); ?>; }
-body        { background:#<?php echo get_srptheme_appearance('backcolor2'); ?>; }
-#main-wrap1 { background:#<?php echo get_srptheme_appearance('backcolor3'); ?>; }
-#main-wrap2 { background:#<?php echo get_srptheme_appearance('backcolor3'); ?>; }
-#main       { background:#<?php echo get_srptheme_appearance('backcolor3'); ?>; }
+#page       { background:#<?php echo $SrpTheme->getHeaderFooterColor(); ?>; }
+body        { background:#<?php echo $SrpTheme->getSideColor(); ?>; }
+#main-wrap1 { background:#<?php echo $SrpTheme->getBodyColor(); ?>; }
+#main-wrap2 { background:#<?php echo $SrpTheme->getBodyColor(); ?>; }
+#main       { background:#<?php echo $SrpTheme->getBodyColor(); ?>; }
 </style>
 <!--[if lte IE 6]>
 <style type="text/css" media="screen">

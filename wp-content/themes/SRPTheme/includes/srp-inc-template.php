@@ -61,8 +61,6 @@ function SRP_PrintPageStart($leftwidth = 60)
     $SRP_RIGHTWIDTH = 100 - $leftwidth;
 
     get_header();
-    
-    $ga_id = get_srptheme_option('ga_id');
 ?>
 <div id="main-wrap1">
 <div id="main-wrap2">
@@ -71,11 +69,17 @@ function SRP_PrintPageStart($leftwidth = 60)
 <div class="mask-left">
 <div class="col1">
 <div id="main-content">
-<?php if (strlen($ga_id) > 0) : ?>
+<?php 
+
+    global $SrpTheme;
+
+    if (strlen($SrpTheme->getGoogleAnalyticsID()) > 0)
+    {
+?>
 <!-- Google analytics -->
 <script type="text/javascript">
 var _gaq = _gaq || [];
-_gaq.push(['_setAccount', '<?php echo $ga_id; ?>']);
+_gaq.push(['_setAccount', '<?php echo $SrpTheme->getGoogleAnalyticsID(); ?>']);
 _gaq.push(['_trackPageview']);
 
 (function() {
@@ -85,8 +89,8 @@ _gaq.push(['_trackPageview']);
 })();
 </script>
 <!-- /Google analytics -->
-<?php endif; ?>
 <?php
+    }
 }
 
 /*
@@ -475,7 +479,9 @@ function validateNumber(event)
  */
 function SRP_PrintHeaderImg()
 {
-    $url = get_srptheme_appearance('header');
+    global $SrpTheme;
+    $url = $SrpTheme->getHeaderImageUrl();
+
     if (strlen($url) > 0)
     {
         echo "<img src=\"$url\" style=\"width:778px;height:178px;\" alt=\"\" />\n";
@@ -490,7 +496,8 @@ function SRP_PrintHeaderImg()
  */
 function SRP_PrintFooterImg()
 {
-    $url = get_srptheme_appearance('footer');
+    global $SrpTheme;
+    $url = $SrpTheme->getFooterImageUrl();
     if (strlen($url) > 0 && file_exists($url))
     {
         echo "<img src=\"$url\" alt=\"\" />\n";
