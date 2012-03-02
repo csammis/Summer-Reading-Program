@@ -104,8 +104,8 @@ function srp_upgrader_activated()
         {
             // 2011 was the last year SRP stored data in the wp_options table
 
-            $srp_theme_opts = get_option('SRPTheme');
-            ksort($srp_theme_opts);
+            $srpopt = get_option('SRPTheme');
+            ksort($srpopt);
 
             //// Messages - fixed displays whose contents are configurable
             $messages_tablename = $wpdb->prefix . 'srp_messages';
@@ -122,7 +122,7 @@ function srp_upgrader_activated()
                 $messages2011 = array('srp_footertext', 'srp_hourlyemail', 'srp_hourlynotice', 'srp_weeklyemail', 'srp_regagreement');
                 foreach ($messages2011 as $msgkey)
                 {
-                    $wpdb->query($wpdb->prepare($insert_message, $msgkey, $srp_theme_opts[$msgkey]));
+                    $wpdb->query($wpdb->prepare($insert_message, $msgkey, $srpopt[$msgkey]));
                 }
             }
 
@@ -137,7 +137,7 @@ function srp_upgrader_activated()
                                             unique key id (id));";
                 dbDelta($create_genres);
                 $insert_genre = "INSERT INTO $genres_tablename (genre_name) VALUES (%s)";
-                foreach ($srp_theme_opts as $key => $val)
+                foreach ($srpopt as $key => $val)
                 {
                     $pos = strpos($key, 'srp_genre');
                     if ($pos === false || $pos != 0)
@@ -181,7 +181,7 @@ function srp_upgrader_activated()
                 // This is pretty awful and is basically the reason I decided to upgrade to tables...
 
                 // Create an associative array of groups (id -> name) and school data (groupid -> schoolid -> name + semester)
-                foreach ($srp_theme_opts as $key => $val)
+                foreach ($srpopt as $key => $val)
                 {
                     $pos = strpos($key, 'srp_school');
                     if ($pos === false)
@@ -280,7 +280,7 @@ function srp_upgrader_activated()
                                                   primary key (gprize_id, grade));";
                 dbDelta($gprize_grade_create);
 
-                foreach ($srp_theme_opts as $key => $val)
+                foreach ($srpopt as $key => $val)
                 {
                     $pos = strpos($key, 'srp_hprize');
                     if ($pos === false || $pos != 0)
@@ -340,7 +340,50 @@ function srp_upgrader_activated()
                 }
             }
 
-            //TODO: User options, theme options (including gprize interval), post information
+            $themeopt_tablename = $wpdb->prefix . 'srp_themeopt';
+            $table_exists = strlen($wpdb->get_var("SHOW TABLES LIKE '$themeopt_tablename'")) > 0;
+            if ($table_exists === false)
+            {
+                $themeopt_create = "CREATE TABLE $themeopt_tablename (
+                                              id mediumint(9) not null auto_increment,
+                                              option_name tinytext not null default '',
+                                              option_value tinytext not null default '',
+                                              primary key (id));";
+                dbDelta($themeopt_create);
+
+                $themeopt_insert = "INSERT INTO $themeopt_tablename (option_name, option_value) VALUES (%s, %s)";
+
+                // From the General page
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'library_name', $srpopt['library_name']));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'google_analytics_id', $srpopt['ga_id']));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'program_active', $srpopt['program_active']));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'review_max_length', $srpopt['max_length']));
+
+                $color1 = isset($srpopt['srp_backcolor1']) ? $srpopt['srp_backcolor1'] : '1E6088';
+                $color2 = isset($srpopt['srp_backcolor2']) ? $srpopt['srp_backcolor2'] : '3D2D1E';
+                $color3 = isset($srpopt['srp_backcolor3']) ? $srpopt['srp_backcolor3'] : 'B5D1E6';
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'color_header_footer', $color1));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'color_sides', $color2));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'color_body', $color3));
+                
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'header_img_url', $srpopt['srp_headerimg']));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'footer_img_url', $srpopt['srp_footerimg']));
+
+
+                // Grand Prize page
+                $gprize_every = isset($srpopt['srp_gprize_every']) ? $srpopt['srp_gprize_every'] : 16;
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'grand_prize_interval', $gprize_every));
+                $gprize_max = isset($srpopt['srp_gprize_numentries']) ? $srpopt['srp_gprize_numentries'] : 3;
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'grand_prize_max_entries', $gprize_max));
+
+                // Email page
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'gmail_account_name', $srpopt['gmail_account']));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'gmail_account_pass', $srpopt['gmail_password']));
+                $wpdb->query($wpdb->prepare($themeopt_insert, 'gmail_send_email_as', $srpopt['gmail_reply_to']));
+                
+            }
+
+            //TODO: User options, post information
 
         }
         // Intentional fallthrough
