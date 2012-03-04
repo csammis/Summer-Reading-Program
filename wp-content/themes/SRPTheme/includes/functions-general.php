@@ -29,14 +29,13 @@ THE SOFTWARE.
 *
 */
 
-require_once('srp-obj-theme.php');
-
 function SRP_PrintGeneralOptions()
 {
+    require_once('srp-obj-theme.php');
     $theme_opts = new SRPThemeSettings;
     if (!$theme_opts->dbSelect())
     {
-        die('Could not retrieve SRPThemeSettings object.');
+        die('Could not retrieve SRPThemeSettings object (loc = 8F0KOV)');
     }
     
     $program_active = get_srptheme_option('program_active');

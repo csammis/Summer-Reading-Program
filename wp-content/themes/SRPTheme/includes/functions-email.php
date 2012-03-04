@@ -31,23 +31,29 @@ THE SOFTWARE.
 
 function SRP_PrintEmailOptions()
 {
+    require_once('srp-obj-email.php');
+    $email = new SRPEmailSettings;
+    if (!$email->dbSelect())
+    {
+        die('The email settings could not be read from the database (loc = 8F0MWK)');
+    }
 ?>
 <div>The Summer Reading Program site uses a Google account in order to send e-mail to prize winners.  You can create a <a href="http://mail.google.com/mail/signup" target="new">free Google account</a> for your library's Summer Reading Program.  It is recommended to <em><strong>not</strong></em> use an existing Google account since the password must be stored.</div>
 <div>&nbsp;</div>
 <table class="form-table" style="width: auto">
 <tr><th scope="row">Gmail account name:</th>
 <td>
-<input class="text" type="text" size="40" name="gmail_account" value="<?php esc_attr(print_srptheme_option('gmail_account')); ?>" />
+<input class="text" type="text" size="40" name="gmail_account" value="<?php echo $email->getGoogleAccountName(); ?>" />
 </td>
 </tr>
 <tr><th scope="row">Gmail account password:</th>
 <td>
-<input class="text" type="password" size="40" name="gmail_password" value="<?php esc_attr(print_srptheme_option('gmail_password')); ?>" />
+<input class="text" type="password" size="40" name="gmail_password" value="<?php echo $email->getGoogleAccountPass(); ?>" />
 </td>
 </tr>
 <tr><th scope="row">Send e-mails on behalf of this address (users will send their replies to this address):</th>
 <td>
-<input class="text" type="text" size="40" name="gmail_reply_to" value="<?php esc_attr(print_srptheme_option('gmail_reply_to')); ?>" />
+<input class="text" type="text" size="40" name="gmail_reply_to" value="<?php echo $email->getGoogleAccountSendAs(); ?>" />
 </td>
 </tr>
 </table>

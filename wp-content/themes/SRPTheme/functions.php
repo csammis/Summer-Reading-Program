@@ -186,21 +186,37 @@ function SRP_StoreSimpleDynamicOptions($options, $postarray, $prefkey, $nextidke
 
 function srptheme_update_options()
 {
-    die('Not a good idea right now.');
-
 	check_admin_referer('theme-settings');
-	if (!current_user_can('edit_themes')) wp_die('You are not authorised to perform this operation.');
+	if (!current_user_can('edit_themes'))
+    {
+        wp_die('You are not authorised to perform this operation.');
+    }
+
 	$options = get_option('SRPTheme');
     
     $prefmode = $_POST['active_show'];
     if ($prefmode == 'email')
     {
-        if (isset($_POST['gmail_reply_to'])) $options['gmail_reply_to'] = $_POST['gmail_reply_to'];
-        if (isset($_POST['gmail_account'])) $options['gmail_account'] = $_POST['gmail_account'];
-        if (isset($_POST['gmail_password'])) $options['gmail_password'] = $_POST['gmail_password'];
+        require_once('includes/srp-obj-email.php');
+
+        $email = new SRPEmailSettings;
+        if (!$email->dbSelect())
+        {
+            die('Could not retrieve email information from database (loc = 8F0NMJ)');
+        }
+
+        if (isset($_POST['gmail_reply_to'])) $email->setGoogleAccountSendAs($_POST['gmail_reply_to']);
+        if (isset($_POST['gmail_account']))  $email->setGoogleAccountName($_POST['gmail_account']);
+        if (isset($_POST['gmail_password'])) $email->setGoogleAccountPass($_POST['gmail_password']);
+
+        if (!$email->dbUpdate())
+        {
+            die('Could not update email information in the database (loc = 8F0NOU)');
+        }
     }
     else if ($prefmode == 'messages')
     {
+        die('Not a good idea right now.');
         if (isset($_POST['srp_hourlyemail'])) $options['srp_hourlyemail'] = $_POST['srp_hourlyemail'];
         if (isset($_POST['srp_hourlynotice'])) $options['srp_hourlynotice'] = $_POST['srp_hourlynotice'];
         if (isset($_POST['srp_regagreement'])) $options['srp_regagreement'] = $_POST['srp_regagreement'];
@@ -209,6 +225,7 @@ function srptheme_update_options()
     }
     else if ($prefmode == 'prizes')
     {
+        die('Not a good idea right now.');
         if (isset($_POST['srp_gprize_every'])) $options['srp_gprize_every'] = $_POST['srp_gprize_every'];
         if (isset($_POST['srp_gprize_numentries'])) $options['srp_gprize_numentries'] = $_POST['srp_gprize_numentries'];
 
@@ -217,7 +234,29 @@ function srptheme_update_options()
     }
     else if ($prefmode == 'general')
     {
-        if (isset($_POST['ga_id'])) $options['ga_id'] = $_POST['ga_id'];
+        require_once('includes/srp-obj-theme.php');
+
+        $theme = new SRPThemeSettings;
+        if (!$theme->dbSelect())
+        {
+            die('Could not retrieve theme information from database (loc = 8F0KKS)');
+        }
+        
+        if (isset($_POST['ga_id']))          $theme->setGoogleAnalyticsID($_POST['ga_id']);
+        if (isset($_POST['srp_headerimg']))  $theme->setHeaderImageUrl($_POST['srp_headerimg']);
+        if (isset($_POST['srp_footerimg']))  $theme->setFooterImageUrl($_POST['srp_footerimg']);
+        if (isset($_POST['srp_backcolor1'])) $theme->setHeaderFooterColor($_POST['srp_backcolor1']);
+        if (isset($_POST['srp_backcolor2'])) $theme->setSideColor($_POST['srp_backcolor2']);
+        if (isset($_POST['srp_backcolor3'])) $theme->setBodyColor($_POST['srp_backcolor3']);
+        if (isset($_POST['max_length']))     $theme->setMaxReviewLength($_POST['max_length']);
+        if (isset($_POST['library_name']))   $theme->setLibraryName($_POST['library_name']);
+
+        if (!$theme->dbUpdate())
+        {
+            die('Could not update theme information into database (loc = 8F0L1J)');
+        }
+
+        // Handle the switches available from the general settings
         if (isset($_POST['program_active']))
         {
             $options['program_active'] = $_POST['program_active'];
@@ -226,16 +265,7 @@ function srptheme_update_options()
                 $options['program_open_date'] = time();
             }
         }
-        
-        if (isset($_POST['srp_headerimg'])) $options['srp_headerimg'] = $_POST['srp_headerimg'];
-        if (isset($_POST['srp_footerimg'])) $options['srp_footerimg'] = $_POST['srp_footerimg'];
-        if (isset($_POST['srp_backcolor1'])) $options['srp_backcolor1'] = $_POST['srp_backcolor1'];
-        if (isset($_POST['srp_backcolor2'])) $options['srp_backcolor2'] = $_POST['srp_backcolor2'];
-        if (isset($_POST['srp_backcolor3'])) $options['srp_backcolor3'] = $_POST['srp_backcolor3'];
-        if (isset($_POST['max_length'])) $options['max_length'] = $_POST['max_length'];
-        
-        if (isset($_POST['library_name'])) $options['library_name'] = $_POST['library_name'];
-        
+
         if (isset($_POST['srp_reset']))
         {
             require_once('includes/srp-inc-admin.php');
@@ -243,6 +273,7 @@ function srptheme_update_options()
             unset($options['program_open_date']);
             delete_option('SRP_LastDrawing');
         }
+
         if (isset($_POST['srp_oneclicksetup']))
         {
             require_once('includes/srp-inc-setup.php');
@@ -251,6 +282,7 @@ function srptheme_update_options()
     }
     else if ($prefmode == 'schools')
     {
+        die('Not a good idea right now.');
         // Remove all the srp_group and srp_school keys and overwrite with the POST values. This takes care of values removed
         // by the user which are no longer in the POST array.
         $newoptions = array();
@@ -283,6 +315,7 @@ function srptheme_update_options()
     }
     else if ($prefmode == 'genres')
     {
+        die('Not a good idea right now.');
         $options = SRP_StoreSimpleDynamicOptions($options, $_POST, 'srp_genre', 'nextgenreid');
     }
 
