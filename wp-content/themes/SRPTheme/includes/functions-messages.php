@@ -31,11 +31,12 @@ THE SOFTWARE.
 
 function SRP_PrintMessagesOptions()
 {
-    $hourly_email = get_srptheme_message('srp_hourlyemail');
-    $hourly_notice = get_srptheme_message('srp_hourlynotice');
-    $user_reg = get_srptheme_message('srp_regagreement');
-    $weekly_email = get_srptheme_message('srp_weeklyemail');
-    $srp_footertext = get_srptheme_message('srp_footertext');
+    require_once('srp.class.messages.php');
+    $SrpMessage = new SRPMessages;
+    if (!$SrpMessage->dbSelect())
+    {
+        die('The SRP messages object could not be retrieved from the database (loc = 8FAMGK)');
+    }
 ?>
 <div>
 The Summer Reading Program site will send e-mails and display messages that may be specific to your library.  You can customize those messages here.  Messages may include special tags (indicated by <strong>%%<em>tagname</em>%%</strong>) which will be replaced with information when the message is displayed or sent.
@@ -49,23 +50,23 @@ All messages can use the following tags (and any special tags listed beside the 
 <div>&nbsp;</div>
 <table class="form-table" style="width: auto">
 <tr><th scope="row"><p>E-mail sent to users who win an hourly prize:</p></th>
-<td><textarea rows="7" cols="60" name="srp_hourlyemail"><?php echo $hourly_email; ?></textarea></td>
+<td><textarea rows="7" cols="60" name="srp_hourlyemail"><?php echo $SrpMessage->getHourlyEmail(); ?></textarea></td>
 <td>Special tags:<ul><li>%%prizename%%</li><li>%%prizecode%%</li></ul></td>
 </tr>
 <tr><th scope="row"><p>Front page notice to users who have won a prize:</p></th>
-<td><textarea rows="7" cols="60" name="srp_hourlynotice"><?php echo $hourly_notice; ?></textarea></td>
+<td><textarea rows="7" cols="60" name="srp_hourlynotice"><?php echo $SrpMessage->getHourlyPrizeNotice(); ?></textarea></td>
 <td>Special tags: none</td>
 </tr>
 <tr><th scope="row"><p>E-mail sent to users who win a review prize drawing:</p></th>
-<td><textarea rows="7" cols="60" name="srp_weeklyemail"><?php echo $weekly_email; ?></textarea></td>
+<td><textarea rows="7" cols="60" name="srp_weeklyemail"><?php echo $SrpMessage->getWeeklyEmail(); ?></textarea></td>
 <td>Special tags: none</td>
 </tr>
 <tr><th scope="row"><p>User registration agreement:</p></th>
-<td><textarea rows="7" cols="60" name="srp_regagreement"><?php echo $user_reg; ?></textarea></td>
+<td><textarea rows="7" cols="60" name="srp_regagreement"><?php echo $SrpMessage->getRegistrationAgreement(); ?></textarea></td>
 <td>Special tags: none</td>
 </tr>
 <tr><th scope="row"><p>Footer area:</p></th>
-<td><textarea rows="7" cols="60" name="srp_footertext"><?php echo $srp_footertext; ?></textarea></td>
+<td><textarea rows="7" cols="60" name="srp_footertext"><?php echo $SrpMessage->getFooterText(); ?></textarea></td>
 <td>HTML is allowed, &lt;script&gt; and &lt;iframe&gt; are stripped.</td>
 </tr>
 </table>

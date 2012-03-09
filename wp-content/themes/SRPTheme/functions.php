@@ -72,7 +72,7 @@ function print_srptheme_option($option)
     echo esc_attr(stripslashes($get_srptheme_options[$option]));
 }
 
-function get_srptheme_message($message)
+function get_srptheme_message_mangle($message)
 {
     $retval = '';
     
@@ -216,12 +216,24 @@ function srptheme_update_options()
     }
     else if ($prefmode == 'messages')
     {
-        die('Not a good idea right now.');
-        if (isset($_POST['srp_hourlyemail'])) $options['srp_hourlyemail'] = $_POST['srp_hourlyemail'];
-        if (isset($_POST['srp_hourlynotice'])) $options['srp_hourlynotice'] = $_POST['srp_hourlynotice'];
-        if (isset($_POST['srp_regagreement'])) $options['srp_regagreement'] = $_POST['srp_regagreement'];
-        if (isset($_POST['srp_weeklyemail'])) $options['srp_weeklyemail'] = $_POST['srp_weeklyemail'];
-        if (isset($_POST['srp_footertext'])) $options['srp_footertext'] = $_POST['srp_footertext'];
+        require_once('includes/srp.class.messages.php');
+
+        $messages = new SRPMessages;
+        if (!$messages->dbSelect())
+        {
+            die('Could not retrieve message information from database (loc = 8FAMR1)');
+        }
+
+        if (isset($_POST['srp_hourlyemail'])) $messages->setHourlyEmail($_POST['srp_hourlyemail']);
+        if (isset($_POST['srp_hourlynotice'])) $messages->setHourlyPrizeNotice($_POST['srp_hourlynotice']);
+        if (isset($_POST['srp_regagreement'])) $messages->setRegistrationAgreement($_POST['srp_regagreement']);
+        if (isset($_POST['srp_weeklyemail'])) $messages->setWeeklyEmail($_POST['srp_weeklyemail']);
+        if (isset($_POST['srp_footertext'])) $messages->setFooterText($_POST['srp_footertext']);
+
+        if (!$messages->dbUpdate())
+        {
+            die('Could not update message information in the database (loc = 8FAMU5)');
+        }
     }
     else if ($prefmode == 'prizes')
     {

@@ -4,14 +4,23 @@ require_once('includes/srp-inc-utility.php');
 require_once('includes/srp-inc-template.php');
 require_once('includes/srp-inc-search.php');
 
-// Set up the theme object so that it's available
+// Set up the theme object and message objects so that they're available
+// This should be limited to only those objects which are frequently accessed in the course of page rendering
 require_once('includes/srp-obj-theme.php');
+require_once('includes/srp.class.messages.php');
 
 global $SrpTheme;
 $SrpTheme = new SRPThemeSettings;
 if (!$SrpTheme->dbSelect())
 {
-    die('Could not instantiate SRP theme settings object.');
+    die('Could not instantiate SRP theme settings object (loc = 8FALCS)');
+}
+
+global $SrpMessage;
+$SrpMessage = new SRPMessages;
+if (!$SrpMessage->dbSelect())
+{
+    die('Could not instantiate SRP messages object (loc = 8FALDT)');
 }
 
 ?>

@@ -4,7 +4,7 @@
     <!-- page block -->
     <div class="block-content">
         <div class="copyright">
-        <?php echo get_srptheme_message('srp_footertext'); ?>
+        <?php global $SrpMessage; echo $SrpMessage->getFooterText(); ?>
         </div>
     </div>
     <!-- /page block -->

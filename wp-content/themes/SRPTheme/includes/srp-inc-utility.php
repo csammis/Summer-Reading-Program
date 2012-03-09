@@ -6,7 +6,7 @@
 This WordPress plugin was developed for the Olathe Public Library, Olathe, KS
 http://www.olathelibrary.org
 
-Copyright (c) 2010, Chris Sammis
+Copyright (c) 2012, Chris Sammis
 http://csammisrun.net/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -65,19 +65,27 @@ function SRP_DaysBetweenDates($date1, $date2)
 function SRP_SendEmail($subject, $body, $email)
 {
     require_once('class.phpmailer.php');
+    require_once('srp-obj-email.php');
+
+    $emailSettings = new SRPEmailSettings;
+    if (!$emailSettings->dbSelect())
+    {
+        die('Unable to retrieve email settings from database (loc = 8FAJO8)');
+    }
+
     $mail = new PHPMailer();
     $mail->IsSMTP();
     $mail->SMTPAuth   = true;
     $mail->SMTPSecure = "ssl";
     $mail->Host       = "smtp.gmail.com";
     $mail->Port       = 465;
-    $mail->Username   = get_srptheme_option('gmail_account');
-    $mail->Password   = get_srptheme_option('gmail_password');
+    $mail->Username   = $emailSettings->getGoogleAccountName();
+    $mail->Password   = $emailSettings->getGoogleAccountPass();
 
-    $reply_to = get_srptheme_option('gmail_reply_to');
+    $reply_to = $emailSettings->getGoogleAccountSendAs();
     if (strlen($reply_to) == 0)
     {
-        $reply_to = get_srptheme_option('gmail_account');
+        $reply_to = $emailSettings->getGoogleAccountName();
     }
     $mail->SetFrom($reply_to, $reply_to);
     $mail->AddReplyTo($reply_to, $reply_to);
@@ -177,10 +185,10 @@ function SRP_SelectPageIdsForNav()
  */
 function SRP_FormatMessage($message, $tags = array())
 {
-    $retval = get_srptheme_message($message);
-    
+    global $SrpTheme;
+
     // Common tags
-    $tags['libraryname'] = get_srptheme_option('library_name');
+    $tags['libraryname'] = $SrpTheme->getLibraryName();
     
     // Specified tags
     foreach ($tags as $key => $value)

@@ -198,6 +198,9 @@ END2;
         echo "  try{document.getElementById('$fieldfocus').focus();}catch(e){}\n";
         echo "</script>\n";
     }
+
+    global $SrpMessage;
+
     get_footer();
 }
 
