@@ -188,8 +188,10 @@ function SRP_SetUserPrizeMilestone($userid, $milestone)
 
 function SRP_SendReviewerDrawingPrizeEmail($userid)
 {
+    global $SrpMessage;
+
     $userinfo = get_userdata($userid);
-    $email_body = SRP_FormatMessage('srp_weeklyemail', $tags);
+    $email_body = SRP_FormatMessage($SrpMessage->getWeeklyEmail(), $tags);
     $email_body = str_replace("\n", '<br />', $email_body);
 
     SRP_SendEmail("Summer Reading Program:  You've won a prize!", $email_body, $userinfo->user_email);
@@ -259,12 +261,14 @@ function SRP_AwardUserHourBasedPrize($userid, $prizeid)
 {
     if (get_usermeta($userid, 'srp_noemail') != '1')
     {
+        global $SrpMessage;
+
         $userinfo = get_userdata($userid);
         
         $tags = array('prizename' => '<strong>' . SRP_HoursToPrizeName($prizeid) . '</strong>',
                       'prizecode' => '<strong>' . SRP_HoursToPrizeCode($prizeid) . '</strong>');
                       
-        $email_body = SRP_FormatMessage('srp_hourlyemail', $tags);
+        $email_body = SRP_FormatMessage($SrpMessage->getHourlyEmail(), $tags);
         $email_body = str_replace("\n", '<br />', $email_body);
         
         SRP_SendEmail("Summer Reading Program:  You've won a prize!", $email_body, $userinfo->user_email);

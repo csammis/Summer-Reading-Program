@@ -361,7 +361,8 @@ switch ($action_type)
         </label>
         </p>
         <h4>User Agreement</h4>
-        <div><input type="checkbox" name="srp_useragreement" id="srp_useragreement" value="1" /> <?php echo SRP_FormatMessage('srp_regagreement'); ?></div>
+        <div><input type="checkbox" name="srp_useragreement" id="srp_useragreement" value="1" />
+            <?php echo SRP_FormatMessage($SrpMessage->getRegistrationAgreement()); ?></div>
         <div>&nbsp;</div>
         <div><input type="submit" value="Create Profile" />&nbsp;<input type="reset" value="Reset fields" /></div>
         </form>

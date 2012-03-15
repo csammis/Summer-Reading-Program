@@ -199,7 +199,7 @@ if (is_user_logged_in())
         if (strlen($prizeswon) > 0) :
         ?>
         <div>&nbsp;</div>
-        <span style="font-size:smaller;font-style:italic"><?php echo SRP_FormatMessage('srp_hourlynotice'); ?></span>
+        <span style="font-size:smaller;font-style:italic"><?php echo SRP_FormatMessage($SrpMessage->getHourlyPrizeNotice()); ?></span>
         <?php endif; ?>
         
         </div><!-- / prizes -->
