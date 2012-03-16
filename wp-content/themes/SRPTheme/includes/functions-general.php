@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 function SRP_PrintGeneralOptions()
 {
-    require_once('srp-obj-theme.php');
+    require_once('srp.class.theme.php');
     $theme_opts = new SRPThemeSettings;
     if (!$theme_opts->dbSelect())
     {

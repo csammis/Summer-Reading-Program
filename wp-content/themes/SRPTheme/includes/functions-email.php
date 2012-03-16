@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 function SRP_PrintEmailOptions()
 {
-    require_once('srp-obj-email.php');
+    require_once('srp.class.email.php');
     $email = new SRPEmailSettings;
     if (!$email->dbSelect())
     {

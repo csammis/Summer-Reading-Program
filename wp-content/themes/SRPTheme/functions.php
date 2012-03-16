@@ -130,7 +130,7 @@ function srptheme_update_options()
     $prefmode = $_POST['active_show'];
     if ($prefmode == 'email')
     {
-        require_once('includes/srp-obj-email.php');
+        require_once('includes/srp.class.email.php');
 
         $email = new SRPEmailSettings;
         if (!$email->dbSelect())
@@ -179,7 +179,7 @@ function srptheme_update_options()
     }
     else if ($prefmode == 'general')
     {
-        require_once('includes/srp-obj-theme.php');
+        require_once('includes/srp.class.theme.php');
 
         $theme = new SRPThemeSettings;
         if (!$theme->dbSelect())

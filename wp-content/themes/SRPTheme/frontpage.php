@@ -276,7 +276,7 @@ else
 ?>
         <h2><?php the_title(); ?></h2>
         <div class="post-content clearfix"><?php the_content('Read the rest of this page &raquo;'); ?></div>
-        <div class="SRPHoursBanner">So far, <?php echo get_srptheme_option('library_name'); ?> readers have logged 
+        <div class="SRPHoursBanner">So far, <?php echo $SrpTheme->getLibraryName(); ?> readers have logged 
             <span class="SRPHoursNumber"><?php echo floor(SRP_SelectAllMinutes() / 60); ?></span> hours!</div>
         <div class="loginbox">
             <h4>Log in</h4>

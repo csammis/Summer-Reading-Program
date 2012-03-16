@@ -55,13 +55,20 @@ if (empty($action_type))
 switch ($action_type)
 {
     case 'postreview':
+        require_once('include/srp.class.theme.php'); // for maximum review length
+        $theme = new SrpThemeSettings;
+        if (!$theme->dbSelect())
+        {
+            die('Could not get the theme settings from the database (loc = 8FRCVH)');
+        }
+
         /** Collect and validate input **/
         $reqfields = '';
         $srp_title = esc_attr(stripslashes($_POST['srp_title']));
         if (strlen($srp_title) == 0) $reqfields .= 'srp_title:';
         $srp_author = esc_attr(stripslashes($_POST['srp_author']));
         if (strlen($srp_author) == 0) $reqfields .= 'srp_author:';
-        $srp_review = substr(esc_attr(stripslashes($_POST['srp_review'])), 0, get_srptheme_option('max_length'));
+        $srp_review = substr(esc_attr(stripslashes($_POST['srp_review'])), 0, $theme->getMaxReviewLength());
         if (strlen($srp_review) == 0) $reqfields .= 'srp_review:';
         $srp_rating = esc_attr(stripslashes($_POST['srp_rating']));
         if (strlen($srp_rating) == 0) $reqfields .= 'srp_rating:';
@@ -131,7 +138,7 @@ switch ($action_type)
         <script language="javascript">
         function displayAndRestrictTextLength(taObj, counterId)
         {
-            var maxLen = <?php echo get_srptheme_option('max_length'); ?>;
+            var maxLen = <?php echo $SrpTheme->getMaxReviewLength(); ?>;
             
             var counter = createObject(counterId);
             if (taObj.value.length > maxLen) taObj.value = taObj.value.substring(0, maxLen);
@@ -194,7 +201,7 @@ switch ($action_type)
             <span class="srp_forminfo">Please use appropriate language in your reviews.</span><br />
             <textarea rows="5" cols="40" name="srp_review" id="srp_review" class="SRPInput"
                       onKeyUp="return displayAndRestrictTextLength(this, 'srp_counter');"><?php echo esc_attr(stripslashes($srp_review)); ?></textarea><br />
-            <span class="srp_forminfo"><span style="font-weight:bold" id="srp_counter"><?php echo get_srptheme_option('max_length'); ?></span> characters remaining</span>
+            <span class="srp_forminfo"><span style="font-weight:bold" id="srp_counter"><?php echo $SrpTheme->getMaxReviewLength(); ?></span> characters remaining</span>
             </label>
             </p>
             <p>

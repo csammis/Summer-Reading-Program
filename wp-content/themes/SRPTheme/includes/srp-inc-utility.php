@@ -65,7 +65,7 @@ function SRP_DaysBetweenDates($date1, $date2)
 function SRP_SendEmail($subject, $body, $email)
 {
     require_once('class.phpmailer.php');
-    require_once('srp-obj-email.php');
+    require_once('srp.class.email.php');
 
     $emailSettings = new SRPEmailSettings;
     if (!$emailSettings->dbSelect())

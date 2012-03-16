@@ -6,7 +6,7 @@ require_once('includes/srp-inc-search.php');
 
 // Set up the theme object and message objects so that they're available
 // This should be limited to only those objects which are frequently accessed in the course of page rendering
-require_once('includes/srp-obj-theme.php');
+require_once('includes/srp.class.theme.php');
 require_once('includes/srp.class.messages.php');
 
 global $SrpTheme;
