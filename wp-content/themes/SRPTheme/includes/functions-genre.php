@@ -31,6 +31,13 @@ THE SOFTWARE.
 
 function SRP_PrintGenreOptions()
 {
+    require_once('srp.class.genre.php');
+    $genres = new SRPGenreSettings;
+    if (!$genres->dbSelect())
+    {
+        die('Cannot retrieve genre information from database (loc = 8FREJ9)');
+    }
+
     //csnote DO NOT START ANY ID AT ZERO.  PHP HAS MAJOR ISSUES WITH ZERO.  SERIOUSLY.
     $gid = is_srptheme_option_set('nextgenreid') ? get_srptheme_option('nextgenreid') : 1;
 ?>
@@ -103,22 +110,11 @@ function deleteGenreRow(genrenumber)
 window.onload = function loadExistingGenres()
 {
 <?php
-    $options = get_option('SRPTheme');
-    ksort($options);
-    
-    $optionkeys = array_keys($options);
-    for ($i = 0; $i < count($optionkeys); $i++)
+    foreach ($genres->getAllGenres() as $genre)
     {
-        $key = $optionkeys[$i];
-        $pos = strpos($key, 'srp_genre');
-        if ($pos === false || $pos != 0)
-        {
-            continue;
-        }
-
-        $genreid = substr($key, strlen('srp_genre'));
-        $genrename = $options[$key];
-        echo "addGenreRow($genreid, '$genrename');\n";
+        $id = $genre->getID();
+        $name = $genre->getName();
+        echo "addGenreRow($id, '$name');\n";
     }
 ?>
 }

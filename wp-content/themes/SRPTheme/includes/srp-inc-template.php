@@ -353,38 +353,23 @@ function SRP_PrintSchoolSelector($type, $selected)
  */
 function SRP_PrintGenreSelector($inputname, $selected = '', $bIncludeBlank = false, $class = 'SRPInput')
 {
-    require_once('srp-inc-lists.php');
-    
-    $options = get_option('SRPTheme');
-    ksort($options);
-    $optionkeys = array_keys($options);
-    
-    $gid2name = array();
-    
-    // Associate names and IDs to each other
-    for ($i = 0; $i < count($optionkeys); $i++)
+    require_once('srp.class.genre.php');
+    $genres = new SRPGenreSettings;
+    if (!$genres->dbSelect())
     {
-        $key = $optionkeys[$i];
-        $matches = array();
-        
-        if (strpos($key, 'srp_genre') === 0)
-        {
-            preg_match('/srp_genre([0-9]+)/', $key, $matches);
-            $gid = $matches[1];
-            $gid2name[$gid] = $options[$key];
-        }
+        die('Cannot read genre information from the database (loc = 8FRECW)');
     }
-    
-    asort($gid2name);
-    
+
     echo "<select name=\"$inputname\" id=\"$inputname\" class=\"$class\">\n";
     if ($bIncludeBlank)
     {
         echo '<option value=""'; if ($selected == '') echo ' selected="selected"'; echo ' disabled="disabled">' . "</option>\n";
     }
-    foreach ( $gid2name as $gid => $genrename)
+    foreach ($genres as $genre)
     {
-        echo "<option value=\"$gid\""; if ($selected === $gid) echo ' selected="selected"'; echo ">$genrename</option>\n";
+        $gid = $genre->getID();
+        $name = $genre->getName();
+        echo "<option value=\"$gid\""; if ($selected === $gid) echo ' selected="selected"'; echo ">$name</option>\n";
     }
     echo "</select>\n";
 }
@@ -501,6 +486,7 @@ function SRP_PrintFooterImg()
 {
     global $SrpTheme;
     $url = $SrpTheme->getFooterImageUrl();
+
     if (strlen($url) > 0 && file_exists($url))
     {
         echo "<img src=\"$url\" alt=\"\" />\n";

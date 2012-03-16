@@ -68,7 +68,11 @@ function SRP_GetAllSchoolNames()
  */
 function SRP_GetGenreName($genreId)
 {
-    return get_srptheme_option("srp_genre$genreId");
+    require_once('srp.class.genre.php');
+    
+    static $genres = new SRPGenreSettings(true);
+
+    return $genres->getGenreByID($genreId)->getName();
 }
 
 ?>
