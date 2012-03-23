@@ -80,7 +80,7 @@ function SRP_PrintGeneralOptions()
   <div>&nbsp;</div><div><strong>Please note:</strong> the Program calculates how many hours are allowed to be logged per user based on how long the program has been open. Closing and opening the program midsummer will reset this counter, creating serious usability issues.  It is not recommended that the program be closed except at the end of the summer.</div>
 <div>&nbsp;</div>
 <div>The Summer Reading Program is &nbsp;
-<input type="radio" disabled="disabled" name="program_active" id="program_active" value="1" <?php if ($program_active == 1) echo 'checked'; ?> /> open &nbsp;
+<input type="radio" name="program_active" id="program_active" value="1" <?php if ($program_active == 1) echo 'checked'; ?> /> open &nbsp;
 <input type="radio" name="program_active" id="program_active" value="0" <?php if ($program_active == 0) echo 'checked'; ?> /> closed
 <!-- <input type="radio" name="program_active" id="program_active" value="-1" <?php if ($program_active == -1) echo 'checked'; ?> /> paused (no user access) --></div>
 

@@ -36,6 +36,7 @@ function SRP_PrintMessagesOptions()
     $user_reg = get_srptheme_message('srp_regagreement');
     $weekly_email = get_srptheme_message('srp_weeklyemail');
     $srp_footertext = get_srptheme_message('srp_footertext');
+    $submit_agreement = get_srptheme_message('srp_submitagreement');
 ?>
 <div>
 The Summer Reading Program site will send e-mails and display messages that may be specific to your library.  You can customize those messages here.  Messages may include special tags (indicated by <strong>%%<em>tagname</em>%%</strong>) which will be replaced with information when the message is displayed or sent.
@@ -62,7 +63,11 @@ All messages can use the following tags (and any special tags listed beside the 
 </tr>
 <tr><th scope="row"><p>User registration agreement:</p></th>
 <td><textarea rows="7" cols="60" name="srp_regagreement"><?php echo $user_reg; ?></textarea></td>
-<td>Special tags: none</td>
+<td>Special tags: %%explainlink:linktext%%</td>
+</tr>
+<tr><th scope="row"><p>Review submission agreement reminder:</p></th>
+<td><textarea rows="7" cols="60" name="srp_submitagreement"><?php echo $submit_agreement; ?></textarea></td>
+<td>Special tags: %%explainlink:linktext%%</td>
 </tr>
 <tr><th scope="row"><p>Footer area:</p></th>
 <td><textarea rows="7" cols="60" name="srp_footertext"><?php echo $srp_footertext; ?></textarea></td>

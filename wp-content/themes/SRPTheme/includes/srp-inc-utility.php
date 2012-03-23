@@ -182,6 +182,16 @@ function SRP_FormatMessage($message, $tags = array())
     // Common tags
     $tags['libraryname'] = get_srptheme_option('library_name');
     
+    if ($message == 'srp_submitagreement' || $message == 'srp_regagreement')
+    {
+        if (preg_match('/%%explainlink:(.*?)%%/', $retval, $matches))
+        {
+            $retval = preg_replace('/%%explainlink:(.*?)%%/', '%%explainlink%%', $retval);
+            $tags['explainlink'] =  '<a target="new" href="' . SRP_SelectUrlOfTemplatedPage('plagiarism') . '">' . $matches[1] . '</a>';
+        }
+    }
+
+
     // Specified tags
     foreach ($tags as $key => $value)
     {

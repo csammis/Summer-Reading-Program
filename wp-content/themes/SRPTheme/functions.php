@@ -174,6 +174,10 @@ function get_srptheme_message($message)
         {
             $retval = 'I am a resident of Johnson County, Kansas, and am able to pick up any prizes I win at %%libraryname%%.';
         }
+        else if ($message == 'srp_submitagreement')
+        {
+            $retval = 'Reminder: the book reviews you post must be your own work (%%explainlink:Why is this important?%%)';
+        }
         else if ($message == 'srp_footertext')
         {
             $retval  = "<p>\n";
@@ -266,6 +270,7 @@ function srptheme_update_options()
         if (isset($_POST['srp_regagreement'])) $options['srp_regagreement'] = $_POST['srp_regagreement'];
         if (isset($_POST['srp_weeklyemail'])) $options['srp_weeklyemail'] = $_POST['srp_weeklyemail'];
         if (isset($_POST['srp_footertext'])) $options['srp_footertext'] = $_POST['srp_footertext'];
+        if (isset($_POST['srp_submitagreement'])) $options['srp_submitagreement'] = $_POST['srp_submitagreement'];
     }
     else if ($prefmode == 'prizes')
     {

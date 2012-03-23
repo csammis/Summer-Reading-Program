@@ -18,7 +18,7 @@ function srp_upgrader_activated()
 
     $version_table_name = $wpdb->prefix . 'srp_version';
 
-    $from_version = '2011';//cstodo // This was the first version of SRP and should be the default if the table doesn't exist.
+    $from_version = '2010'; // This was the first version of SRP and should be the default if the table doesn't exist.
 
     if ($wpdb->get_var("SHOW TABLES LIKE '$version_table_name'") == $version_table_name)
     {
