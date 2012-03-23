@@ -4,19 +4,21 @@ Plugin Name: SRP Upgrader
 Description:  Activate this plugin to convert an SRP installation to the latest version.
 */
 
-register_activation_hook (__FILE__, 'srp_upgrader_activated');
+register_activation_hook (WP_PLUGIN_DIR . '/SRPUpgrader/SRPUpgrader.php', 'srp_upgrader_activated');
 
 global $SRP_VERSION;
-$SRP_VERSION = '2011';
+$SRP_VERSION = '2012';
 
 function srp_upgrader_activated()
 {
     global $SRP_VERSION;
     global $wpdb;
 
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
     $version_table_name = $wpdb->prefix . 'srp_version';
 
-    $from_version = '2010'; // This was the first version of SRP and should be the default if the table doesn't exist.
+    $from_version = '2011';//cstodo // This was the first version of SRP and should be the default if the table doesn't exist.
 
     if ($wpdb->get_var("SHOW TABLES LIKE '$version_table_name'") == $version_table_name)
     {
@@ -34,18 +36,18 @@ function srp_upgrader_activated()
             return;
         }
     }
-
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-    // Create the srp_version table
-    $create_table = "CREATE TABLE $version_table_name (
-                        id mediumint(9) NOT NULL AUTO_INCREMENT,
-                        prev_version tinytext DEFAULT '' NOT NULL,
-                        to_version tinytext DEFAULT '' NOT NULL,
-                        upgrade_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                        UNIQUE KEY id (id)
-                    );";
-    dbDelta($create_table);
+    else
+    {
+        // Create the srp_version table
+        $create_table = "CREATE TABLE $version_table_name (
+                            id mediumint(9) NOT NULL AUTO_INCREMENT,
+                            prev_version tinytext DEFAULT '' NOT NULL,
+                            to_version tinytext DEFAULT '' NOT NULL,
+                            upgrade_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                            UNIQUE KEY id (id)
+                     );";
+        dbDelta($create_table);
+    }
 
     // The 2010 version was a special case of "not-writing-for-upgradability"
     if ($from_version == '2010')
@@ -82,14 +84,6 @@ function srp_upgrader_activated()
         $wpdb->query($wpdb->prepare($genreUpdate, '8', 'book_genre', 'romance'));
         $wpdb->query($wpdb->prepare($genreUpdate, '9', 'book_genre', 'scifi'));
         $wpdb->query($wpdb->prepare($genreUpdate, '10', 'book_genre', 'thriller'));
-
-        // (4) Denormalize post author information
-        $query  = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
-        $query .= " SELECT p.ID, 'author_info', CONCAT(umn.meta_value, ' (grade ', umg.meta_value, ')') ";
-        $query .= " FROM $wpdb->posts p ";
-        $query .= " INNER JOIN $wpdb->usermeta umn ON p.post_author = umn.user_id AND umn.meta_key = %s ";
-        $query .= " INNER JOIN $wpdb->usermeta umg ON p.post_author = umg.user_id AND umg.meta_key = %s ";
-        $wpdb->query($wpdb->prepare($query, 'first_name', 'school_grade'));
     }
 
     delete_option('SRP_LastDrawing');
@@ -118,6 +112,18 @@ function srp_upgrader_activated()
         }
         $admin_userids .= $query[$i]->user_id;
     }
+
+    // Delete all prior year posts by the upgrade user
+    $wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE post_id IN (SELECT ID FROM $wpdb->posts WHERE post_author = %s)", $upgrade_userid));
+    $wpdb->query($wpdb->prepare("DELETE FROM $wpdb->posts WHERE post_author = %s", $upgrade_userid));
+
+    // Save the previous year's posts by denormalizing post author information and attributing to the upgrade user
+    $query  = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
+    $query .= " SELECT p.ID, 'author_info', CONCAT(umn.meta_value, ' (grade ', umg.meta_value, ')') ";
+    $query .= " FROM $wpdb->posts p ";
+    $query .= " INNER JOIN $wpdb->usermeta umn ON p.post_author = umn.user_id AND umn.meta_key = %s ";
+    $query .= " INNER JOIN $wpdb->usermeta umg ON p.post_author = umg.user_id AND umg.meta_key = %s ";
+    $wpdb->query($wpdb->prepare($query, 'first_name', 'school_grade'));
 
     // Attribute all posts to the upgrade user
     $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_author = %s WHERE post_type = %s AND post_status = %s",
