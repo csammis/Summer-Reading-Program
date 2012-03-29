@@ -33,6 +33,7 @@ require_once('includes/srp-inc-users.php');
 SRP_AuthRedirect($SRP_AUTHENTICATED);
 
 require_once('includes/srp-inc-template.php');
+require_once('includes/srp-inc-utility.php');
 
 $srp_leftcolumnwidth = 100;
 
@@ -213,6 +214,9 @@ switch ($action_type)
             </select>
             </label>
             </p>
+            <div>
+            Remember: the book reviews you post must be your own work. <a href="<?php SRP_SelectUrlOfTemplatedPage('plagiarism'); ?>" target="new">(Why is this important?)</a>
+            </div>
             <p>
             <input type="submit" value="Post review" />
             </p>

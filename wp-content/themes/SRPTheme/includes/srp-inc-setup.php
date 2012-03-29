@@ -65,6 +65,7 @@ function SRP_CreatePages()
     SRP_CreateSinglePage('How It Works', 'howitworks.php', '0,1');
     SRP_CreateSinglePage('Pending Reviews', 'approvals.php', '2');
     SRP_CreateSinglePage('JQuery Processor', 'jqueryprocessor.php', '3');
+    SRP_CreateSinglePage('Plagiarism', 'plagiarism.php', '3');
     SRP_CreateSinglePage('Prize Drawing', 'prizedrawing.php', '2');
     SRP_CreateSinglePage('Register', 'user_reg.php', '0');
     SRP_CreateSinglePage('Reset user time', 'hoursreset.php', '3');
