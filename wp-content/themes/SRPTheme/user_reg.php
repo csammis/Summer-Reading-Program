@@ -163,7 +163,7 @@ switch ($action_type)
                     SRP_PrintPageStart($srp_leftcolumnwidth);
 ?>
 <h2>Thanks for registering!</h2>
-<div>Please check your e-mail for a confirmation link.  Follow this link to confirm your account and log in to the site.</div>
+<div>Your registration is not quite finished! We've sent you an email to make sure your information is correct. You'll need to click on the confirmation link in that email before you can log in to the site.</div>
 <?php
                     break;
                 }
