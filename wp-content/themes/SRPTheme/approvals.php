@@ -102,10 +102,13 @@ function checkAll()
     while ($query->have_posts()) :
         $query->the_post();
         $post_id = get_the_ID();
+
+        $author_id = get_the_author_meta('ID');
+        $author_name = get_the_author() . ' (grade ' . get_user_meta($author_id, 'school_grade') . ')';
 ?>
 <tr>
 <td><input type="checkbox" name="<?php echo "SRP_ApprovePost_$post_id"; ?>" /></td>
-<td><?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?> by <?php echo get_the_author(); ?></td>
+<td><?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?> by <?php echo $author_name; ?></td>
 <td><em><?php echo get_post_meta($post_id, 'book_title', true); ?></em>, <?php echo get_post_meta($post_id, 'book_author', true); ?></td>
 <td><?php echo strip_tags(get_the_content()); ?></td>
 </tr>
