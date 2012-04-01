@@ -330,8 +330,8 @@ blockquote p{
 
 /*** The login box ***/
 .loginbox {
-    padding: 0.5em;
-    margin-top:2em;
+    /*padding: 0.5em;*/
+    margin-top:1.5em;
 }
 
 /*** The review box ***/

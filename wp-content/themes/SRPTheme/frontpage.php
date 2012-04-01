@@ -91,8 +91,17 @@ SRP_PrintPageStart($srp_leftcolumnwidth);
 
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 ?>
-    <div id="post-<?php the_ID(); ?>" <?php if (function_exists("post_class")) post_class(); else print 'class="post"'; ?>>          
+    <div id="post-<?php the_ID(); ?>" <?php if (function_exists("post_class")) post_class(); else print 'class="post"'; ?>>
 <?php
+    // Print the page title and the customizable content if the user is either not logged in or not an admin
+    if (!SRP_IsUserAdministrator())
+    {
+?>
+        <h2><?php the_title(); ?></h2>
+        <div class="post-content clearfix"><?php the_content('Read the rest of this page &raquo;'); ?></div>
+<?php
+    }
+
 if (is_user_logged_in())
 {
 ?>
@@ -274,12 +283,12 @@ if (is_user_logged_in())
 else
 {
 ?>
-        <h2><?php the_title(); ?></h2>
-        <div class="post-content clearfix"><?php the_content('Read the rest of this page &raquo;'); ?></div>
+        
         <div class="SRPHoursBanner">So far, <?php echo get_srptheme_option('library_name'); ?> readers have logged 
             <span class="SRPHoursNumber"><?php echo floor(SRP_SelectAllMinutes() / 60); ?></span> hours!</div>
+        
         <div class="loginbox">
-            <h4>Log in</h4>
+            <div style="font-style:italic">Sign in below to view your reviews, prizes, and pages read for last summer!</div>
             <?php
                 if (isset($_REQUEST['loginstatus']))
                 {
