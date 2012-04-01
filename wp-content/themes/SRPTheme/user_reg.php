@@ -75,6 +75,8 @@ switch ($action_type)
         if (strlen($srp_school_spring) == 0 || $srp_school_spring < 0) $reqfields .= 'srp_school_spring:';
         $srp_grade = esc_attr(stripslashes($_POST['srp_grade']));
         if (strlen($srp_grade) == 0 || $srp_grade < 6) $reqfields .= 'srp_grade:';
+        $srp_pickup = esc_attr(stripslashes($_POST['srp_pickup']));
+        if (strlen($srp_pickup) == 0 || $srp_pickup < 1) $reqfields .= 'srp_pickup:';
         
         $srp_grandprize = esc_attr(stripslashes($_POST['srp_grandprize']));
         if (strlen($srp_grandprize) == 0) $reqfields .= 'srp_grandprize:';
@@ -154,6 +156,7 @@ switch ($action_type)
                 update_user_meta($user_id, 'school_name_spring', $srp_school_spring);
                 update_user_meta($user_id, 'phone', $srp_phone);
                 update_user_meta($user_id, 'srp_grandprize', $srp_grandprize);
+                update_user_meta($user_id, 'srp_pickup', $srp_pickup);
                 
                 if ($sendEmail == true)
                 {
@@ -360,6 +363,10 @@ switch ($action_type)
         <?php SRP_PrintGrandPrizeSelector('srp_grandprize'); ?>
         </label>
         </p>
+        <div>
+        <label <?php if (strpos($reqfields, 'srp_pickup:') !== FALSE) echo 'class="errormsg"';?>>Select the location at which you will be able to pick up prizes:<br />
+            <?php SRP_PrintPickupLocationSelector('srp_pickup', $srp_pickup); ?>
+        </div>
         <h4>User Agreement</h4>
         <div><input type="checkbox" name="srp_useragreement" id="srp_useragreement" value="1" /> <?php echo SRP_FormatMessage('srp_regagreement'); ?></div>
         <div>&nbsp;</div>

@@ -382,6 +382,17 @@ function SRP_PrintGenreSelector($inputname, $selected = '', $bIncludeBlank = fal
     echo "</select>\n";
 }
 
+function SRP_PrintPickupLocationSelector($inputname, $selected = '')
+{
+    echo "<select name=\"$inputname\" id=\"$inputname\" class=\"SRPInput\">\n";
+?>
+    <option value="-1" <?php if ($selected == '') echo 'selected="selected"';?> disabled="disabled">-- Select a location --</option>
+    <option value="1" <?php  if ($selected == 1) echo 'selected="selected"';?>>Olathe Main Library</option>
+    <option value="2" <?php  if ($selected == 2) echo 'selected="selected"';?>>Indian Creek Branch</option>
+<?php
+    echo "</select>\n";
+}
+
 /*
  * SRP_PrintGradeSelector
  * Prints a selector for the grades allowed for the reading program.
