@@ -72,6 +72,10 @@ function SRP_PrintGeneralOptions()
 <div>If you want to track visitors to your site, register an account with <a href="http://www.google.com/analytics/" target="new">Google Analytics</a> and enter the tracking ID here.  Visits to each SRP page will be tracked separately.</div>
 <div><input type="text" name="ga_id" id="ga_id" value="<?php echo get_srptheme_option('ga_id'); ?>" size="40" /></div>
 <div>&nbsp;</div>
+<div>If you want to include a form for users to send questions to the SRP email account on the Contact page, create and enter your <a href="https://www.google.com/recaptcha/admin/create" target="new">Google ReCAPTCHA</a> keys. The Summer Reading Program requires the use of a ReCAPTCHA system to submit questions in order to reduce spam.</div>
+<div>Public key: <input type="text" name="rc_pub_key" id="rc_pub_key" value="<?php echo get_srptheme_option('recaptcha_public'); ?>" size="40" /></div>
+<div>Private key: <input type="text" name="rc_priv_key" id="rc_priv_key" value="<?php echo get_srptheme_option('recaptcha_private'); ?>" size="40" /></div>
+<div>&nbsp;</div>
 <hr />
 <div>&nbsp;</div>
 <div>The following settings control the contents of the Summer Reading Program site.  Please read each instruction carefully before saving changes.</div>

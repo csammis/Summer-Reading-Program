@@ -283,6 +283,9 @@ function srptheme_update_options()
     else if ($prefmode == 'general')
     {
         if (isset($_POST['ga_id'])) $options['ga_id'] = $_POST['ga_id'];
+        if (isset($_POST['rc_pub_key'])) $options['recaptcha_public'] = $_POST['rc_pub_key'];
+        if (isset($_POST['rc_priv_key'])) $options['recaptcha_private'] = $_POST['rc_priv_key'];
+
         if (isset($_POST['program_active']))
         {
             $options['program_active'] = $_POST['program_active'];

@@ -66,11 +66,12 @@ function SRP_SendEmail($subject, $body, $email)
 {
     require_once('class.phpmailer.php');
     $mail = new PHPMailer();
+
     $mail->IsSMTP();
     $mail->SMTPAuth   = true;
-    $mail->SMTPSecure = "ssl";
+    $mail->SMTPSecure = "tls";
     $mail->Host       = "smtp.gmail.com";
-    $mail->Port       = 465;
+    $mail->Port       = 587;
     $mail->Username   = get_srptheme_option('gmail_account');
     $mail->Password   = get_srptheme_option('gmail_password');
 
@@ -79,8 +80,8 @@ function SRP_SendEmail($subject, $body, $email)
     {
         $reply_to = get_srptheme_option('gmail_account');
     }
-    $mail->SetFrom($reply_to, $reply_to);
-    $mail->AddReplyTo($reply_to, $reply_to);
+    $mail->SetFrom($reply_to, "Summer Reading Program");
+    $mail->AddReplyTo($reply_to, "Summer Reading Program");
     $mail->Subject = $subject;
     $mail->MsgHTML($body);
 
@@ -88,7 +89,7 @@ function SRP_SendEmail($subject, $body, $email)
 
     if (!$mail->Send())
     {
-        echo 'couldn\'t send mail';
+        die('couldn\'t send mail: ' . $mail->ErrorInfo);
     }
 }
 
