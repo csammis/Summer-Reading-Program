@@ -487,9 +487,16 @@ function validateNumber(event)
 function SRP_PrintHeaderImg()
 {
     $url = get_srptheme_appearance('header');
+    $height = get_srptheme_option('srp_headerimgheight');
+    if (strlen($height) == 0)
+    {
+        $height = '178';
+    }
+    $height .= 'px';
+
     if (strlen($url) > 0)
     {
-        echo "<img src=\"$url\" style=\"width:778px;height:178px;\" alt=\"\" />\n";
+        echo "<img src=\"$url\" style=\"width:778px;height:$height;\" alt=\"\" />\n";
     }
     
     echo '';
@@ -502,9 +509,17 @@ function SRP_PrintHeaderImg()
 function SRP_PrintFooterImg()
 {
     $url = get_srptheme_appearance('footer');
-    if (strlen($url) > 0 && file_exists($url))
+    $height = get_srptheme_option('srp_footerimgheight');
+    if (strlen($height) == 0)
     {
-        echo "<img src=\"$url\" alt=\"\" />\n";
+        $height = '178';
+    }
+    $height .= 'px';
+
+
+    if (strlen($url) > 0)
+    {
+        echo "<img src=\"$url\" style=\"width:778px;height:$height;\" alt=\"\" />\n";
     }
     
     echo '';

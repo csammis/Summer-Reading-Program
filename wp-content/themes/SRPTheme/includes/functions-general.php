@@ -49,10 +49,20 @@ function SRP_PrintGeneralOptions()
 <td><input type="text" name="library_name" id="library_name" value="<?php echo get_srptheme_option('library_name'); ?>" size="40" /></td>
 </tr>
 <tr><th scope="row">URL of header image:</th>
-<td><input type="text" name="srp_headerimg" id="srp_headerimg" value="<?php echo get_srptheme_appearance('header'); ?>" size="80" /></td>
+<td><input type="text" name="srp_headerimg" id="srp_headerimg" 
+           value="<?php echo get_srptheme_appearance('header'); ?>" size="80" /></td>
+</tr>
+<tr><th scope="row">Header image height in pixels:</th>
+<td><input type="text" name="srp_headerimgheight" id="srp_headerimgheight" 
+           value="<?php echo get_srptheme_option('srp_headerimgheight'); ?>" size="5" /></td>
 </tr>
 <tr><th scope="row">URL of footer image:</th>
-<td><input type="text" name="srp_footerimg" id="srp_footerimg" value="<?php echo get_srptheme_appearance('footer'); ?>" size="80" /></td>
+<td><input type="text" name="srp_footerimg" id="srp_footerimg" 
+           value="<?php echo get_srptheme_appearance('footer'); ?>" size="80" /></td>
+</tr>
+<tr><th scope="row">Footer image height in pixels:</th>
+<td><input type="text" name="srp_footerimgheight" id="srp_footerimgheight" 
+           value="<?php echo get_srptheme_option('srp_footerimgheight'); ?>" size="5" /></td>
 </tr>
 <tr><th scope="row">Header / Footer color:</th>
 <td><input class="color" name="srp_backcolor1" id="srp_backcolor1" value="<?php echo get_srptheme_appearance('backcolor1'); ?>" /></td>

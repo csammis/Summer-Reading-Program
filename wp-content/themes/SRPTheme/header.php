@@ -18,8 +18,20 @@ require_once('includes/srp-inc-search.php');
     global $SRP_RIGHTWIDTH;
     global $SRP_LEFTWIDTH;
 
+    $height = get_srptheme_option('srp_headerimgheight');
+
     // Generate the CSS for the column widths
     echo "<style type=\"text/css\">\n";
+    if (strlen($height) > 0)
+    {
+        
+        $headerheight = $height; //csnote there used to be a height offset of 17px here
+        $height .= 'px';
+        $headerheight .= 'px';
+        echo "#nav-wrap1 { top:$height; }\n";
+        echo "#header { height:$headerheight; }\n";
+        echo "#header .block-content{ height:$headerheight; }\n";
+    }
     echo "#page.with-sidebar .mask-main .mask-left {\n";
     echo "  right:$SRP_RIGHTWIDTH%;\n";
     echo "}\n";

@@ -297,6 +297,8 @@ function srptheme_update_options()
         
         if (isset($_POST['srp_headerimg'])) $options['srp_headerimg'] = $_POST['srp_headerimg'];
         if (isset($_POST['srp_footerimg'])) $options['srp_footerimg'] = $_POST['srp_footerimg'];
+        if (isset($_POST['srp_headerimgheight'])) $options['srp_headerimgheight'] = $_POST['srp_headerimgheight'];
+        if (isset($_POST['srp_footerimgheight'])) $options['srp_footerimgheight'] = $_POST['srp_footerimgheight'];
         if (isset($_POST['srp_backcolor1'])) $options['srp_backcolor1'] = $_POST['srp_backcolor1'];
         if (isset($_POST['srp_backcolor2'])) $options['srp_backcolor2'] = $_POST['srp_backcolor2'];
         if (isset($_POST['srp_backcolor3'])) $options['srp_backcolor3'] = $_POST['srp_backcolor3'];
