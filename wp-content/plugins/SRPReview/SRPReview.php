@@ -34,6 +34,7 @@ class SRPReviewWidget extends WP_Widget
     
     function widget($args, $instance)
     {
+        require_once(get_theme_root() . '/SRPTheme/includes/srp-inc-lists.php');
         extract($args);
         
         $postcount = empty($instance['count']) ? 5  : $instance['count'];

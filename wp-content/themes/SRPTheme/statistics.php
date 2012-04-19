@@ -39,117 +39,178 @@ require_once('includes/srp-inc-lists.php');
 
 $srp_leftcolumnwidth = 100;
 
-$action = $_POST['action'];
+$action = '';
+$pivot = 0;
+
+if (isset($_POST['action']))
+{
+	$action = $_POST['action'];
+}
+
+if (isset($_POST['pivot']))
+{
+	$pivot = $_POST['pivot'];
+}
+
+$pivotname = '';
+switch ($pivot)
+{
+	case 1: $pivotname  = 'Olathe Main Library'; break;
+	case 2: $pivotname  = 'Indian Creek Branch'; break;
+	default: $pivotname = 'all locations'; break;
+}
 
 // Handle the CSV action by redirecting to the dynamically generated content
 if ($action == 'csv')
 {
     header('Content-type: text/csv');
-    header('Content-Disposition: attachment; filename="OPL Teens user report.csv"');
-    echo SRP_GetAllUsersCSV();
+    header("Content-Disposition: attachment; filename=\"OPL Teens user report ($pivotname).csv\"");
+    echo SRP_GetAllUsersCSV($pivot);
     exit();
 }
 
 SRP_PrintPageStart($srp_leftcolumnwidth);
 
-if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
+$pagetitle = '';
+$pageid = '';
+
+if (have_posts()) :
+	the_post(); /* start The Loop so we can get the page ID */
+	$pagetitle = get_the_title();
+	$pageid = get_the_ID();
+endif;
+
+
+
+// Calculate stats for the selected pivot location
+$usercount = SRP_GetUserCount(false, $pivot);
+$confcount = SRP_GetConfirmedUserCount($pivot);
+$usernumbers = "$usercount ($confcount have confirmed)";
+
+$minutes = SRP_SelectAllMinutes($pivot);
+$hours = floor($minutes / 60);
+$totaltime = "$minutes ($hours hours)";
+
+$program_open_date = get_srptheme_option('program_open_date');
+$days_open = ((time() - $program_open_date) / 60 / 60 / 24);
+$reading_hours_open = round($days_open * 20, 2);
+
+
 ?>
-<h2><?php the_title(); ?></h2>
+<h2><?php echo $pagetitle; ?></h2>
+<div>&nbsp;</div>
+<h4>Displaying statistics for users registered to pick up at <?php echo $pivotname; ?></h4>
+<div>
+<form id="SRPSwitchPivot" method="POST" action="<?php echo get_permalink($pageid);?>">
+Switch to: <select name="pivot">
+<option value="0">All locations</option>
+<option value="1">Olathe Main Library</option>
+<option value="2">Indian Creek Branch</option>
+</select>
+&nbsp;
+<input type="Submit" value="Switch" />
+</form>
+</div>
+<div>&nbsp;</div>
 <div>&nbsp;</div>
 
 <div>
-<span class="SRPStatLabel">Number of registered users:</span>&nbsp;<span class="SRPStatValue"><?php echo SRP_GetUserCount();?> (<?php echo SRP_GetConfirmedUserCount(); ?> have confirmed)</span>
-&nbsp;
-<form id="SRPCreateCSV" method="POST" action="<?php echo get_permalink(get_the_ID()); ?>">
+<span class="SRPStatLabel">Number of registered users:</span>&nbsp;
+<span class="SRPStatValue"><?php echo $usernumbers;?></span>&nbsp;
+<form id="SRPCreateCSV" method="POST" action="<?php echo get_permalink($pageid); ?>">
 <input type="hidden" name="action" value="csv" />
+<input type="hidden" name="pivot" value="<?php echo $pivot; ?>" />
 <input type="submit" value="Create registered user CSV" />
 </form>
 </div>
   
-<div><span class="SRPStatLabel">Number of reviews posted:</span>&nbsp;<span class="SRPStatValue"><?php echo SRP_GetReviewCount();?></span></div>
-<?php
-    $minutes = SRP_SelectAllMinutes();
-    $hours = floor($minutes / 60);
-?>
-<div><span class="SRPStatLabel">Total number of minutes / pages logged:</span>&nbsp;<span class="SRPStatValue"><?php echo "$minutes ($hours hours)"; ?></span></div>
-<?php
-    $program_open_date = get_srptheme_option('program_open_date');
-    $days_open = ((time() - $program_open_date) / 60 / 60 / 24);
-    $reading_hours_open = round($days_open * 20, 2);
-?>
-<div>&nbsp;</div>
-<div><span class="SRPStatLabel">The Summer Reading Program is allowing <?php echo $reading_hours_open; ?> hours per user to be logged since program open (20 hours out of each 24 hour period).</span></div>
-<div>&nbsp;</div>
-<div><span class="SRPStatLabel">Users who have submitted reviews (from most reviews to least):</span><br />
-  <ol>
-  <?php
-    $names = SRP_SelectUsersWithReviews();
-    foreach ($names as $name)
-    {
-      echo "   <li>$name</li>\n";
-    }
-  ?>
-  </ol>
+<div>
+<span class="SRPStatLabel">Number of reviews posted:</span>&nbsp;
+<span class="SRPStatValue"><?php echo SRP_GetReviewCount($pivot);?></span>
 </div>
-<div><span class="SRPStatLabel">Users who have submitted at least one minute (from most minutes to least):</span><br />
-  <ol>
-  <?php
-    $names = SRP_SelectUsersWithHours(1);
-    foreach ($names as $name)
-    {
-      echo "   <li>$name</li>\n";
-    }
-  ?>
-  </ol>
+
+<div>
+<span class="SRPStatLabel">Total number of minutes / pages logged:</span>&nbsp;
+<span class="SRPStatValue"><?php echo $totaltime; ?></span>
 </div>
+
+<div>&nbsp;</div>
+
+<div>
+<span class="SRPStatLabel">The Summer Reading Program is allowing <?php echo $reading_hours_open; ?> hours per user to be logged since program open
+(20 hours out of each 24 hour period).</span>
+</div>
+
+<div>&nbsp;</div>
+
+<div>
+<span class="SRPStatLabel">Users who have submitted reviews (from most reviews to least):</span><br />
+<ol>
+<?php
+$names = SRP_SelectUsersWithReviews($pivot);
+foreach ($names as $name)
+{
+    echo "   <li>$name</li>\n";
+}
+?>
+</ol>
+</div>
+
+<div>
+<span class="SRPStatLabel">Users who have submitted at least one minute (from most minutes to least):</span><br />
+<ol>
+<?php
+$names = SRP_SelectUsersWithHours(1, $pivot);
+foreach ($names as $name)
+{
+    echo "   <li>$name</li>\n";
+}
+?>
+</ol>
+</div>
+
 <div><span class="SRPStatLabel">Number of users by grade:</span><br />
-  <ul>
-  <?php
-    $names = SRP_SelectUsersByGrade();
-    foreach (array_keys($names) as $grade)
-    {
-      echo "    <li>Grade $grade: " . count($names[$grade]) . " </li>\n";
-    }
-  ?>
-  </ul>
-</div>
-<div><span class="SRPStatLabel">Number of users by school attendance in spring:</span><br />
-  <ol>
-  <?php
-    $sid2name = SRP_GetAllSchoolNames();
-    
-    $counts = SRP_SelectSchoolsByMostReviewers('spring');
-    $total = 0;
-    foreach ($counts as $school => $count)
-    {
-      echo '   <li>' . $sid2name[$school] . ": $count</li>\n";
-      $total += $count;
-    }
-    echo "  <li>TOTAL: $total</li>\n";
-  ?>
-  </ol>
-</div>
-<div><span class="SRPStatLabel">Number of users by school attendance in fall:</span><br />
-  <ol>
-  <?php
-    $counts = SRP_SelectSchoolsByMostReviewers('fall');
-    $total = 0;
-    foreach ($counts as $school => $count)
-    {
-      echo '   <li>' . $sid2name[$school] . ": $count</li>\n";
-      $total += $count;
-    }
-    echo "  <li>TOTAL: $total</li>\n";
-  ?>
-  </ol>
-</div>
-    
-    <div><?php /* SRP_ChrisScratch(); */ ?>
-      </div>
-    
+<ul>
 <?php
-
-endif; /* end The Loop */
-SRP_PrintPageEnd($srp_leftcolumnwidth);
-
+$names = SRP_SelectUsersByGrade($pivot);
+foreach (array_keys($names) as $grade)
+{
+    echo "    <li>Grade $grade: " . count($names[$grade]) . " </li>\n";
+}
 ?>
+</ul>
+</div>
+
+<div><span class="SRPStatLabel">Number of users by school attendance in spring:</span><br />
+<ol>
+<?php
+$sid2name = SRP_GetAllSchoolNames();
+
+$counts = SRP_SelectSchoolsByMostReviewers('spring', $pivot);
+$total = 0;
+foreach ($counts as $school => $count)
+{
+    echo '   <li>' . $sid2name[$school] . ": $count</li>\n";
+    $total += $count;
+}
+echo "  <li>TOTAL: $total</li>\n";
+?>
+</ol>
+</div>
+
+<div><span class="SRPStatLabel">Number of users by school attendance in fall:</span><br />
+<ol>
+<?php
+$counts = SRP_SelectSchoolsByMostReviewers('fall', $pivot);
+$total = 0;
+foreach ($counts as $school => $count)
+{
+    echo '   <li>' . $sid2name[$school] . ": $count</li>\n";
+    $total += $count;
+}
+echo "  <li>TOTAL: $total</li>\n";
+?>
+</ol>
+</div>
+
+<?php SRP_PrintPageEnd($srp_leftcolumnwidth); ?>

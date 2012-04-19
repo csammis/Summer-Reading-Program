@@ -120,15 +120,17 @@ function SRP_GetReviewerInformation($userid, $bIncludePhone = false, $bIncludeEm
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_phone ON (um_phone.user_id = u.id AND um_phone.meta_key = %s) ";
+    $select .= "LEFT OUTER JOIN $wpdb->usermeta um_pikup ON (um_pikup.user_id = u.id AND um_pikup.meta_key = %s) ";
     $select .= "WHERE u.id = %s ";
     $select .= "ORDER BY um_fname.meta_key";
 
-    $query = $wpdb->prepare($select, 'first_name', 'last_name', 'phone', $userid);
+    $query = $wpdb->prepare($select, 'first_name', 'last_name', 'phone', 'srp_pickup', $userid);
     $id_col = $wpdb->get_col($query, 0);
     $fname_col = $wpdb->get_col($query, 1);
     $lname_col = $wpdb->get_col($query, 2);
     $phone_col = $wpdb->get_col($query, 3);
     $email_col = $wpdb->get_col($query, 4);
+    $pikup_col = $wpdb->get_col($query, 5);
     for ($i = 0; $i < count($id_col); $i++)
     {
         $firstname = $fname_col[$i];
@@ -142,6 +144,18 @@ function SRP_GetReviewerInformation($userid, $bIncludePhone = false, $bIncludeEm
         {
             $retval .= ' [Email:&nbsp;&nbsp;' . $email_col[$i] . ']';
         }
+
+        $retval .= ' [Pickup location:&nbsp;&nbsp;';
+        if ($pikup_col[$i] == 1)
+        {
+            $retval .= 'Olathe Main Library';
+        }
+        else if ($pikup_col[$i] == 2)
+        {
+            $retval .= 'Indian Creek Branch';
+        }
+        $retval .= ']';
+
         return $retval;
     }
 }

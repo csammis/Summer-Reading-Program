@@ -285,7 +285,7 @@ else
 ?>
         
         <div class="SRPHoursBanner">So far, <?php echo get_srptheme_option('library_name'); ?> readers have logged 
-            <span class="SRPHoursNumber"><?php echo floor(SRP_SelectAllMinutes() / 60); ?></span> hours!</div>
+            <span class="SRPHoursNumber"><?php echo floor(SRP_SelectAllMinutes(0) / 60); ?></span> hours!</div>
         
         <div class="loginbox">
             <div style="font-style:italic">Sign in below to view your reviews, prizes, and pages read for last summer!</div>

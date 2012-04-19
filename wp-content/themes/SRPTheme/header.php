@@ -26,6 +26,7 @@ require_once('includes/srp-inc-search.php');
     {
         
         $headerheight = $height; //csnote there used to be a height offset of 17px here
+        $height = $height - 15;
         $height .= 'px';
         $headerheight .= 'px';
         echo "#nav-wrap1 { top:$height; }\n";

@@ -89,7 +89,7 @@ function checkAll()
 
 <form method="post" id="SRPApprove" action="<?php echo get_permalink(get_the_ID()); ?>">
 <input type="hidden" name="action" value="process" />
-<table>
+<table style="width:100%">
 <tr>
   <th><input type="checkbox" name="checkall" onClick="javascript:checkAll();" /></th>
   <th>Review Date and Author</th>
@@ -104,13 +104,22 @@ function checkAll()
         $post_id = get_the_ID();
 
         $author_id = get_the_author_meta('ID');
-        $author_name = get_the_author() . ' (grade ' . get_user_meta($author_id, 'school_grade') . ')';
+        $author_name = get_the_author();
+        $author_grade = get_user_meta($author_id, 'school_grade');
+        if (is_array($author_grade))
+        {
+            $author_grade = $author_grade[0];
+        }
+        $author_info = "$author_name (grade $author_grade)";
+
+        $content = strip_tags(get_the_content());
+        $content .= '&nbsp;&nbsp;<a target="new" href="https://www.google.com/search?q=' . urlencode($content) . '">[&nbsp;G?&nbsp;]</a>';
 ?>
 <tr>
 <td><input type="checkbox" name="<?php echo "SRP_ApprovePost_$post_id"; ?>" /></td>
-<td><?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?> by <?php echo $author_name; ?></td>
+<td><?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?> by <?php echo $author_info; ?></td>
 <td><em><?php echo get_post_meta($post_id, 'book_title', true); ?></em>, <?php echo get_post_meta($post_id, 'book_author', true); ?></td>
-<td><?php echo strip_tags(get_the_content()); ?></td>
+<td><?php echo $content; ?></td>
 </tr>
 <?php
     endwhile;

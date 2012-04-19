@@ -50,7 +50,7 @@ THE SOFTWARE.
  * Uses SRP methods:
  *  printFallSchoolName
  */
-function SRP_GetAllUsersCSV()
+function SRP_GetAllUsersCSV($pivot)
 {
     global $wpdb;
 
@@ -61,6 +61,7 @@ function SRP_GetAllUsersCSV()
     $select .= "                u.user_email AS email, ";
     $select .= "                um_school.meta_value AS school_value ";
     $select .= "FROM $wpdb->users u ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'u.id', $pivot);
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_grade ON (um_grade.user_id = u.id AND um_grade.meta_key = %s) ";
@@ -98,7 +99,7 @@ function SRP_GetAllUsersCSV()
  * Uses metadata values:
  *  srp_minutes
  */
-function SRP_SelectAllMinutes()
+function SRP_SelectAllMinutes($pivot)
 {
     global $wpdb;
     
@@ -115,42 +116,48 @@ function SRP_SelectAllMinutes()
 
 /*
  * SRP_GetUserCount
- * Returns the number of SRP users, not including administrators by default.
+ * Returns the number of SRP users, optionally not including administrators
  */
-function SRP_GetUserCount($bIncludeAdmins = false)
+function SRP_GetUserCount($bIncludeAdmins, $pivot)
 {
     global $wpdb;
 
     if ($bIncludeAdmins == false)
     {
-        $select = "SELECT COUNT(*) FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value NOT LIKE %s";
+        $select  = "SELECT COUNT(1) FROM $wpdb->usermeta umc ";
+        $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'umc.user_id', $pivot);
+        $select .= "WHERE umc.meta_key LIKE %s AND umc.meta_value NOT LIKE %s";
         return $wpdb->get_var($wpdb->prepare($select, '%_capabilities', '%administrator%'));
     }
 
-    $select = "SELECT COUNT(*) FROM $wpdb->users";
+    $select  = "SELECT COUNT(1) FROM $wpdb->users u ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'u.id', $pivot);
     return $wpdb->get_var($wpdb->prepare($select));
 }
 
-function SRP_GetConfirmedUserCount()
+function SRP_GetConfirmedUserCount($pivot)
 {
     global $wpdb;
-  $select  = "SELECT COUNT(*) FROM $wpdb->usermeta caps ";
-  $select .= "LEFT OUTER JOIN $wpdb->usermeta confirmed ON caps.user_id = confirmed.user_id AND confirmed.meta_key = %s ";
-  $select .= "WHERE caps.meta_key LIKE %s AND caps.meta_value NOT LIKE %s AND confirmed.meta_value IS NULL";
+    $select  = "SELECT COUNT(1) FROM $wpdb->usermeta caps ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'caps.user_id', $pivot);
+    $select .= "LEFT OUTER JOIN $wpdb->usermeta confirmed ON caps.user_id = confirmed.user_id AND confirmed.meta_key = %s ";
+    $select .= "WHERE caps.meta_key LIKE %s AND caps.meta_value NOT LIKE %s AND confirmed.meta_value IS NULL";
 
-  return $wpdb->get_var($wpdb->prepare($select, 'confirmation_id', '%_capabilities', '%administrator%'));
+    return $wpdb->get_var($wpdb->prepare($select, 'confirmation_id', '%_capabilities', '%administrator%'));
 }
 
 /*
  * SRP_GetReviewCount
  * Returns the number of published reviews.
  */
-function SRP_GetReviewCount()
+function SRP_GetReviewCount($pivot)
 {
     global $wpdb;
     
-    $select  = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = %s AND post_status = %s ";
-    $select .= "AND post_author NOT IN (SELECT user_id FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value LIKE %s)";
+    $select  = "SELECT COUNT(1) FROM $wpdb->posts p";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'p.post_author', $pivot);
+    $select .= 'WHERE p.post_type = %s AND p.post_status = %s ';
+    $select .= "AND p.post_author NOT IN (SELECT user_id FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value LIKE %s)";
     return $wpdb->get_var($wpdb->prepare($select, 'post', 'publish', '%_capabilities', '%administrator%'));
 }
 
@@ -177,7 +184,7 @@ function SRP_GetReviewCountByUser($userid, $status = 'publish')
  * Uses SRP methods:
  *  SRP_GetReviewCountByUser
  */
-function SRP_SelectUsersWithReviews()
+function SRP_SelectUsersWithReviews($pivot)
 {
     global $wpdb;
     
@@ -187,6 +194,7 @@ function SRP_SelectUsersWithReviews()
     $select .= "                um_grade.meta_value AS grade_value ";
     $select .= "FROM $wpdb->users u ";
     $select .= "INNER JOIN $wpdb->posts p ON u.id = p.post_author ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'u.id', $pivot);
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_grade ON (um_grade.user_id = u.id AND um_grade.meta_key = %s) ";
@@ -243,7 +251,7 @@ function SRP_SelectUsersWithReviews()
  *  phone
  *  srp_minutes
  */
-function SRP_SelectUsersWithHours($hourlimit = 0)
+function SRP_SelectUsersWithHours($hourlimit, $pivot)
 {
     global $wpdb;
 
@@ -255,6 +263,7 @@ function SRP_SelectUsersWithHours($hourlimit = 0)
     $select .= "                u.user_email AS email, ";
     $select .= "                um_phone.meta_value AS phone_value ";
     $select .= "FROM $wpdb->users u ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'u.id', $pivot);
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_grade ON (um_grade.user_id = u.id AND um_grade.meta_key = %s) ";
@@ -312,7 +321,7 @@ function SRP_SelectUsersWithHours($hourlimit = 0)
  *  last_name
  *  school_grade
  */
-function SRP_SelectUsersByGrade()
+function SRP_SelectUsersByGrade($pivot)
 {
     global $wpdb;
     $select  = "SELECT DISTINCT u.id as ID, ";
@@ -320,6 +329,7 @@ function SRP_SelectUsersByGrade()
     $select .= "                um_lname.meta_value AS lname_value, ";
     $select .= "                um_grade.meta_value AS grade_value ";
     $select .= "FROM $wpdb->users u ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'u.id', $pivot);
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
     $select .= "INNER JOIN $wpdb->usermeta um_grade ON (um_grade.user_id = u.id AND um_grade.meta_key = %s) ";
@@ -355,10 +365,11 @@ function SRP_SelectUsersByGrade()
  *  school_name_spring
  *  school_name_fall
  */
-function SRP_SelectSchoolsByMostReviewers($school = 'spring')
+function SRP_SelectSchoolsByMostReviewers($school, $pivot)
 {
     global $wpdb;
     $select  = "SELECT um.meta_value FROM $wpdb->usermeta um ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'um.user_id', $pivot);
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_confirm ON (um_confirm.user_id = um.user_id AND um_confirm.meta_key = %s) ";
     $select .= "WHERE um_confirm.user_id IS NULL AND um.meta_key = %s";
     $query = $wpdb->prepare($select, 'confirmation_id', "school_name_$school");
@@ -372,6 +383,16 @@ function SRP_SelectSchoolsByMostReviewers($school = 'spring')
     ksort($counts);
 
     return $counts;
+}
+
+function SRP_CreatePivotJoin($tablename, $userid, $pivot)
+{
+    if ($pivot == 0)
+    {
+        return '';
+    }
+
+    return "INNER JOIN $tablename ump ON (ump.user_id = $userid AND ump.meta_key = 'srp_pickup' AND ump.meta_value = $pivot) ";
 }
   
 ?>
