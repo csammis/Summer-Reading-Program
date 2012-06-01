@@ -104,7 +104,11 @@ function checkAll()
         $post_id = get_the_ID();
 
         $author_id = get_the_author_meta('ID');
-        $author_name = get_the_author();
+        $author_name = get_user_meta($author_id, 'first_name');
+        if (is_array($author_name))
+        {
+            $author_name = $author_name[0];
+        }
         $author_grade = get_user_meta($author_id, 'school_grade');
         if (is_array($author_grade))
         {
