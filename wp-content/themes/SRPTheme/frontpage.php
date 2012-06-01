@@ -288,7 +288,7 @@ else
             <span class="SRPHoursNumber"><?php echo floor(SRP_SelectAllMinutes(0) / 60); ?></span> hours!</div>
         
         <div class="loginbox">
-            <div style="font-style:italic">Sign in below to view your reviews, prizes, and pages read for last summer!</div>
+            <div style="font-style:italic">Sign in below to log your reading, write reviews, and check your progress toward winning prizes.</div>
             <?php
                 if (isset($_REQUEST['loginstatus']))
                 {
