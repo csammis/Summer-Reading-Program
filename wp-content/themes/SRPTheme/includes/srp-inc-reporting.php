@@ -154,7 +154,7 @@ function SRP_GetReviewCount($pivot)
 {
     global $wpdb;
     
-    $select  = "SELECT COUNT(1) FROM $wpdb->posts p";
+    $select  = "SELECT COUNT(1) FROM $wpdb->posts p ";
     $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'p.post_author', $pivot);
     $select .= 'WHERE p.post_type = %s AND p.post_status = %s ';
     $select .= "AND p.post_author NOT IN (SELECT user_id FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value LIKE %s)";
