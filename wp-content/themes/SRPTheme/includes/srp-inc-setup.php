@@ -76,6 +76,7 @@ function SRP_CreatePages()
     SRP_CreateSinglePage('Submit Time', 'submitbooks.php', '1');
     SRP_CreateSinglePage('Submit Review', 'submitreview.php', '1');
     SRP_CreateSinglePage('Update Profile', 'editprofile.php', '3');
+    SRP_CreateSinglePage('Fix User', 'userfix.php', '2');
 }
 
 /*
