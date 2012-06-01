@@ -56,6 +56,8 @@ function SRP_PrintPageStart($leftwidth = 60)
 {
     // Assign to globals so header.php can grab these
     // and inject a <style> element in the right place
+    global $SRP_LEFTWIDTH;
+    global $SRP_RIGHTWIDTH;
 
     $SRP_LEFTWIDTH = $leftwidth;
     $SRP_RIGHTWIDTH = 100 - $leftwidth;
