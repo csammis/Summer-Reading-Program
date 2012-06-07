@@ -214,9 +214,7 @@ switch ($action_type)
             </select>
             </label>
             </p>
-            <div>
-            Remember: the book reviews you post must be your own work. <a href="<?php SRP_SelectUrlOfTemplatedPage('plagiarism'); ?>" target="new">(Why is this important?)</a>
-            </div>
+            <div><?php echo SRP_FormatMessage('srp_submitagreement'); ?></div>
             <p>
             <input type="submit" value="Post review" />
             </p>
