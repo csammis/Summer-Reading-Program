@@ -44,10 +44,12 @@ $firstname = '';
 $lastname = '';
 $gprize = '';
 $minutes = 0;
+$enable_resend = false;
 
 if (isset($_POST['action']))
 {
     $action = $_POST['action'];
+
     switch ($action)
     {
     case 1:
@@ -77,6 +79,14 @@ if (isset($_POST['action']))
             $lastname = get_user_meta($userid, 'last_name'); $lastname = $lastname[0];
             $gprize = get_user_meta($userid, 'srp_grandprize'); $gprize = $gprize[0];
             $minutes = get_user_meta($userid, 'srp_minutes'); $minutes = $minutes[0];
+
+            $confirmid = get_user_meta($userid, 'confirmation_id'); $confirmid = $confirmid[0];
+            if (strlen($confirmid) > 0)
+            {
+                $enable_resend = true;
+            }
+
+            //$confirmation = SRP_SendNewEmail($user_id, $srp_pass1, $confirmation_id);
         }
         break;
 
@@ -98,6 +108,15 @@ if (isset($_POST['action']))
             update_user_meta($userid, 'last_name', $lastname);
             update_user_meta($userid, 'srp_grandprize', $gprize);
             update_user_meta($userid, 'srp_minutes', $minutes);
+        }
+        break;
+
+    case 3:
+        $userid = $_POST['userid'];
+        $confirmid = get_user_meta($userid, 'confirmation_id'); $confirmid = $confirmid[0];
+        if (strlen($confirmid) > 0)
+        {
+            $confirmation = SRP_SendNewEmail($userid, '', $confirmid);
         }
         break;
     }
@@ -127,7 +146,7 @@ SRP_PrintPageStart($srp_leftcolumnwidth);
 <?php endif; ?>
 
 <?php if ($action == 1) : ?>
-<p>Step two: review and correct information for <?php echo $username; ?></p>
+<p>Step two: review and correct information for <?php echo $username; if ($enable_resend == false) echo ' <strong>(confirmed user)</strong>';?></p>
 <input type="hidden" id="userid" name="userid" value="<?php echo $userid; ?>" />
 <div><label>First name:</label>&nbsp;<input type="text" class="SRPInputNoSize" name="firstname" value="<?php echo $firstname; ?>" size="20" /></div>
 <div><label>Last name:</label>&nbsp;<input type="text" class="SRPInputNoSize" name="lastname" value="<?php echo $lastname; ?>" size="20" /></div>
@@ -140,7 +159,23 @@ SRP_PrintPageStart($srp_leftcolumnwidth);
 <p>User updated!</p>
 <?php endif; ?>
 
+<?php if ($action == 3) : ?>
+<p>Confirmation resent!</p>
+<?php endif; ?>
+
 </form>
+
+<?php if ($action == 1 && $enable_resend) : ?>
+<div style="margin-top:1em">
+<p><span style="color:red;font-weight:bold">This user has not confirmed their account.</span></p>
+<form id="ResendConfirm" method="POST" action="<?php echo get_permalink($pageid);?>">
+<input type="hidden" id="action" name="action" value="3" />
+<input type="hidden" id="userid" name="userid" value="<?php echo $userid; ?>" />
+<input type="submit" value="Resend confirmation email" />
+</form>
+</div>
+<?php endif; ?>
+
 <?php
 SRP_PrintPageEnd($srp_leftcolumnwidth);
 ?>
