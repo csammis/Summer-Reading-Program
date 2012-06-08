@@ -174,7 +174,7 @@ switch ($action_type)
             <label for="srp_pages" <?php if (strpos($reqfields, 'srp_pages:') !== FALSE) echo 'class="errormsg"';?>>Number of pages / minutes spent reading:</label>
             <br />
             <input type="text" name="srp_pages" id="srp_pages" class="SRPInputNoSize"
-                   value="<?php echo esc_attr(stripslashes($srp_pages)); ?>" size="5" onKeyPress="validateNumber(event);" />
+                   value="<?php echo esc_attr(stripslashes($srp_pages)); ?>" size="5" onKeyPress="return onlyNumbers(event.charCode || event.keyCode);" />
             &nbsp;&nbsp;<span style="font-size:smaller;font-style:italic">1 page = 1 minute</span>
             </span>
             </div>

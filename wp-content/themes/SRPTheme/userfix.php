@@ -151,7 +151,9 @@ SRP_PrintPageStart($srp_leftcolumnwidth);
 <div><label>First name:</label>&nbsp;<input type="text" class="SRPInputNoSize" name="firstname" value="<?php echo $firstname; ?>" size="20" /></div>
 <div><label>Last name:</label>&nbsp;<input type="text" class="SRPInputNoSize" name="lastname" value="<?php echo $lastname; ?>" size="20" /></div>
 <div><label>Grand prize:</label>&nbsp;<?php SRP_PrintGrandPrizeSelector('gprize', $gprize); ?></div>
-<div><label>Minutes read:</label>&nbsp;<input type="text" class="SRPInputNoSize" name="minutes" value="<?php echo $minutes; ?>" size="4" /></div>
+<?php SRP_PrintJavascriptNumberValidator(); ?>
+<div><label>Minutes read:</label>&nbsp;<input type="text" class="SRPInputNoSize" name="minutes" value="<?php echo $minutes; ?>" size="5"
+     onKeyPress="return onlyNumbers(event.charCode || event.keyCode);" /></div>
 <input type="submit" value="Update Profile" />
 <?php endif; ?>
 

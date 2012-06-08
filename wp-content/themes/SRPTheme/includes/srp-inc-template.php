@@ -462,21 +462,9 @@ function SRP_PrintJavascriptNumberValidator()
 {
 ?>
 <script language="javascript">
-function isNumber(c)
+function onlyNumbers(chr)
 {
-    return (c - 0) == c && c.length > 0;
-}
-
-function validateNumber(event)
-{
-    var theEvent = event || window.event;
-    var key = theEvent.keyCode || theEvent.which;
-    var keyStr = String.fromCharCode(key);
-    if (!isNumber(keyStr))
-    {
-        theEvent.returnValue = false;
-        theEvent.preventDefault();
-    }
+    return !(chr > 31 && (chr < 48 || chr > 57))
 }
 </script>
 <?php

@@ -103,7 +103,7 @@ switch ($action_type)
 <div>
     <label>How many minutes should this user have?<br />
     <input type="text" name="srp_userminutes" id="srp_userminutes" class="SRPInputNoSize"
-           value="<?php echo esc_attr(stripslashes($srp_userminutes)); ?>" size="10" onKeyPress="validateNumber(event);"/>
+           value="<?php echo esc_attr(stripslashes($srp_userminutes)); ?>" size="10" onKeyPress="return onlyNumbers(event.charCode || event.keyCode);" />
     </label>
 </div>
 <div>
