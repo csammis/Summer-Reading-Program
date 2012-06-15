@@ -115,7 +115,8 @@ function SRP_GetReviewerInformation($userid, $bIncludePhone = false, $bIncludeEm
     $select .= "                um_fname.meta_value AS fname_value, ";
     $select .= "                um_lname.meta_value AS lname_value, ";
     $select .= "                um_phone.meta_value AS phone_value, ";
-    $select .= "                u.user_email AS email ";
+    $select .= "                u.user_email AS email, ";
+    $select .= "                um_pikup.meta_value AS pikup_value ";
     $select .= "FROM $wpdb->users u ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
     $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
