@@ -79,7 +79,7 @@ switch ($action_type)
         if (strlen($srp_pickup) == 0 || $srp_pickup < 1) $reqfields .= 'srp_pickup:';
         
         $srp_grandprize = esc_attr(stripslashes($_POST['srp_grandprize']));
-        if (strlen($srp_grandprize) == 0) $reqfields .= 'srp_grandprize:';
+        if (strlen($srp_grandprize) == 0 || $srp_grandprize < 1) $reqfields .= 'srp_grandprize:';
         
         $srp_useragreement = esc_attr(stripslashes($_POST['srp_useragreement']));
         

@@ -54,6 +54,8 @@ function SRP_GetAllUsersCSV($pivot)
 {
     global $wpdb;
 
+    require_once('srp-inc-prizes.php');
+
     $select  = "SELECT DISTINCT u.id AS ID, ";
     $select .= "                um_fname.meta_value AS fname_value, ";
     $select .= "                um_lname.meta_value AS lname_value, ";
@@ -78,7 +80,7 @@ function SRP_GetAllUsersCSV($pivot)
 
     $sid2name = SRP_GetAllSchoolNames();
 
-    $retval = "Name,ID,Grade,Email,School\n";
+    $retval = "Name,ID,Grade,Email,School,GrandPrize\n";
     for ($i = 0; $i < count($id_col); $i++)
     {
         $id = $id_col[$i];
@@ -87,7 +89,8 @@ function SRP_GetAllUsersCSV($pivot)
         $retval .= "$firstname $lastname,$id,";
         $retval .= $grade_col[$i] . ',';
         $retval .= $email_col[$i] . ',';
-        $retval .= $sid2name[$school_col[$i]] . "\n";
+        $retval .= $sid2name[$school_col[$i]] . ',';
+        $retval .= SRP_GetGrandPrizeName($id) . "\n";
     }
 
     return $retval;
