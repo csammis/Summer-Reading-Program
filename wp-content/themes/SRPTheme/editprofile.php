@@ -226,7 +226,7 @@ value="<?php echo esc_attr(stripslashes($srp_email)); ?>" size="20" />
 </label>
 </div>
 <div>
-<input type="submit" value="Update Profile" />&nbsp;<input type="reset" value="Reset fields" />
+<input type="submit" value="Update Profile" onClick="this.disabled=true; this.value='Updating...'; this.form.submit();" />&nbsp;<input type="reset" value="Reset fields" />
 </div>
 </form>
 <?php

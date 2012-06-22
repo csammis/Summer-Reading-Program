@@ -216,7 +216,7 @@ switch ($action_type)
             </p>
             <div><?php echo SRP_FormatMessage('srp_submitagreement'); ?></div>
             <p>
-            <input type="submit" value="Post review" />
+            <input type="submit" value="Post review" onClick="this.disabled=true; this.value='Posting...'; this.form.submit();" />
             </p>
             </form>
 			</div>

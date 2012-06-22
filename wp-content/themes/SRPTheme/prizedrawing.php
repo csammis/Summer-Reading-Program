@@ -178,7 +178,8 @@ switch ($action_type)
 </label>
 </p>
 <p>
-<input type="submit" value="Distribute Prizes" />&nbsp;<input type="reset" value="Reset fields" />
+<input type="submit" value="Distribute Prizes" onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" />&nbsp;
+<input type="reset" value="Reset fields" />
 </p>
 </form>
 <div>&nbsp;</div>
@@ -188,7 +189,7 @@ switch ($action_type)
 <form id="SRPGrandPrizeDrawing" method="post" action="<?php echo get_permalink(get_the_ID()); ?>">
 <p>
 <input type="hidden" name="action" value="grandselect" />
-<input type="submit" value="Distribute Grand Prizes" />
+<input type="submit" value="Distribute Grand Prizes" onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" />
 </p>
 </form>
 <?php

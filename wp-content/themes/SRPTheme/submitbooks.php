@@ -184,7 +184,7 @@ switch ($action_type)
                           <?php if ($srp_submitreview == 1) echo 'checked'; ?> /> After submitting this book, I want to write a review of it.</label>
             </div>
             <p>
-            <input type="submit" value="Submit book" />
+            <input type="submit" value="Submit book" onClick="this.disabled=true; this.value='Submitting...'; this.form.submit();" />
             </p>
             </form>
       </div>

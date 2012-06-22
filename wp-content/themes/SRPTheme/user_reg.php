@@ -370,7 +370,8 @@ switch ($action_type)
         <h4>User Agreement</h4>
         <div><input type="checkbox" name="srp_useragreement" id="srp_useragreement" value="1" /> <?php echo SRP_FormatMessage('srp_regagreement'); ?></div>
         <div>&nbsp;</div>
-        <div><input type="submit" value="Create Profile" />&nbsp;<input type="reset" value="Reset fields" /></div>
+        <div><input type="submit" value="Create Profile" onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" />
+             &nbsp;<input type="reset" value="Reset fields" /></div>
         </form>
 <?php
         } // end get_srptheme_option('program_active')

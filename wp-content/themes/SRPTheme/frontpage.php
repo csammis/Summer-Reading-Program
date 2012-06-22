@@ -334,7 +334,7 @@ else
             <input type="password" name="srp_pass" id="srp_pass" class="SRPInputNoSize" size="20" />
             </label>
             </p>
-            <p><input type="submit" value="Login" /></p>
+            <p><input type="submit" value="Login" onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" /></p>
             <p>
             <?php SRP_PrintLinkToTemplatedPage('user_reg', 'New user?');?> &nbsp; | &nbsp; 
             <?php SRP_PrintLinkToTemplatedPage('retrievepassword', 'Forgot your password?');?>

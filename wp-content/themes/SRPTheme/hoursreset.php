@@ -107,7 +107,7 @@ switch ($action_type)
     </label>
 </div>
 <div>
-<input type="submit" value="Reset hours" />
+<input type="submit" value="Reset hours" onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" />
 </div>
 </form>
 <?php

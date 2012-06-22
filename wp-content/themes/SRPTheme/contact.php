@@ -111,7 +111,7 @@ else
 <?php
             echo recaptcha_get_html($RC_pub_key);
 ?>
-<div><input type="submit" /></div>
+<div><input type="submit" value="Send Message" onClick="this.disabled=true; this.value='Sending...'; this.form.submit();" /></div>
 </form>
 </div>
 <?php

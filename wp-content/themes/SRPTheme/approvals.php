@@ -131,7 +131,12 @@ function checkAll()
   {
 ?>
 </table>
-<p><input type="submit" name="SRPApprovePosts" value="Approve all checked posts" />&nbsp;&nbsp;&nbsp;<input type="submit" name="SRPDeletePosts" value="Delete all checked posts" /></p>
+<p>
+<input type="submit" name="SRPApprovePosts" value="Approve all checked posts" 
+       onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" />&nbsp;&nbsp;&nbsp;
+<input type="submit" name="SRPDeletePosts" value="Delete all checked posts"
+       onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" />
+</p>
 </form>
 <?php
   }

@@ -90,7 +90,7 @@ switch ($action_type)
 <div><label>The grade you will enter this fall:<br /><?php SRP_PrintGradeSelector('srp_grade', $srp_grade); ?></label></div>
 <div><label>The school you will attend this fall:<br /><?php SRP_PrintFallSchoolSelector($srp_school_fall); ?></label></div>
 <div>&nbsp;</div>
-<div><input type="submit" value="Retrieve password" /></div>
+<div><input type="submit" value="Retrieve password" onClick="this.disabled=true; this.value='Please Wait...'; this.form.submit();" /></div>
 </form>
 <?php
         break; // end case 'start'
