@@ -456,11 +456,6 @@ body        { background:#<?php echo get_srptheme_appearance('backcolor2'); ?>; 
 #main-wrap2 { background:#<?php echo get_srptheme_appearance('backcolor3'); ?>; }
 #main       { background:#<?php echo get_srptheme_appearance('backcolor3'); ?>; }
 </style>
-<!--[if lte IE 6]>
-<style type="text/css" media="screen">
-@import "<?php bloginfo('template_url'); ?>/ie6.css";
-</style>
-<![endif]-->
 <?php
 }
 
