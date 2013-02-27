@@ -1492,60 +1492,6 @@ div#fancytitle{width:100%;z-index:100;display:none;background-color:#4e4e4e;colo
 
 /* customize specific widgets */
 
-.widget_tag_cloud{
-  text-align: justify;
-}
-
-.widget_tag_cloud .the-content{
-  padding: .4em 1em 1em 1em;
-  line-height: 125%;
-}
-
-.widget_tag_cloud a{
-  text-decoration: none;
-  vertical-align: middle;
-  letter-spacing: -0.04em;
-  color: #000;
-  line-height: 100%;
-}
-
-.widget_tag_cloud a:hover{
-  background: #f44365;
-  color: #fff;
-}
-
-
-/* no .box style on calendar */
-.widget_calendar .box,
-.widget_calendar .box .wrapleft,
-.widget_calendar .box .wrapright,
-.widget_calendar .box .tr, .widget_calendar .box .bl, .widget_calendar .box .tl, .widget_calendar .box .br,
-.widget_calendar .box .the-content{
-  background: none;
-  padding: 0;
-  margin: 0;
-  width: auto;
-  border: 0;
-  height:auto !important;
-  min-height: none !important;
-  min-width: none !important;
-}
-
-.widget_calendar .box{ margin: 0 1em; }
-.widget_calendar .box .titlewrap{ display: none; }
-.widget_calendar .box table{ width: 100%; }
-
-.widget_calendar .box table td, .widget_calendar .box table th{
-  text-align: center;
-  padding: .1em .3em;
-}
-
-.widget_calendar .box caption{
-  text-align: right;
-  font-style: italic;
-  padding-right: .4em;
-}
-
 #sidebar li.block .info-text, #sidebar-secondary li.block .info-text{
   margin: 1em;
   text-align: center;
