@@ -1188,84 +1188,6 @@ ul.menu li li .fadeThis span.hover {
   margin: .6em 0;
 }
 
-
-/* footer links/widgets */
-ul#footer-widgets{
-  margin: 0;
-  padding: 0;
-  color: #726a60;
-}
-
-ul#footer-widgets li.widget{
-  float: left;
-  padding: 0;
-  margin: 0;
-  width: 50%; /* default  */
-  list-style-type: none;
-}
-
-ul#footer-widgets.widgetcount-1 li.widget{ width: 50%; }
-ul#footer-widgets.widgetcount-2 li.widget{ width: 50%; }
-ul#footer-widgets.widgetcount-3 li.widget{ width: 33%; }
-ul#footer-widgets.widgetcount-4 li.widget{ width: 25%; }
-ul#footer-widgets.widgetcount-5 li.widget{ width: 20%; }
-ul#footer-widgets.widgetcount-6 li.widget{ width: 16%; }
-/* no point to add more than 6 widgets, unreadable */
-
-ul#footer-widgets h6.title{
-  background: transparent url(images/div-h2.gif) repeat-x left bottom;
-  padding: .1em .4em;
-  font-style: italic;
-}
-
-ul#footer-widgets .the-content{
-  margin: 0 1em;
-  padding: .4em 0;
-}
-
-ul#footer-widgets li.widget ul{
-  padding: 0;
-}
-
-ul#footer-widgets li.widget li{
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  padding: .2em .6em;
-  display: block;
-  background: transparent url(images/div-h2.gif) repeat-x left bottom;
-  position: relative;
-  margin-top: 1px;
-}
-
-ul#footer-widgets li.widget li li{
-  padding-left: 1em;
-  border: 0;
-}
-
-ul#footer-widgets li.widget li a{
-  text-decoration: none;
-}
-
-ul#footer-widgets li.widget li a:hover{
-  color: #fff;
-}
-
-ul#footer-widgets li.widget li span.hover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-  height: 100%;
-  width: 100%;
-  background: #403123;
-  z-index: -1;
-  margin: 0;
-  padding: 0;
-}
-
-
-
 /*** MISC ***/
 
 .with-tooltip{ }
@@ -1345,11 +1267,6 @@ div#fancytitle{width:100%;z-index:100;display:none;background-color:#4e4e4e;colo
 
 /* pagination */
 
-.commentnavi{
-  margin: 10px 0;
-  display: block;
-}
-
 .commentnavi .page-numbers, #pagenavi a, #pagenavi span.pages, #pagenavi span.extend{
   padding: 2px 6px 2px 6px !important;
   border: 1px solid #a9947c !important;
@@ -1369,13 +1286,6 @@ div#fancytitle{width:100%;z-index:100;display:none;background-color:#4e4e4e;colo
   border: 1px solid #a9947c !important;
 }
 
-.commentnavi a{
-  color: #0071bb;
-  text-decoration: none;
-  position: relative;
-}
-
-.commentnavi a:hover{ color: #f44365; }
 #comment .page-numbers.current, #pagenavi span.pages{ color: #a9947c !important; }
 
 #pagenavi{
