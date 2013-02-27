@@ -1,0 +1,25 @@
+SRP_GENRE
+=========
+ID int not null auto_increment
+NAME varchar(40)
+
+SRP_SCHOOL_GROUP
+================
+ID int not null auto_increment
+NAME varchar(40)
+SEQ_NUM int not null default 0
+
+SRP_SCHOOL
+==========
+ID int not null auto_increment
+NAME varchar(40)
+SCHOOL_GROUP_ID int not null
+SEQ_NUM int not null default 0
+
+SRP_PRIZE
+=========
+ID int not null auto_increment
+NAME varchar(40)
+TYPE int not null default 0  (hours, grand)
+HOURS_REQUIRED int [null for grand]
+CONFIRM_CODE varchar(10) [null for grand]
