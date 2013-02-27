@@ -29,24 +29,10 @@ THE SOFTWARE.
 *
 */
 
-$arclite_theme_data = get_theme_data(TEMPLATEPATH.'/style.css');
-define('THEME_VERSION', trim($arclite_theme_data['Version']) );
-
 if(!defined("PHP_EOL")) define("PHP_EOL", strtoupper(substr(PHP_OS,0,3) == "WIN") ? "\r\n" : "\n");
 
 function setup_options()
 {
-    //remove_options();
-
-    /*update_option( 'SRPTheme' , apply_filters('theme_default_settings', array(
-                    'theme_version' => THEME_VERSION,
-                    'gmail_reply_to' => $srp_gmail_reply_to,
-                    'gmail_account' => $srp_gmail_account,
-                    'gmail_password' => $srp_gmail_password,
-                    'grand_prizes' => $srp_grand_prizes,
-                    'program_active' => $srp_program_active
-                ))
-    );*/
 }
 
 function remove_options()
