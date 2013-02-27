@@ -41,7 +41,6 @@ body{
   font-size: 13px;
   font-style: normal;
   color: #000;
-  /*background: #3d2d1e;*/
   min-height:100%;
   height:auto !important; /* ie6 ignores it */
   height:100%; /* fix */
@@ -82,7 +81,6 @@ h2{
 }
 
 h3{
-  /*font-family: "Arial Black", Arial, Helvetica, Sans, FreeSans, Jamrul, Garuda, Kalimati;*/
   font-family: "Union", "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Sans, FreeSans, Jamrul, Garuda, Kalimati;
   font-size: 200%;
   font-weight: normal;
@@ -93,7 +91,6 @@ h3{
 }
 
 h4{
-  /*font-family: "Share", "Arial Narrow", Arial, Sans;*/
   font-family: "Union", "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Sans, FreeSans, Jamrul, Garuda, Kalimati;
   font-size: 180%;
   font-weight: normal;
@@ -101,7 +98,6 @@ h4{
 }
 
 h5{
-  /*font-family: "Palatino Linotype", Georgia, Serif;*/
   font-family: "Union", "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Sans, FreeSans, Jamrul, Garuda, Kalimati;
   font-size: 150%;
   font-weight: bold;
@@ -268,7 +264,6 @@ blockquote p{
 #page
 {
     width: 778px;
-    /*background: #1e6088;*/
     margin: 0 auto;
     position: relative;
 }
@@ -330,7 +325,6 @@ blockquote p{
 
 /*** The login box ***/
 .loginbox {
-    /*padding: 0.5em;*/
     margin-top:1.5em;
 }
 
@@ -387,7 +381,6 @@ blockquote p{
 #header-wrap
 {
     width: 100%;
-    /*background: #1e6088;*/
 }
 
 #header-navbar-color {
@@ -397,17 +390,11 @@ blockquote p{
 }
 
 #pagetitle{
-  /*padding: 3em 0 0 1em;*/
 }
 
 #pagetitle h1.logo{
-  /*font-family: "Arial Black", Arial, Helvetica, Sans, FreeSans, Jamrul, Garuda, Kalimati;
-  font-size: 500%;*/
-  /*float: left;*/
-  padding: .6em 0 .6em .8em; /*padding: .1em 0 0 0;*/
+  padding: .6em 0 .6em .8em;
   margin: 0;
-  /*letter-spacing: -0.1em;
-  font-variant: small-caps;*/
   font-weight: normal;
   color: #eeeadb;
 }
@@ -422,8 +409,6 @@ blockquote p{
 }
 
 #pagetitle h4{
-  /*float: left;
-  border-left: 1px solid #8e7762;*/
   padding: .6em 0 .6em .8em;
   margin-left: 1em;
   color: #e9e2c9;
@@ -1171,7 +1156,6 @@ ul.menu li li .fadeThis span.hover {
 /*** FOOTER ***/
 
 #footer{
-  /*padding: 1em 0;*/
   color: #e7e0c7;
   border-top: 1px solid #fff;
 }
@@ -1421,14 +1405,6 @@ div#fancytitle{width:100%;z-index:100;display:none;background-color:#4e4e4e;colo
 
 
 /* captions, thumbnail images in posts */
-
-/*.post-content img, .attachment img, .navigation .alignleft img, .navigation .alignright img{
-  padding: 3px;
-  margin: 4px 10px;
-  border: 1px solid #b7a99a;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-}*/
 
 .post-content img.alignleft, .attachment img.alignleft{ margin-left: 0; }
 .post-content img.alignright, .attachment img.alignright{ margin-right: 0; }
