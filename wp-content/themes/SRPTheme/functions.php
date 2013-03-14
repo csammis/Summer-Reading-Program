@@ -434,7 +434,16 @@ function setup_css()
 {
 ?>
 <style type="text/css">
-@import     "<?php echo get_bloginfo('stylesheet_url'); ?>";
+<?php
+    require_once('includes/Mobile_Detect.php');
+    $detect = new Mobile_Detect();
+    $style_uri = get_bloginfo('stylesheet_url');
+    if ($detect->isMobile())
+    {
+        str_replace($style_uri, 'style.css', 'mobile.style.css');
+    }
+?>
+@import     "<?php echo $style_uri; ?>";
 @import     "<?php echo get_bloginfo('template_url') . '/options/side-default.css'; ?>";
 #page       { background:#<?php echo get_srptheme_appearance('backcolor1'); ?>; }
 body        { background:#<?php echo get_srptheme_appearance('backcolor2'); ?>; }
