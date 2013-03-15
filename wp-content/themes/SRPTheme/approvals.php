@@ -59,9 +59,7 @@ if ($_POST['action'] == 'process')
   }
 }
 
-$srp_leftcolumnwidth = 100;
-
-SRP_PrintPageStart($srp_leftcolumnwidth);
+SRP_PrintPageStart(100);
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 
 ?>
@@ -143,5 +141,5 @@ function checkAll()
 </div>
 <?php
 endif; /* end The Loop */
-SRP_PrintPageEnd($srp_leftcolumnwidth);
+SRP_PrintPageEnd();
 ?>

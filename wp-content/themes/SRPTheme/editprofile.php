@@ -35,8 +35,6 @@ SRP_AuthRedirect($SRP_AUTHENTICATED);
 require_once(ABSPATH . WPINC . '/registration.php');
 require_once('includes/srp-inc-template.php');
 
-$srp_leftcolumnwidth = 100;
-
 $user_id = $current_user->ID;
 $srp_login  = $current_user->user_login;
 $srp_email  = $current_user->user_email;
@@ -124,7 +122,7 @@ switch ($action_type)
 
         /** Intentional fall-through if profile update failed **/
     case 'start':
-        SRP_PrintPageStart($srp_leftcolumnwidth);
+        SRP_PrintPageStart(100);
         if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
         
         if (isset($errorcode))
@@ -231,7 +229,7 @@ value="<?php echo esc_attr(stripslashes($srp_email)); ?>" size="20" />
 </form>
 <?php
         endif; /* end The Loop */
-        SRP_PrintPageEnd($srp_leftcolumnwidth, 'srp_phone'); // printCenterColumnEnd('srp_login');
+        SRP_PrintPageEnd('srp_phone'); // printCenterColumnEnd('srp_login');
         break; // end case 'start' and 'register'
     default:
         echo "hello";

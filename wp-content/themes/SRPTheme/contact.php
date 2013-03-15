@@ -72,9 +72,7 @@ if (isset($_POST['action']) && ($RC_pub_key != '' && $RC_priv_key != ''))
     }
 }
 
-$srp_leftcolumnwidth = 60;
-
-SRP_PrintPageStart($srp_leftcolumnwidth);
+SRP_PrintPageStart(60);
 if (isset($successmessage))
 {
 ?>
@@ -119,5 +117,5 @@ else
     endif; /* end The Loop */
 }
 
-SRP_PrintPageEnd($srp_leftcolumnwidth);
+SRP_PrintPageEnd();
 ?>

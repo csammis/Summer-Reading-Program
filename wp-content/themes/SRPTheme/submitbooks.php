@@ -34,8 +34,6 @@ SRP_AuthRedirect($SRP_AUTHENTICATED);
 
 require_once('includes/srp-inc-template.php');
 
-$srp_leftcolumnwidth = 100;
-
 $action_type = $_POST['action'];
 if (empty($action_type))
 {
@@ -111,7 +109,7 @@ switch ($action_type)
         }
 
     case 'start':
-        SRP_PrintPageStart($srp_leftcolumnwidth);
+        SRP_PrintPageStart(100);
         if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 ?>
         <div id="post-<?php the_ID(); ?>" <?php if (function_exists("post_class")) post_class(); else print 'class="post"'; ?>>
@@ -195,7 +193,7 @@ switch ($action_type)
 <?php
     
         endif; /* end The Loop */
-        SRP_PrintPageEnd($srp_leftcolumnwidth, 'srp_title');
+        SRP_PrintPageEnd('srp_title');
        break;
 }
 ?>

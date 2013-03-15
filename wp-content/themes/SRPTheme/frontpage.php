@@ -37,8 +37,6 @@ require_once('includes/srp-inc-reporting.php');
 require_once('includes/srp-inc-utility.php');
 require_once('includes/srp-inc-prizes.php');
 
-$srp_leftcolumnwidth = 60;
-
 // Has an action been requested?
 if (isset($_REQUEST['action']))
 {
@@ -87,7 +85,7 @@ if (isset($_REQUEST['action']))
     exit();
 }
     
-SRP_PrintPageStart($srp_leftcolumnwidth);
+SRP_PrintPageStart(60);
 
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 ?>
@@ -348,5 +346,5 @@ else
         </div>
 <?php
 endif; /* end The Loop */
-SRP_PrintPageEnd($srp_leftcolumnwidth, 'srp_login');
+SRP_PrintPageEnd('srp_login');
 ?>

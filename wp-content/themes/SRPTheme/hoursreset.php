@@ -34,15 +34,13 @@ SRP_AuthRedirect($SRP_AUTH_ADMIN);
 
 require_once('includes/srp-inc-template.php');
 
-$srp_leftcolumnwidth = 100;
-
 $action_type = $_POST['action'];
 if (empty($action_type))
 {
 	$action_type = 'start';
 }
 
-SRP_PrintPageStart($srp_leftcolumnwidth);
+SRP_PrintPageStart(100);
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 ?>
 <h2><?php the_title(); ?></h2>
@@ -112,5 +110,5 @@ switch ($action_type)
 </form>
 <?php
 	endif; /* end The Loop */
-	SRP_PrintPageEnd($srp_leftcolumnwidth);
+	SRP_PrintPageEnd();
 ?>

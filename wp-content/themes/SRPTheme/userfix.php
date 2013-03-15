@@ -34,8 +34,6 @@ SRP_AuthRedirect($SRP_AUTH_ADMIN);
 
 require_once('includes/srp-inc-template.php');
 
-$srp_leftcolumnwidth = 100;
-
 $action = 0;
 $username = '';
 $useremail = '';
@@ -129,7 +127,7 @@ if (have_posts()) :
 endif;
 
 
-SRP_PrintPageStart($srp_leftcolumnwidth);
+SRP_PrintPageStart(100);
 ?>
 <h3>Fix a user</h3>
 
@@ -179,5 +177,5 @@ SRP_PrintPageStart($srp_leftcolumnwidth);
 <?php endif; ?>
 
 <?php
-SRP_PrintPageEnd($srp_leftcolumnwidth);
+SRP_PrintPageEnd();
 ?>

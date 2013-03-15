@@ -103,17 +103,12 @@ _gaq.push(['_trackPageview']);
  * SRP_PrintPageEnd
  * Prints the two-column page footer with a default left column width of 60%
  */
-function SRP_PrintPageEnd($leftwidth = 60, $fieldfocus = '')
+function SRP_PrintPageEnd($fieldfocus = '')
 {
     SRP_PrintPageEndCommonStart();
     
-    require_once('srp-inc-utility.php');
-    if (SRP_IsMobile())
-    {
-        $leftwidth = 100;
-    }
-
-    if ($leftwidth < 100)
+    global $SRP_LEFTWIDTH;
+    if ($SRP_LEFTWIDTH < 100)
     {
         require_once('srp-inc-lists.php');
         get_sidebar();

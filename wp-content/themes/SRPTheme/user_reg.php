@@ -44,8 +44,6 @@ if (is_user_logged_in())
     exit();
 }
 
-$srp_leftcolumnwidth = 100;
-
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 
 $action_type = $_POST['action'];
@@ -163,7 +161,7 @@ switch ($action_type)
                     $confirmation_id = uniqid();
                     update_user_meta($user_id, 'confirmation_id', $confirmation_id);
                     SRP_SendNewEmail($user_id, $srp_pass1, $confirmation_id);
-                    SRP_PrintPageStart($srp_leftcolumnwidth);
+                    SRP_PrintPageStart(100);
 ?>
 <h2>Thanks for registering!</h2>
 <div>Your registration is not quite finished! We've sent you an email to make sure your information is correct. You'll need to click on the confirmation link in that email before you can log in to the site.</div>
@@ -225,7 +223,7 @@ switch ($action_type)
         
     /** Intentional fall-through if registration failed **/
     case 'start':
-        SRP_PrintPageStart($srp_leftcolumnwidth);
+        SRP_PrintPageStart(100);
 
         if (strlen($errormsg) > 0)
         {
@@ -383,5 +381,5 @@ switch ($action_type)
     
 endif; /* end The Loop */
     
-SRP_PrintPageEnd($srp_leftcolumnwidth, 'srp_login');
+SRP_PrintPageEnd('srp_login');
 ?>

@@ -37,8 +37,6 @@ require_once('includes/srp-inc-template.php');
 require_once('includes/srp-inc-reporting.php');
 require_once('includes/srp-inc-lists.php');
 
-$srp_leftcolumnwidth = 100;
-
 $action = '';
 $pivot = 0;
 
@@ -69,7 +67,7 @@ if ($action == 'csv')
     exit();
 }
 
-SRP_PrintPageStart($srp_leftcolumnwidth);
+SRP_PrintPageStart(100);
 
 $pagetitle = '';
 $pageid = '';
@@ -213,4 +211,4 @@ echo "  <li>TOTAL: $total</li>\n";
 </ol>
 </div>
 
-<?php SRP_PrintPageEnd($srp_leftcolumnwidth); ?>
+<?php SRP_PrintPageEnd(); ?>

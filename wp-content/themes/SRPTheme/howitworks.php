@@ -34,9 +34,7 @@ SRP_AuthRedirect($SRP_UNAUTHENTICATED);
 
 require_once('includes/srp-inc-template.php');
 
-$srp_leftcolumnwidth = 60;
-
-SRP_PrintPageStart($srp_leftcolumnwidth);
+SRP_PrintPageStart(60);
 if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
 ?>
         <div id="post-<?php the_ID(); ?>" <?php if (function_exists("post_class")) post_class(); else print 'class="post"'; ?>>
@@ -47,5 +45,5 @@ if (have_posts()) : the_post(); /* start The Loop so we can get the page ID */
         </div>
 <?php
 endif; /* end The Loop */
-SRP_PrintPageEnd($srp_leftcolumnwidth);
+SRP_PrintPageEnd();
 ?>
