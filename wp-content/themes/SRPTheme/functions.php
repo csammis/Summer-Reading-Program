@@ -435,12 +435,11 @@ function setup_css()
 ?>
 <style type="text/css">
 <?php
-    require_once('includes/Mobile_Detect.php');
-    $detect = new Mobile_Detect();
     $style_uri = get_bloginfo('stylesheet_url');
-    if ($detect->isMobile())
+
+    if (SRP_IsMobile())
     {
-        str_replace($style_uri, 'style.css', 'mobile.style.css');
+        $style_uri = str_replace('style.css', 'mobile.style.css', $style_uri);
     }
 ?>
 @import     "<?php echo $style_uri; ?>";

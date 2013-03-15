@@ -59,6 +59,14 @@ function SRP_PrintPageStart($leftwidth = 60)
     global $SRP_LEFTWIDTH;
     global $SRP_RIGHTWIDTH;
 
+    require_once('srp-inc-utility.php');
+
+    if (SRP_IsMobile())
+    {
+        // Always collapse the sidebar on the mobile rendition
+        $leftwidth = 100;
+    }
+
     $SRP_LEFTWIDTH = $leftwidth;
     $SRP_RIGHTWIDTH = 100 - $leftwidth;
 
@@ -98,6 +106,13 @@ _gaq.push(['_trackPageview']);
 function SRP_PrintPageEnd($leftwidth = 60, $fieldfocus = '')
 {
     SRP_PrintPageEndCommonStart();
+    
+    require_once('srp-inc-utility.php');
+    if (SRP_IsMobile())
+    {
+        $leftwidth = 100;
+    }
+
     if ($leftwidth < 100)
     {
         require_once('srp-inc-lists.php');

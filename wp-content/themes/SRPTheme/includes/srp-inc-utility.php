@@ -38,6 +38,25 @@ THE SOFTWARE.
 
 require_once('srp-inc-users.php');
 
+$SRP_ISMOBILE = false;
+$SRP_ISMOBILEDETECTED = false;
+
+function SRP_IsMobile()
+{
+    global $SRP_ISMOBILE;
+    global $SRP_ISMOBILEDETECTED;
+
+    if ($SRP_ISMOBILEDETECTED === false)
+    {
+        require_once('Mobile_Detect.php');
+        $detector = new Mobile_Detect();
+        $SRP_ISMOBILE = $detector->isMobile();
+        $SRP_ISMOBILEDETECTED = true;
+    }
+
+    return $SRP_ISMOBILE;
+}
+
 /*
  * SRP_DaysBetweenDates
  * Returns the number of days between $date1 and $date2.
