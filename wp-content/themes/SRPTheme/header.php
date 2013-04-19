@@ -18,13 +18,19 @@ require_once('includes/srp-inc-search.php');
     global $SRP_RIGHTWIDTH;
     global $SRP_LEFTWIDTH;
 
-    $height = get_srptheme_option('srp_headerimgheight');
+    if (SRP_IsMobile())
+    {
+        $height = 85;
+    }
+    else
+    {
+        $height = get_srptheme_option('srp_headerimgheight');
+    }
 
     // Generate the CSS for the column widths
     echo "<style type=\"text/css\">\n";
     if (strlen($height) > 0)
     {
-        
         $headerheight = $height; //csnote there used to be a height offset of 17px here
         $height = $height - 15;
         $height .= 'px';
@@ -57,29 +63,57 @@ require_once('includes/srp-inc-search.php');
 
 <!-- header -->
 <div id="header-wrap">
-    <div id="header" class="block-content">
-        <div id="pagetitle"><?php SRP_PrintHeaderImg(); ?></div>
-        <!-- main navigation -->
-        <div id="nav-wrap1">
-            <div id="nav-wrap2">
-                <ul id="nav">
-                <?php
-                    $page_link_array = SRP_SelectPageIdsForNav();
-                    foreach ($page_link_array as $page_name => $page_link)
-                    {
-                        echo '<li class="page_item"><a class="fadeThis" href="' . $page_link . "\"><span>$page_name</span></a></li>\n";
-                    }
+<div id="header" class="block-content">
+<div id="pagetitle"><?php SRP_PrintHeaderImg(); ?></div>
+<!-- main navigation -->
+<?php
+    $page_link_array = SRP_SelectPageIdsForNav();
+    
+    if (!SRP_IsMobile())
+    {
+?>
+<div id="nav-wrap1">
+<div id="nav-wrap2">
+<ul id="nav">
+<?php
+        foreach ($page_link_array as $page_name => $page_link)
+        {
+            echo '<li class="page_item"><a class="fadeThis" href="' . $page_link . "\"><span>$page_name</span></a></li>\n";
+        }
 
-                    if (is_user_logged_in())
-                    {
-                        $list .= '<li><a class="fadeThis" href="' . wp_logout_url(site_url('/')) . '"><span>Log out</span></a></li>' . "\n";
-                    }
-                    echo $list;
-                ?>
-                </ul>
-            </div>
-        </div>
-        <!-- /main navigation -->
+        if (is_user_logged_in())
+        {
+            $list .= '<li><a class="fadeThis" href="' . wp_logout_url(site_url('/')) . '"><span>Log out</span></a></li>' . "\n";
+        }
+        echo $list;
+?>
+</ul>
+</div>
+</div>
+<?php
+    }
+    else
+    {
+?>
+<div>
+<script type="text/javascript">
+function nav_go()
+{
+    var nav = document.getElementById("SRPNavSelect");
+    window.location = nav.options[nav.selectedIndex].value;
+}
+</script>
+<select id="SRPNavSelect" name="SRPNavSelect" onchange="nav_go()">
+<option value="">-- Select a Link --</option>
+<?php
+        foreach ($page_link_array as $page_name => $page_link)
+        {
+            echo "<option value=\"$page_link\">$page_name</option>\n"; 
+        }
+    }
+?>
+</select>
+<!-- /main navigation -->
     </div>
 </div>
 <!-- /header -->

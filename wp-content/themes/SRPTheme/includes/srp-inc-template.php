@@ -486,20 +486,29 @@ function onlyNumbers(chr)
  */
 function SRP_PrintHeaderImg()
 {
-    $url = get_srptheme_appearance('header');
-    $height = get_srptheme_option('srp_headerimgheight');
-    if (strlen($height) == 0)
+    if (SRP_IsMobile() === false)
     {
-        $height = '178';
-    }
-    $height .= 'px';
+        $url = get_srptheme_appearance('header');
+        $height = get_srptheme_option('srp_headerimgheight');
+        if (strlen($height) == 0)
+        {
+            $height = '178';
+        }
+        $height .= 'px';
 
-    if (strlen($url) > 0)
-    {
-        echo "<img src=\"$url\" style=\"width:778px;height:$height;\" alt=\"\" />\n";
+        if (strlen($url) > 0)
+        {
+            echo "<img src=\"$url\" style=\"width:778px;height:$height;\" alt=\"\" />\n";
+        }
+        
+        echo '';
     }
-    
-    echo '';
+    else
+    {
+        echo '<div id="SRPMobileHeader"><span class="SRPMobileHeaderText">';
+        echo get_srptheme_option('library_name');
+        echo ' Summer Reading Program</span></div>';
+    }
 }
 
 /*
@@ -508,20 +517,23 @@ function SRP_PrintHeaderImg()
  */
 function SRP_PrintFooterImg()
 {
-    $url = get_srptheme_appearance('footer');
-    $height = get_srptheme_option('srp_footerimgheight');
-    if (strlen($height) == 0)
+    if (SRP_IsMobile() === false)
     {
-        $height = '178';
-    }
-    $height .= 'px';
+        $url = get_srptheme_appearance('footer');
+        $height = get_srptheme_option('srp_footerimgheight');
+        if (strlen($height) == 0)
+        {
+            $height = '178';
+        }
+        $height .= 'px';
 
 
-    if (strlen($url) > 0)
-    {
-        echo "<img src=\"$url\" style=\"width:778px;height:$height;\" alt=\"\" />\n";
+        if (strlen($url) > 0)
+        {
+            echo "<img src=\"$url\" style=\"width:778px;height:$height;\" alt=\"\" />\n";
+        }
+        
+        echo '';
     }
-    
-    echo '';
 }
 ?>

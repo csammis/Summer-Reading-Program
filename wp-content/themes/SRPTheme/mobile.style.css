@@ -33,12 +33,12 @@ html, body{
 }
 
 html{
-  font-size: 100%;
+  font-size: 300%;
 }
 
 body{
   font-family: "Lucida Grande", "Lucida Sans Unicode", Calibri, Arial, Helvetica, Sans, FreeSans, Jamrul, Garuda, Kalimati;
-  font-size: 13px;
+  //font-size: 13px;
   font-style: normal;
   color: #000;
   min-height:100%;
@@ -238,7 +238,7 @@ pre{
   white-space: pre-wrap;       /* css3 */
   white-space: -moz-pre-wrap;  /* ff */
   word-wrap: break-word;       /* ie */
-  font-size: 12px;
+  //font-size: 12px;
   font-family: "Courier New", Courier, "Lucida Console", Monaco, "DejaVu Sans Mono", "Nimbus Mono L", "Bitstream Vera Sans Mono";
   background: #fff;
   padding: .4em;
@@ -263,16 +263,16 @@ blockquote p{
 
 #page
 {
-    width: 778px;
+    /*width: 778px;*/
     margin: 0 auto;
     position: relative;
 }
 
 .block-content{
   width: 100% !important;
-  width: 778px; /* for ie 6 */
-  min-width: 778px;
-  max-width: 778px;
+  /* width: 778px; /* for ie 6 */
+  /*min-width: 778px;*/
+  /*max-width: 778px;*/
   margin: 0 auto;
   display: block;
 }
@@ -318,7 +318,7 @@ blockquote p{
 /*** Single column, centered ***/
 .singlecenter {
     padding: 20px;
-    width: 400px;
+    /*width: 400px;*/
     text-align: left;
     margin: 0 auto;
 }
@@ -368,14 +368,14 @@ blockquote p{
 /*** HEADER ***/
 
 #header{
-  height: 195px;
+  height: 95px;
   position: relative;
   z-index: 10;
   color: #fff;
 }
 
 #header .block-content{
-  height:195px;
+  height:95px;
 }
 
 #header-wrap
@@ -387,6 +387,18 @@ blockquote p{
   width: 100%;
   font-size:smaller;
   background: #acdff8;
+}
+
+#SRPMobileHeader
+{
+    padding:1em;
+}
+
+#SRPMobileHeader span
+{
+    font-size:xx-large;
+    font-weight:bold;
+    color:#000;
 }
 
 #pagetitle{
@@ -425,7 +437,7 @@ blockquote p{
 
 .search-block .searchform-wrap{
   background: transparent url(images/search-go.png) no-repeat right top;
-  width: 146px;
+  /*width: 146px;*/
   height: 30px;
 }
 
@@ -434,7 +446,7 @@ blockquote p{
   border: 0;
   color: #928a85;
   float: left;
-  width: 100px;
+  /*width: 100px;*/
   padding: 0;
   margin: 0;
 }
@@ -488,6 +500,7 @@ ul#nav{
   padding-right: 2px;
   display: block;
   height: 64px;
+  font-size:normal;
 }
 
 
@@ -549,7 +562,7 @@ ul#nav ul {
   position: absolute;
   background: #f7f5ef url(images/side-menu-active.png) repeat-x left bottom;
   display: none;
-  width:255px;
+  /*width:255px;*/
   top: 36px;
   left: 0;
   margin: 0;
@@ -585,7 +598,7 @@ ul#nav li.current-cat ul ul{
 }
 
 ul#nav li ul a{
-  width:230px;
+  /*width:230px;*/
   float:left;
   background: none;
   margin: 0;
@@ -1505,4 +1518,9 @@ li.SRPReviewSlug{
 span.SRPHoursNumber {
   font-size:200%;
   font-weight:bold;
+}
+
+#SRPNavSelect {
+    font-size:70%;
+    margin-left:1em;
 }
