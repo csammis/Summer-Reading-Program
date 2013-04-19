@@ -100,7 +100,11 @@ require_once('includes/srp-inc-search.php');
 function nav_go()
 {
     var nav = document.getElementById("SRPNavSelect");
-    window.location = nav.options[nav.selectedIndex].value;
+    var nav_value = nav.options[nav.selectedIndex].value;
+    if (nav_value != "")
+    {
+        window.location = nav_value;
+    }
 }
 </script>
 <select id="SRPNavSelect" name="SRPNavSelect" onchange="nav_go()">
@@ -109,6 +113,10 @@ function nav_go()
         foreach ($page_link_array as $page_name => $page_link)
         {
             echo "<option value=\"$page_link\">$page_name</option>\n"; 
+        }
+        if (is_user_logged_in())
+        {
+            echo '<option value="' . wp_logout_url(site_url('/')) . '">Log out</option>' . "\n";
         }
     }
 ?>
