@@ -257,12 +257,12 @@ switch ($action_type)
         <p>
         <label><span <?php if (strpos($reqfields, 'srp_email:') !== FALSE) echo 'class="errormsg"';?>>E-mail</span> (please do not use your school e-mail address):<br />
         <a href="http://www.oplteens.com/email/">Don't have your own email address?</a> <br />
-        <input type="text" name="srp_email" id="srp_email" class="SRPInput" value="<?php echo esc_attr(stripslashes($srp_email)); ?>" size="20" />
+        <input type="email" name="srp_email" id="srp_email" class="SRPInput" value="<?php echo esc_attr(stripslashes($srp_email)); ?>" size="20" />
         </label>
         </p>
         <p>
         <label>E-mail (confirm):<br />
-        <input type="text" name="srp_email1" id="srp_email1" class="SRPInput" size="20" />
+        <input type="email" name="srp_email1" id="srp_email1" class="SRPInput" size="20" />
         </label>
         </p>
         <p>
@@ -289,7 +289,7 @@ switch ($action_type)
         </p>
         <p>
         <label <?php if (strpos($reqfields, 'srp_phone:') !== FALSE) echo 'class="errormsg"';?>>Phone:<br />
-        <input type="text" name="srp_phone" id="srp_phone" class="SRPInput" value="<?php echo esc_attr(stripslashes($srp_phone)); ?>" size="20" />
+        <input type="tel" name="srp_phone" id="srp_phone" class="SRPInput" value="<?php echo esc_attr(stripslashes($srp_phone)); ?>" size="20" />
         </label>
         </p>
         <p>&nbsp;</p>
