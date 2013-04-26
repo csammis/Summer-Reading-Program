@@ -20,7 +20,7 @@ require_once('includes/srp-inc-search.php');
 
     if (SRP_IsMobile())
     {
-        $height = 85;
+        $height = 165;
     }
     else
     {
@@ -36,7 +36,7 @@ require_once('includes/srp-inc-search.php');
         $height .= 'px';
         $headerheight .= 'px';
         echo "#nav-wrap1 { top:$height; }\n";
-        echo "#header { height:$headerheight; }\n";
+        echo "#header { height:$headerheight; background:#1393c0; }\n";
         echo "#header .block-content{ height:$headerheight; }\n";
     }
     echo "#page.with-sidebar .mask-main .mask-left {\n";

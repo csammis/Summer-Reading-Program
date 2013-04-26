@@ -505,9 +505,12 @@ function SRP_PrintHeaderImg()
     }
     else
     {
-        echo '<div id="SRPMobileHeader"><span class="SRPMobileHeaderText">';
-        echo get_srptheme_option('library_name');
-        echo ' Summer Reading Program</span></div>';
+        //$url = get_srptheme_appearance('header');
+        $url = 'wp-content/themes/SRPTheme/images/mobileimage.png';
+        echo "<img src=\"$url\" alt=\"\" style=\"float:right;height:165px;\"/><div style=\"clear:right;\"></div>\n";
+        //echo '<div id="SRPMobileHeader"><span class="SRPMobileHeaderText">';
+        //echo get_srptheme_option('library_name');
+        //echo ' Summer Reading Program</span></div>';
     }
 }
 
