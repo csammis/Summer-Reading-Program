@@ -40,18 +40,23 @@ if ($_POST['action'] == 'process')
 {
     require_once('includes/srp-inc-admin.php');
     
-  $op_ids = array();
+    $op_ids = array();
+    $comment_ids = array();
   foreach (array_keys($_POST) as $key)
   {
     if (substr($key, 0, 16) == 'SRP_ApprovePost_')
     {
       $op_ids[] = substr($key, 16);
     }
+    else if (substr($key, 0, 16) == 'SRP_CommentPost_')
+    {
+        $comment_ids[substr($key, 16)] = $_POST[$key];
+    }
   }
-  
+
   if (isset($_POST['SRPApprovePosts']))
   {
-    SRP_PublishPosts($op_ids);
+    SRP_PublishPosts($op_ids, $comment_ids);
   }
   else if (isset($_POST['SRPDeletePosts']))
   {
@@ -121,7 +126,11 @@ function checkAll()
 <td><input type="checkbox" name="<?php echo "SRP_ApprovePost_$post_id"; ?>" /></td>
 <td><?php echo get_date_from_gmt(get_the_time('Y-m-d H:i:s'), 'F jS, Y'); ?> by <?php echo $author_info; ?></td>
 <td><em><?php echo get_post_meta($post_id, 'book_title', true); ?></em>, <?php echo get_post_meta($post_id, 'book_author', true); ?></td>
-<td><?php echo $content; ?></td>
+<td>
+<div><?php echo $content; ?></div>
+<div><br /><em>Add a comment:</em></div>
+<div><textarea name="<?php echo "SRP_CommentPost_$post_id"; ?>" rows="2" style="width:85%"></textarea></div>
+</td>
 </tr>
 <?php
     endwhile;

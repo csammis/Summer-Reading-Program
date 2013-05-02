@@ -37,7 +37,7 @@ THE SOFTWARE.
  * SRP_PublishPosts
  * Sets the specified posts to 'publish' status.
  */
-function SRP_PublishPosts($ids)
+function SRP_PublishPosts($ids, $comments)
 {
     if (count($ids) == 0)
     {
@@ -58,6 +58,25 @@ function SRP_PublishPosts($ids)
     $update .= ')';
     
     $wpdb->query($wpdb->prepare($update, $ids));
+
+    foreach ($comments as $id => $comment)
+    {
+        if (isset($comment) && strlen(trim($comment)) > 0)
+        {
+            $comment_data = array(
+                'comment_post_ID' => $id,
+                'comment_content' => $comment,
+                'comment_author' => 'admin',
+                'comment_date_gmt' => gmdate('Y-m-d H:i:s'),
+                'comment_approved' => 1
+            );
+
+            if (wp_insert_comment($comment_data) <= 0)
+            {
+                die("Failed to insert new comment on post ID $id, try again later.");
+            }
+        }
+    }
 }
 
 /*
