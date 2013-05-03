@@ -42,7 +42,9 @@ function SRP_PrintPrizeOptions()
 <!-- Set up the form variables for nondecreasing prize IDs -->
 <input type="hidden" id="nexthprizeid" name="nexthprizeid" value="<?php echo $pid; ?>" />
 <!-- Javascript for prize table manipulation -->
-<script language="javascript">
+    <script language="javascript">
+function validateOnlyNumbers() { return onlyNumbers(event.charCode || event.keyCode); }
+
 function addPrizeRow(prizeId, prizeHours, prizeName, prizeCode)
 {
     if (prizeName === undefined)
@@ -83,7 +85,7 @@ function addPrizeRow(prizeId, prizeHours, prizeName, prizeCode)
     hoursinput.setAttribute('size', 5);
     hoursinput.setAttribute('name', 'srp_hprizehours' + prizeId);
     hoursinput.setAttribute('value', prizeHours);
-    hoursinput.addEventListener('keypress', validateNumber, false);
+    hoursinput.addEventListener('keypress', validateOnlyNumbers, false);
     prizegroup.appendChild(hoursinput);
     var nameprologue = document.createElement("span");
     nameprologue.innerHTML = "&nbsp;hours, award prize&nbsp;";

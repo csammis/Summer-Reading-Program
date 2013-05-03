@@ -44,9 +44,9 @@ function SRP_PrintGrandPrizeOptions()
 <input type="hidden" id="nextgprizeid" name="nextgprizeid" value="<?php echo $gid; ?>" />
 <div>Give users an entry for their grand prize selection every&nbsp;
 <input type="text" class="text" size="5" maxlength="2" value="<?php echo $entry;?>"
-       name="srp_gprize_every" onKeyPress="validateNumber(event);" />&nbsp;hours, up to&nbsp;
+       name="srp_gprize_every" onKeyPress="return onlyNumbers(event.charCode || event.keyCode);" />&nbsp;hours, up to&nbsp;
 <input type="text" class="text" size="5" maxlength="2" value="<?php echo $numentry;?>"
-       name="srp_gprize_numentries" onKeyPress="validateNumber(event);" />&nbsp;entries.</div>
+       name="srp_gprize_numentries" onKeyPress="return onlyNumbers(event.charCode || event.keyCode);" />&nbsp;entries.</div>
 <div>&nbsp;</div>
 <!-- Javascript for grand prize table manipulation -->
 <script language="javascript">
