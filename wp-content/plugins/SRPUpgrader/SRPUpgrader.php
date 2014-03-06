@@ -7,7 +7,7 @@ Description:  Activate this plugin to convert an SRP installation to the latest 
 register_activation_hook (WP_PLUGIN_DIR . '/SRPUpgrader/SRPUpgrader.php', 'srp_upgrader_activated');
 
 global $SRP_VERSION;
-$SRP_VERSION = '2013';
+$SRP_VERSION = '2014';
 
 function srp_upgrader_activated()
 {
