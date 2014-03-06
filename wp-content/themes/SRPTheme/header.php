@@ -118,9 +118,11 @@ function nav_go()
         {
             echo '<option value="' . wp_logout_url(site_url('/')) . '">Log out</option>' . "\n";
         }
-    }
 ?>
 </select>
+<?php
+    } // end of IsMobile check
+?>
 <!-- /main navigation -->
     </div>
 </div>

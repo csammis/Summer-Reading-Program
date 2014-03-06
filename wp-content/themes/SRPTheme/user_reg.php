@@ -301,7 +301,7 @@ switch ($action_type)
         </p>
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-        <script language="javascript">
+        <script type="text/javascript">
         function processGradeChange(jqueryUrl)
         {
             var dropdown = document.getElementById('srp_grade');
@@ -321,12 +321,15 @@ switch ($action_type)
 
                     for (i = 0; i < arrayData.length - 1; i += 2)
                     {
-                        var id = arrayData[i];
-                        var name = arrayData[i + 1];
-                        var option = document.createElement('option');
-                        option.value = id;
-                        option.text = name;
-                        gprizeDropdown.options.add(option);
+                        var id = arrayData[i].trim();
+                        var name = arrayData[i + 1].trim();
+                        if (id.length > 0 && name.length > 0)
+                        {
+                            var option = document.createElement('option');
+                            option.value = id;
+                            option.text = name;
+                            gprizeDropdown.options.add(option);
+                        }
                     }
                 });
             return true;
@@ -364,6 +367,7 @@ switch ($action_type)
         <div>
         <label <?php if (strpos($reqfields, 'srp_pickup:') !== FALSE) echo 'class="errormsg"';?>>Select the location at which you will be able to pick up prizes:<br />
             <?php SRP_PrintPickupLocationSelector('srp_pickup', $srp_pickup); ?>
+        </label>
         </div>
         <h4>User Agreement</h4>
         <div><input type="checkbox" name="srp_useragreement" id="srp_useragreement" value="1" /> <?php echo SRP_FormatMessage('srp_regagreement'); ?></div>
