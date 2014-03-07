@@ -1160,24 +1160,6 @@ ul.menu li li .fadeThis span.hover {
   border-top: 1px solid #fff;
 }
 
-#footer a{
-  color: #a59079;
-}
-
-#footer a.rss{
-  background: transparent url(images/rss.png) no-repeat left top;
-  padding-left: 20px;
-}
-
-#footer a.toplink{
-  padding: 1px 6px;
-  background: #584d43;
-  color: #9b856f;
-  font-size: 50%;
-  text-decoration: none;
-  margin-left: 4px;
-}
-
 #footer .copyright{
   text-align: center;
   font-size: 85%;
@@ -1186,6 +1168,11 @@ ul.menu li li .fadeThis span.hover {
 #footer .add-content{
   text-align: center;
   margin: .6em 0;
+}
+
+#styleswap {
+    text-align:center;
+    font-size:85%;
 }
 
 /*** MISC ***/

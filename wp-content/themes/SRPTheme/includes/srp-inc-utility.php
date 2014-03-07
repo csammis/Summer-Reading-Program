@@ -40,6 +40,18 @@ require_once('srp-inc-users.php');
 
 function SRP_IsMobile()
 {
+    if (isset($_COOKIE["SRPMobile"]))
+    {
+        if ($_COOKIE['SRPMobile'] == '1')
+        {
+            return true;
+        }
+        else if ($_COOKIE['SRPMobile'] == '2')
+        {
+            return false;
+        }
+    }
+
     require_once('Mobile_Detect.php');
     $detector = new Mobile_Detect();
     return $detector->isMobile();
