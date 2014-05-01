@@ -362,6 +362,51 @@ function SRP_SelectUsersByGrade($pivot)
 }
 
 /*
+ * SRP_SelectUsersByPrize
+ * Returns a list of lists of users, keyed by grand prize selection ID ascending.
+ * Uses metadata values:
+ *  first_name
+ *  last_name
+ *  ...something
+ */
+function SRP_SelectUsersByPrize($pivot)
+{
+    global $wpdb;
+    $select  = "SELECT DISTINCT u.id as ID, ";
+    $select .= "                um_fname.meta_value AS fname_value, ";
+    $select .= "                um_lname.meta_value AS lname_value, ";
+    $select .= "                um_prize.meta_value AS prize_value ";
+    $select .= "FROM $wpdb->users u ";
+    $select .= SRP_CreatePivotJoin($wpdb->usermeta, 'u.id', $pivot);
+    $select .= "LEFT OUTER JOIN $wpdb->usermeta um_fname ON (um_fname.user_id = u.id AND um_fname.meta_key = %s) ";
+    $select .= "LEFT OUTER JOIN $wpdb->usermeta um_lname ON (um_lname.user_id = u.id AND um_lname.meta_key = %s) ";
+    $select .= "INNER JOIN $wpdb->usermeta um_prize ON (um_prize.user_id = u.id AND um_prize.meta_key = %s) ";
+    
+    $select .= "LEFT OUTER JOIN $wpdb->usermeta um_confirm ON (um_confirm.user_id = u.id AND um_confirm.meta_key = %s) ";
+    $select .= "WHERE um_confirm.user_id IS NULL ";
+    
+    $select .= "ORDER BY u.id";
+
+    $names = array();
+    $query = $wpdb->prepare($select, 'first_name', 'last_name', 'srp_grandprize', 'confirmation_id');
+    $id_col = $wpdb->get_col($query, 0);
+    $fname_col = $wpdb->get_col($query, 1);
+    $lname_col = $wpdb->get_col($query, 2);
+    $prize_col = $wpdb->get_col($query, 3);
+    for ($i = 0; $i < count($id_col); $i++)
+    {
+        $firstname = $fname_col[$i];
+        $lastname = $lname_col[$i];
+        $prize = get_srptheme_option("srp_gprize$prize_col[$i]");
+        $names[$prize][] = $firstname . ' ' . $lastname;
+    }
+
+    ksort($names);
+
+    return $names;
+}
+
+/*
  * SRP_SelectSchoolsByMostReviews
  * Returns a map whose keys are school IDs and values are number of users reporting that school.
  * Uses metadata values:

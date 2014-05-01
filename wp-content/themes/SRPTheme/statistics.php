@@ -167,6 +167,18 @@ foreach ($names as $name)
 </ol>
 </div>
 
+<div><span class="SRPStatLabel">Number of users by grand prize selection:</span><br />
+<ul>
+<?php
+$names = SRP_SelectUsersByPrize($pivot);
+foreach (array_keys($names) as $prize)
+{
+    echo "    <li>$prize: " . count($names[$prize]) . "</li>\n";
+}
+?>
+</ul>
+</div>
+
 <div><span class="SRPStatLabel">Number of users by grade:</span><br />
 <ul>
 <?php
