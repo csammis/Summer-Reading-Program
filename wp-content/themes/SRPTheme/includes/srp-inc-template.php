@@ -381,7 +381,7 @@ function SRP_PrintGenreSelector($inputname, $selected = '', $bIncludeBlank = fal
     }
     
     asort($gid2name);
-    
+
     echo "<select name=\"$inputname\" id=\"$inputname\" class=\"$class\">\n";
     if ($bIncludeBlank)
     {

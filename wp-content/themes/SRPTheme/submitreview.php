@@ -40,10 +40,10 @@ if (empty($action_type))
 {
     $action_type = 'start';
 
-	$submitreview_info = get_usermeta($current_user->ID, 'submitreview_info');
+    $submitreview_info = get_usermeta($current_user->ID, 'submitreview_info');
 	if (strlen($submitreview_info) > 0)
 	{
-		$info = explode('=', $submitreview_info);
+        $info = explode('=', $submitreview_info);
 		$srp_title = urldecode($info[0]);
 		$srp_author = urldecode($info[1]);
 		$srp_genre = urldecode($info[2]);
@@ -198,7 +198,9 @@ switch ($action_type)
             </p>
             <p>
             <label <?php if (strpos($reqfields, 'srp_genre:') !== FALSE) echo 'class="errormsg"';?>>Which best describes this book?<br />
-            <?php SRP_PrintGenreSelector('srp_genre', $srp_genre); ?>
+            <?php
+            SRP_PrintGenreSelector('srp_genre', $srp_genre + 0);
+            ?>
             </label>
             </p>
             <p>
