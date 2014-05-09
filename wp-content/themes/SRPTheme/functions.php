@@ -418,6 +418,7 @@ function srptheme_theme_settings()
     <div>&nbsp;</div>
     </div>
     <p><input type="submit" class="button-primary" name="submit" value="Save Changes" onClick="return confirmSubmission();" /></p>
+    <p style="font-size:smaller"><?php echo 'Running on PHP version ' . phpversion(); ?></p>
 </form>
 <hr />
 <div class="clear"></div>
