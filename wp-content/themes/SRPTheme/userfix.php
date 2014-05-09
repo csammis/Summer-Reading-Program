@@ -83,8 +83,6 @@ if (isset($_POST['action']))
             {
                 $enable_resend = true;
             }
-
-            //$confirmation = SRP_SendNewEmail($user_id, $srp_pass1, $confirmation_id);
         }
         break;
 
@@ -105,7 +103,7 @@ if (isset($_POST['action']))
             update_user_meta($userid, 'first_name', $firstname);
             update_user_meta($userid, 'last_name', $lastname);
             update_user_meta($userid, 'srp_grandprize', $gprize);
-            update_user_meta($userid, 'srp_minutes', $minutes);
+            SRP_UpdateUserMinutes($userid, $minutes);
         }
         break;
 
