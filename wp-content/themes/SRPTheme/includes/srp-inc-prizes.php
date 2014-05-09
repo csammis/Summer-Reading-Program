@@ -228,6 +228,9 @@ function SRP_GetPrizeSettings()
  */
 function SRP_AwardHourlyPrizesWithinBoundary($userid, $previousMinutes, $newMinutes)
 {
+    $previousMinutes = intval($previousMinutes);
+    $newMinutes = intval($newMinutes);
+
     $previousHours = $previousMinutes / 60.0;
     $newHours = $newMinutes / 60.0;
     
@@ -277,6 +280,9 @@ function SRP_AwardUserHourBasedPrize($userid, $prizeid)
 
 function SRP_SetGrandPrizeEntriesWithinBoundary($userid, $previousMinutes, $newMinutes)
 {
+    $previousMinutes = intval($previousMinutes);
+    $newMinutes = intval($newMinutes);
+
     $srp_gprize_every = get_srptheme_option('srp_gprize_every');
     $every_minutes = $srp_gprize_every * 60;
     

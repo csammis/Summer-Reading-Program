@@ -97,6 +97,8 @@ function SRP_SelectUser($username, $firstname)
 function SRP_UpdateUserMinutes($userid, $userminutes)
 {
     require_once('srp-inc-prizes.php');
+
+    $userminutes = intval($userminutes); 
   
     update_user_meta($userid, 'srp_minutes', $userminutes);
     update_user_meta($userid, 'srp_prizeswon', '');
