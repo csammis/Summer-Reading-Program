@@ -99,10 +99,11 @@ function SRP_UpdateUserMinutes($userid, $userminutes)
     require_once('srp-inc-prizes.php');
   
     update_user_meta($userid, 'srp_minutes', $userminutes);
+    update_user_meta($userid, 'srp_prizeswon', '');
     SRP_AwardHourlyPrizesWithinBoundary($userid, 0, $userminutes);
     
     global $wpdb;
-    $select = "DELETE FROM $wpdb->usermeta WHERE user_id = %s AND meta_key = %s";
+    $select = "DELETE FROM $wpdb->usermeta WHERE user_id = %s AND meta_key LIKE %s";
     $wpdb->query($wpdb->prepare($delete, $userid, 'srp_milestone%'));
     SRP_SetGrandPrizeEntriesWithinBoundary($userid, 0, $userminutes);
 }
