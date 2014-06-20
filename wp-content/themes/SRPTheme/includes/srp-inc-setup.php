@@ -68,7 +68,6 @@ function SRP_CreatePages()
     SRP_CreateSinglePage('Plagiarism', 'plagiarism.php', '3');
     SRP_CreateSinglePage('Prize Drawing', 'prizedrawing.php', '2');
     SRP_CreateSinglePage('Register', 'user_reg.php', '0');
-    SRP_CreateSinglePage('Reset user time', 'hoursreset.php', '3');
     SRP_CreateSinglePage('Retrive Password', 'retrievepassword.php', '3');
     SRP_CreateSinglePage('Reviews', 'reviewpage.php', '0,1,2');
     SRP_CreateSinglePage('Sponsors', 'sponsors.php', '3');

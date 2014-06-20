@@ -274,7 +274,6 @@ if (is_user_logged_in())
     {
 ?>
         <div><?php SRP_PrintLinkToTemplatedPage('statistics', 'View SRP statistics');?></div>
-        <div><?php SRP_PrintLinkToTemplatedPage('hoursreset', 'Reset a user\'s time');?></div>
 <?php
     }
 }
