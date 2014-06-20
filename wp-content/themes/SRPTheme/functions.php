@@ -243,6 +243,38 @@ function SRP_StoreSimpleDynamicOptions($options, $postarray, $prefkey, $nextidke
     return $options;
 }
 
+function SRP_HandleFileUploads($options)
+{
+    $options = SRP_DoFileUpload('srp_uploadheaderimg', $options);
+    $options = SRP_DoFileUpload('srp_uploadmobileheaderimg', $options);
+    $options = SRP_DoFileUpload('srp_uploadfooterimg', $options);
+    return $options;
+}
+
+function SRP_DoFileUpload($key, $options)
+{
+    if (!isset($_FILES[$key]['name']))
+    {
+        return;
+    }
+    $allow = array('gif', 'png', 'jpg', 'jpeg');
+    $saveto = __DIR__ . '/images/';
+    if (!!$_FILES[$key]['tmp_name'])
+    {
+        $info = explode('.', strtolower($_FILES[$key]['name']));
+        if (in_array(end($info), $allow))
+        {
+            $basename = basename($_FILES[$key]['name']);
+            $target = $saveto . $basename;
+            if (move_uploaded_file($_FILES[$key]['tmp_name'], $target))
+            {
+                $options[str_replace('upload', '', $key)] = content_url() . '/themes/SRPTheme/images/' . $basename;
+            } else die("couldn't move $key to $target");
+        } 
+    }
+    return $options;
+}
+
 function srptheme_update_options()
 {
 	check_admin_referer('theme-settings');
@@ -290,7 +322,7 @@ function srptheme_update_options()
                 $options['program_open_date'] = time();
             }
         }
-        
+
         if (isset($_POST['srp_headerimg'])) $options['srp_headerimg'] = $_POST['srp_headerimg'];
         if (isset($_POST['srp_mobileheaderimg'])) $options['srp_mobileheaderimg'] = $_POST['srp_mobileheaderimg'];
         if (isset($_POST['srp_footerimg'])) $options['srp_footerimg'] = $_POST['srp_footerimg'];
@@ -300,6 +332,8 @@ function srptheme_update_options()
         if (isset($_POST['srp_backcolor2'])) $options['srp_backcolor2'] = $_POST['srp_backcolor2'];
         if (isset($_POST['srp_backcolor3'])) $options['srp_backcolor3'] = $_POST['srp_backcolor3'];
         if (isset($_POST['max_length'])) $options['max_length'] = $_POST['max_length'];
+
+        $options = SRP_HandleFileUploads($options);
         
         if (isset($_POST['library_name'])) $options['library_name'] = $_POST['library_name'];
         

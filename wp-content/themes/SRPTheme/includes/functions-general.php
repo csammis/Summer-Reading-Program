@@ -48,9 +48,16 @@ function SRP_PrintGeneralOptions()
 <tr><th scope="row">Library name:</th>
 <td><input type="text" name="library_name" id="library_name" value="<?php echo get_srptheme_option('library_name'); ?>" size="40" /></td>
 </tr>
+</table>
+<h3>Theme images</h3>
+<hr />
+<table class="form-table" style="width:auto">
 <tr><th scope="row">URL of header image:</th>
 <td><input type="text" name="srp_headerimg" id="srp_headerimg" 
            value="<?php echo get_srptheme_appearance('header'); ?>" size="80" /></td>
+</tr>
+<tr><th scope="row">...or upload an image:</th>
+<td><input type="file" name="srp_uploadheaderimg" id="srp_uploadheaderimg" /> (allowed extensions: gif jpg png)</td>
 </tr>
 <tr><th scope="row">Header image height in pixels:</th>
 <td><input type="text" name="srp_headerimgheight" id="srp_headerimgheight" 
@@ -60,14 +67,24 @@ function SRP_PrintGeneralOptions()
 <td><input type="text" name="srp_mobileheaderimg" id="srp_mobileheaderimg"
            value="<?php echo get_srptheme_appearance('mobileheader'); ?>" size="80" /> - 165px tall x 325px wide</td>
 </tr>
+<tr><th scope="row">...or upload an image:</th>
+<td><input type="file" name="srp_uploadmobileheaderimg" id="srp_uploadmobileheaderimg" /> (allowed extensions: gif jpg png)</td>
+</tr>
 <tr><th scope="row">URL of footer image:</th>
 <td><input type="text" name="srp_footerimg" id="srp_footerimg" 
            value="<?php echo get_srptheme_appearance('footer'); ?>" size="80" /></td>
+</tr>
+<tr><th scope="row">...or upload an image:</th>
+<td><input type="file" name="srp_uploadfooterimg" id="srp_uploadfooterimg" /> (allowed extensions: gif jpg png)</td>
 </tr>
 <tr><th scope="row">Footer image height in pixels:</th>
 <td><input type="text" name="srp_footerimgheight" id="srp_footerimgheight" 
            value="<?php echo get_srptheme_option('srp_footerimgheight'); ?>" size="5" />px tall x 778px wide</td>
 </tr>
+</table>
+<h3>Theme colors</h3>
+<hr />
+<table class="form-table" style="width:auto">
 <tr><th scope="row">Header / Footer color:</th>
 <td><input class="color" name="srp_backcolor1" id="srp_backcolor1" value="<?php echo get_srptheme_appearance('backcolor1'); ?>" /></td>
 </tr>
@@ -77,10 +94,13 @@ function SRP_PrintGeneralOptions()
 <tr><th scope="row">Body color:</th>
 <td><input class="color" name="srp_backcolor3" id="srp_backcolor3" value="<?php echo get_srptheme_appearance('backcolor3'); ?>" /></td>
 </tr>
+</table>
+<h3>Miscellaneous</h3>
+<hr />
+<table class="form-table" style="width:auto">
 <tr><th scope="row">Limit review length to this many characters:</th>
 <td><input type="textx" name="max_length" id="max_length" value="<?php echo $max_length; ?>" /></td>
 </tr>
-
 </table>
 <div>&nbsp;</div>
 <div>If you want to track visitors to your site, register an account with <a href="http://www.google.com/analytics/" target="new">Google Analytics</a> and enter the tracking ID here.  Visits to each SRP page will be tracked separately.</div>
