@@ -40,9 +40,6 @@ function SRP_PrintGeneralOptions()
     
     $jscolor_url = get_bloginfo('template_directory') . '/jscolor/jscolor.js';
 ?>
-<div>Customize the Summer Reading Program theme with your library's name and choice of colors and images.  You may also set up a Google Anayltics tracking number to count visitors to the program's site.</div>
-<div>&nbsp;</div>
-
 <script type="text/javascript" src="<?php echo $jscolor_url; ?>"></script>
 <table class="form-table" style="width: auto">
 <tr><th scope="row">Library name:</th>
