@@ -71,6 +71,13 @@ function get_srptheme_appearance($name)
         {
             $retval = get_bloginfo('template_directory') . '/images/headerimg.png';
         }
+    }
+    else if ($name == 'mobileheader')
+    {
+        if (is_srptheme_option_set('srp_mobileheaderimg'))
+        {
+            $retval = get_srptheme_option('srp_mobileheaderimg');
+        }
     } 
     else if ($name == 'footer')
     {
@@ -277,11 +284,15 @@ function srptheme_update_options()
             $options['program_active'] = $_POST['program_active'];
             if ($_POST['program_active'] == 1)
             {
+                $year = $_POST['srp_program_year'];
+                require_once('includes/srp-inc-admin.php');
+                SRP_StartNewYear($year);
                 $options['program_open_date'] = time();
             }
         }
         
         if (isset($_POST['srp_headerimg'])) $options['srp_headerimg'] = $_POST['srp_headerimg'];
+        if (isset($_POST['srp_mobileheaderimg'])) $options['srp_mobileheaderimg'] = $_POST['srp_mobileheaderimg'];
         if (isset($_POST['srp_footerimg'])) $options['srp_footerimg'] = $_POST['srp_footerimg'];
         if (isset($_POST['srp_headerimgheight'])) $options['srp_headerimgheight'] = $_POST['srp_headerimgheight'];
         if (isset($_POST['srp_footerimgheight'])) $options['srp_footerimgheight'] = $_POST['srp_footerimgheight'];

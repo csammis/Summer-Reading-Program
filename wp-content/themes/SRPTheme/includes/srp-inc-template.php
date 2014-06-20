@@ -505,8 +505,7 @@ function SRP_PrintHeaderImg()
     }
     else
     {
-        //$url = get_srptheme_appearance('header');
-        $url = 'wp-content/themes/SRPTheme/images/mobileimage.png';
+        $url = get_srptheme_appearance('mobileheader');
         echo "<img src=\"$url\" alt=\"\" style=\"float:right;height:165px;\"/><div style=\"clear:right;\"></div>\n";
         //echo '<div id="SRPMobileHeader"><span class="SRPMobileHeaderText">';
         //echo get_srptheme_option('library_name');
