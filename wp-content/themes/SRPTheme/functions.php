@@ -277,9 +277,9 @@ function SRP_DoFileUpload($key, $options)
 
 function srptheme_update_options()
 {
-	check_admin_referer('theme-settings');
-	if (!current_user_can('edit_themes')) wp_die('You are not authorised to perform this operation.');
-	$options = get_option('SRPTheme');
+  check_admin_referer('theme-settings');
+  if (!current_user_can('edit_themes')) wp_die('You are not authorised to perform this operation.');
+  $options = get_option('SRPTheme');
     
     $prefmode = $_POST['active_show'];
     if ($prefmode == 'email')
@@ -313,8 +313,9 @@ function srptheme_update_options()
 
         if (isset($_POST['program_active']))
         {
+            $previous_setting = get_srptheme_option('program_active');
             $options['program_active'] = $_POST['program_active'];
-            if ($_POST['program_active'] == 1)
+            if ($_POST['program_active'] == 1 && $previous_setting == '0')
             {
                 $year = $_POST['srp_program_year'];
                 require_once('includes/srp-inc-admin.php');
@@ -387,8 +388,8 @@ function srptheme_update_options()
         $options = SRP_StoreSimpleDynamicOptions($options, $_POST, 'srp_genre', 'nextgenreid');
     }
 
-	update_option('SRPTheme', $options);
-	wp_redirect(admin_url("themes.php?page=theme-settings&show=$prefmode&updated=true"));
+  update_option('SRPTheme', $options);
+  wp_redirect(admin_url("themes.php?page=theme-settings&show=$prefmode&updated=true"));
 }
 
 function srptheme_theme_settings()
@@ -473,7 +474,7 @@ function srptheme_theme_settings()
 
 function srptheme_addmenu()
 {
-	$page = add_theme_page('SRP Theme settings', 'SRP Theme settings', 'edit_themes', 'theme-settings', 'srptheme_theme_settings');
+  $page = add_theme_page('SRP Theme settings', 'SRP Theme settings', 'edit_themes', 'theme-settings', 'srptheme_theme_settings');
 }
 
 function setup_css()
@@ -516,11 +517,6 @@ if (function_exists('register_sidebar'))
     register_sidebar(array(
         'name' => 'Default sidebar',
         'id' => 'sidebar-1',
-		'before_widget' => '<li class="block widget %2$s" id="%1$s"><div class="box"> <div class="wrapleft"><div class="wrapright"><div class="tr"><div class="bl"><div class="tl"><div class="br the-content">',
-		'after_widget' => '</div></div></div></div></div></div> </div></li>',
-		'before_title' => '<div class="titlewrap"><h4><span>',
-		'after_title' => '</span></h4></div>'
-    ));
-}
-
-?>
+    'before_widget' => '<li class="block widget %2$s" id="%1$s"><div class="box"> <div class="wrapleft"><div class="wrapright"><div class="tr"><div class="bl"><div class="tl"><div class="br the-content">',
+    'after_widget' => '</div></div></div></div></div></div> </div></li>',
+ 
